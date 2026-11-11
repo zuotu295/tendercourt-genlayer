@@ -26,6 +26,7 @@ import {studionet} from 'genlayer-js/chains';
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const deployment = JSON.parse(fs.readFileSync(path.join(REPO, 'evidence', 'deployment.json'), 'utf8'));
 const evidence = JSON.parse(fs.readFileSync(path.join(REPO, 'evidence', 'transactions.json'), 'utf8'));
+if (evidence.complete !== true) throw new Error('INCOMPLETE_EVIDENCE: new chain suite has not finished; no completed verification may be generated');
 const source = fs.readFileSync(path.join(REPO, 'contracts', 'tendercourt.py'), 'utf8');
 const ADDRESS = deployment.contract_address;
 
@@ -58,9 +59,11 @@ const onChain = await reader.getContractCode(ADDRESS);
 check('byte-parity', onChain === source, `source sha256 ${sha(source).slice(0, 12)}…`);
 check('source-sha-matches-deployment', sha(source) === deployment.source_sha256);
 
+const limits = JSON.parse(await reader.readContract({address: ADDRESS, functionName: 'get_limits', args: [], transactionHashVariant: 'latest-final'}));
+check('capacity-limits', limits.max_quote_terms_chars === 1000 && limits.max_quotes_per_tender === 8 && limits.max_total_terms_chars === 8000);
 // 2. Protocol + deploy tx.
 const protocol = await reader.readContract({address: ADDRESS, functionName: 'get_protocol', args: [], transactionHashVariant: 'latest-final'});
-check('protocol', protocol === 'tendercourt-2', String(protocol));
+check('protocol', protocol === 'tendercourt-2.1', String(protocol));
 const deployTx = await receiptOf(deployment.deploy_tx);
 check('deploy-tx', [7, 'FINALIZED'].includes(deployTx.status) && [6, 'MAJORITY_AGREE'].includes(deployTx.result) && leaderExec(deployTx) === 'SUCCESS',
   `status=${deployTx.status} result=${deployTx.result} leader=${leaderExec(deployTx)}`);
@@ -100,6 +103,7 @@ check('tender-count', all.length >= 7, `got ${all.length} (evidence set is tende
 for (const t of all) {
   const e = expected[t.tender_id];
   if (!e) { console.log('NOTE extra tender (post-evidence write loop):', `id=${t.tender_id} status=${t.status} winner=${t.winner_quote_id}`); continue; }
+  if (t.tender_id === 6) check('full-capacity-eight-slots', t.quotes.length === 8 && t.quotes.every(q => [...q.terms].length === 1000));
   check(`tender-${t.tender_id}`, t.status === e.status && t.winner_quote_id === e.winner && t.winner_credit === e.winner_credit && t.buyer_credit === e.buyer_credit,
     `status=${t.status} winner=${t.winner_quote_id} winner_credit=${t.winner_credit} buyer_credit=${t.buyer_credit}`);
 }

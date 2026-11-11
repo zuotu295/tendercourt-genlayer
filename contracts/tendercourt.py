@@ -1,7 +1,8 @@
 # { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
 """TenderCourt v2: procurement quote-selection court on GenLayer Studionet.
 
-Protocol tendercourt-2. A buyer posts a tender (requirements text,
+Protocol tendercourt-2.1. Capacity revision: each quote is limited to 1000
+characters, so 8 slots always fit within the 8000-character total. A buyer posts a tender (requirements text,
 category, budget cap) and escrows a fixed 10 GEN award. Suppliers submit
 one quote each (price in GEN + terms text). The buyer awards directly to
 a quote, or requests judgment: GenLayer validators read the published
@@ -61,6 +62,7 @@ CATEGORIES = ["Software Development", "Design", "Writing & Translation",
 MAX_BUDGET_GEN = 10000
 MAX_QUOTES_PER_TENDER = 8
 MAX_TOTAL_TERMS_CHARS = 8000
+MAX_QUOTE_TERMS_CHARS = MAX_TOTAL_TERMS_CHARS // MAX_QUOTES_PER_TENDER
 
 
 def fail(s):
@@ -272,7 +274,7 @@ class TenderCourt(gl.Contract):
         if not isinstance(price_gen, int) or isinstance(price_gen, bool) \
                 or not 1 <= price_gen <= int(t['budget_gen']):
             fail('QUOTE_PRICE')
-        text = _bounded(terms, 10, 2000, 'QUOTE_TERMS')
+        text = _bounded(terms, 10, MAX_QUOTE_TERMS_CHARS, 'QUOTE_TERMS')
         if len(t['quotes']) >= MAX_QUOTES_PER_TENDER:
             fail('QUOTE_LIMIT')
         if sum(len(q['terms']) for q in t['quotes']) + len(text) \
@@ -361,13 +363,14 @@ class TenderCourt(gl.Contract):
 
     @gl.public.view
     def get_protocol(self) -> str:
-        return 'tendercourt-2'
+        return 'tendercourt-2.1'
 
     @gl.public.view
     def get_limits(self) -> str:
         return packed({
             'max_quotes_per_tender': MAX_QUOTES_PER_TENDER,
             'max_total_terms_chars': MAX_TOTAL_TERMS_CHARS,
+            'max_quote_terms_chars': MAX_QUOTE_TERMS_CHARS,
             'max_budget_gen': MAX_BUDGET_GEN,
             'fee_wei': FEE_WEI,
         })

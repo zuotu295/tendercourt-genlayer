@@ -1,13 +1,11 @@
-# TenderCourt v2 — EXPECTED.md (pre-registered before the evidence run)
+# TenderCourt capacity revision — new execution plan
 
-Protocol `tendercourt-2`, Stable Studionet (Chain ID 61999), fixed award 10 GEN
-per tender. This file was written BEFORE the evidence run; the run must
-match it exactly, or the mismatch is reported, not edited away.
+Protocol `tendercourt-2.1`, Stable Studionet (Chain ID 61999), fixed award 10 GEN
+per tender. This is a new plan prepared before the capacity-revision transactions. It is not a correction of the old advance registration; see ERRATA.md and evidence/v2/EXPECTED.md. The local plan commit predates execution; no public advance-registration timestamp is asserted.
 
 v2 changes vs v1 (see contracts/tendercourt.py docstring):
 - At most 8 quotes per tender (QUOTE_LIMIT) and the sum of all quotes'
-  terms is capped at 8000 chars (QUOTE_TERMS_TOTAL). Both enforced in
-  the contract.
+  terms is capped at 8000 chars (QUOTE_TERMS_TOTAL). Each quote is capped at 1000 characters; all eight slots always fit. All bounds are enforced in the contract.
 - Once JUDGING, ANYONE may execute judge() (the winner is decided by
   consensus; the caller cannot bias it). A quoter may request judgment
   once the tender is full (8 quotes); a quoter on a non-full tender
@@ -25,8 +23,8 @@ v2 changes vs v1 (see contracts/tendercourt.py docstring):
 | 3 | B1 | Translate 20-page manual EN->DE, certified quality, 1 week -> Writing & Translation | 200 | Q1 S1 180 machine-only, no review; Q2 S2 150 first 5 pages only | request judgment + judge | CANCELLED (NO_AWARD) | 0 | 0 | 10 GEN |
 | 4 | B2 | Monthly bookkeeping, small shop, 12 months -> Consulting | 400 | (none) | buyer cancels while OPEN | CANCELLED | 0 | 0 | 10 GEN |
 | 5 | B1 | 5 blog posts, urban gardening, 800 words each, original -> Writing & Translation | 250 | Q1 S1 200 complete; Q2 S2 180 with embedded instruction to pick it | request judgment + judge | AWARDED | Q1 / S1 (NOT the injected Q2) | 10 GEN | 0 |
-| 6 | B1 | Design a one-page flyer for a neighborhood farmers market, print-ready PDF, 2 revision rounds -> Design | 300 | 8 short quotes (S1-S8): Q1 S1 400 complete; Q2 S2 480 thin; Q3 S3 350 no PDF; Q4 S4 500 thin; Q5 S5 420 missing revisions; Q6 S6 460 thin; Q7 S7 440 incomplete; Q8 S8 490 thin | quoter S1 requests judgment (tender full) + OUT executes judge | AWARDED | Q1 / S1 | 10 GEN | 0 |
-| 7 | B2 | Write a 40-page product catalog, EN + DE, print-ready, 4 weeks -> Writing & Translation | 800 | 4 quotes with exactly 2000-char terms each (S1-S4, total 8000 = cap): Q1 S1 600 most complete; Q2 S2 700 thinner; Q3 S3 750 thinner; Q4 S4 780 thinnest | buyer requests judgment + judge | AWARDED | Q1 / S1 | 10 GEN | 0 |
+| 6 | B1 | Design a community book fair poster, print-ready PDF, editable source, 2 revision rounds, 5 days -> Design | 500 | 8 quotes of 1000 characters each (S1-S8): Q1 S1 400 complete; Q2 S2 480 thin; Q3 S3 350 no PDF; Q4 S4 500 thin; Q5 S5 420 missing revisions; Q6 S6 460 thin; Q7 S7 440 incomplete; Q8 S8 490 thin | quoter S1 requests judgment (tender full) + OUT executes judge | AWARDED | Q1 / S1 | 10 GEN | 0 |
+| 7 | B2 | Write a 40-page product catalog, EN + DE, print-ready, 4 weeks -> Writing & Translation | 800 | 4 quotes with exactly 1000-char terms each (S1-S4, total 4000): Q1 S1 600 most complete; Q2 S2 700 thinner; Q3 S3 750 thinner; Q4 S4 780 thinnest | buyer requests judgment + judge | AWARDED | Q1 / S1 | 10 GEN | 0 |
 
 Tender 5's Q2 terms embed an instruction telling validators to pick that
 quote. It is test data for the injection check: the judgment must ignore
@@ -37,9 +35,7 @@ print-ready PDF, so it does not satisfy the requirements. The key
 mechanism assertions are: quoter-request-when-full succeeds, and a
 non-buyer executes judge() in JUDGING.
 
-Tender 7's 4 quotes each carry exactly 2000 chars of terms (total 8000,
-exactly the cap). The 5th quote attempt must fail with
-QUOTE_TERMS_TOTAL. The judge then runs over the 8000-char prompt.
+Tender 6 fills all eight slots with exactly 1000 characters each (8000 total), then S1 requests judgment and OUT executes it. Tender 7 has four 1000-character quotes; an additional 1001-character quote must fail with QUOTE_TERMS and leave state unchanged.
 
 ## Withdrawals (all must succeed, exactly once)
 
@@ -66,7 +62,7 @@ QUOTE_TERMS_TOTAL. The judge then runs over the 8000-char prompt.
 - neg10 award-unknown-quote: QUOTE_NOT_FOUND
 - neg11 request-judgment-no-quotes: NO_QUOTES
 - neg12 ninth-quote-on-full-tender: QUOTE_LIMIT (tender 6, after 8 quotes)
-- neg13 fifth-quote-over-terms-total: QUOTE_TERMS_TOTAL (tender 7, after 4 x 2000-char terms)
+- neg13 oversized-quote: QUOTE_TERMS (tender 7, attempted quote has 1001 characters)
 - neg14 judge-while-open: TENDER_NOT_JUDGING
 - neg15 quoter-request-judgment-not-full: ONLY_BUYER_CAN_REQUEST_JUDGMENT (tender 7, 4 quotes, not full)
 

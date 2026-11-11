@@ -17,8 +17,8 @@ export const EXPLORER_BASE = 'https://explorer-studio.genlayer.com';
 export const FEE_WEI = 10000000000000000000n; // fixed award: 10 GEN
 export const CATEGORIES = ['Software Development', 'Design', 'Writing & Translation', 'Marketing', 'Data & Research', 'Consulting', 'Maintenance & Repair', 'Other'];
 export const MAX_BUDGET_GEN = 10000;
-export const MAX_QUOTES_PER_TENDER = 8; // contract cap (tendercourt-2)
-export const MAX_TOTAL_TERMS_CHARS = 8000; // contract cap (tendercourt-2)
+export const MAX_QUOTES_PER_TENDER = 8; // contract cap (tendercourt-2.1)
+export const MAX_TOTAL_TERMS_CHARS = 8000; // contract cap (tendercourt-2.1)
 
 export interface Deployment { contract_address: string; deploy_tx: string; source_sha256: string; network: string; chain_id: number }
 export let DEPLOYMENT: Deployment | null = null;
@@ -63,7 +63,7 @@ export async function readTotals(): Promise<Totals> {
   return JSON.parse(raw as unknown as string) as Totals;
 }
 export interface Limits { max_quotes_per_tender: number; max_total_terms_chars: number; max_budget_gen: number; fee_wei: number }
-// Contract limits (tendercourt-2 get_limits). Falls back to the v2
+// Contract limits (tendercourt-2.1 get_limits). Falls back to the v2
 // constants if the deployed contract predates the view (v1).
 export async function readLimits(): Promise<Limits> {
   try {

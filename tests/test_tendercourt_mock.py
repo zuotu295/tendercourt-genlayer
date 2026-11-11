@@ -227,12 +227,44 @@ class TenderCourtTest(unittest.TestCase):
         self.assertEqual(len(json.loads(self.c.get_tender(t['tender_id']))['quotes']), 8)
         self.expect_error('QUOTE_LIMIT', self.quote, t['tender_id'], SUP9, 300)
 
-    def test_quote_terms_total_limit(self):
+    def test_capacity_reserves_every_slot(self):
         t = self.create()
-        for s in [SUP1, SUP2, SUP3, SUP4]:
-            self.quote(t['tender_id'], s, 400, 'x' * 2000)
-        self.assertEqual(sum(len(q['terms']) for q in json.loads(self.c.get_tender(t['tender_id']))['quotes']), 8000)
-        self.expect_error('QUOTE_TERMS_TOTAL', self.quote, t['tender_id'], SUP5, 400)
+        suppliers = [SUP1, SUP2, SUP3, SUP4, SUP5, SUP6, SUP7, SUP8]
+        for i, supplier in enumerate(suppliers):
+            self.quote(t['tender_id'], supplier, 400, '界' * 1000)
+            if i < 7:
+                self.as_sender(SUP1)
+                before = self.c.get_tender(1)
+                self.expect_error('ONLY_BUYER_CAN_REQUEST_JUDGMENT', self.c.request_judgment, 1)
+                self.assertEqual(self.c.get_tender(1), before)
+        full = json.loads(self.c.get_tender(1))
+        self.assertEqual(sum(len(q['terms']) for q in full['quotes']), 8000)
+        self.as_sender(OUT)
+        self.expect_error('ONLY_BUYER_CAN_REQUEST_JUDGMENT', self.c.request_judgment, 1)
+        self.expect_error('QUOTE_LIMIT', self.quote, 1, SUP9, 400)
+        self.as_sender(SUP1)
+        self.c.request_judgment(1)
+        self.expect_error('TENDER_NOT_OPEN', self.quote, 1, SUP9, 400)
+        self.as_sender(OUT)
+        _Nondet.answers = [judge_answer(1), judge_answer(1)]
+        self.c.judge(1)
+        self.expect_error('TENDER_NOT_OPEN', self.c.request_judgment, 1)
+        self.expect_error('NO_CREDIT', self.c.withdraw, 1)
+        self.as_sender(SUP1)
+        self.c.withdraw(1)
+        self.expect_error('NO_CREDIT', self.c.withdraw, 1)
+        self.assertEqual(json.loads(self.c.get_totals())['total_withdrawn_wei'], FEE)
+
+    def test_oversized_quote_does_not_consume_capacity(self):
+        self.create()
+        for n in [1001, 2000]:
+            before = self.c.get_tender(1)
+            self.expect_error('QUOTE_TERMS', self.quote, 1, SUP1, 400, 'x' * n)
+            self.assertEqual(self.c.get_tender(1), before)
+        self.quote(1, SUP1, 400, 'x' * 10)
+        self.quote(1, SUP2, 400, ' ' + 'x' * 1000 + ' ')
+        self.assertEqual(len(json.loads(self.c.get_tender(1))['quotes'][1]['terms']), 1000)
+        self.assertEqual(TC.MAX_QUOTE_TERMS_CHARS * TC.MAX_QUOTES_PER_TENDER, TC.MAX_TOTAL_TERMS_CHARS)
 
     # -- cancel ------------------------------------------------------------
     def test_cancel_no_quotes_refunds(self):

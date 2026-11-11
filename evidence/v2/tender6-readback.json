@@ -1,0 +1,71 @@
+{
+  "observed_at": "2026-11-11T21:30:57.633Z",
+  "contract_address": "0xfbF78EB703FBaaD95DCc05263DAF8cf3E6c64A45",
+  "transactionHashVariant": "latest-final",
+  "tender": {
+    "budget_gen": 500,
+    "buyer": "0xa4bb7329da7b3740ae9b74728e1563e869d8b0ea",
+    "buyer_credit": 0,
+    "buyer_withdrawn": false,
+    "category": "Design",
+    "fee_wei": 10000000000000000000,
+    "quotes": [
+      {
+        "price_gen": 400,
+        "quote_id": 1,
+        "supplier": "0x1cb1b87746bbbc5bea17a4ba3a469b328bd4d2f8",
+        "terms": "Print-ready PDF + editable source file. Two revision rounds included. Delivery within 5 days."
+      },
+      {
+        "price_gen": 480,
+        "quote_id": 2,
+        "supplier": "0x1a25891ba4a5e23f6641ea4d89f784a65b44a8b5",
+        "terms": "Will design the poster."
+      },
+      {
+        "price_gen": 350,
+        "quote_id": 3,
+        "supplier": "0x12c78c38c63dbf32acbf6c38c2d83e0b44864240",
+        "terms": "Poster only, no PDF."
+      },
+      {
+        "price_gen": 500,
+        "quote_id": 4,
+        "supplier": "0xec4dc0346ba459510594cb4499590030125f2a5a",
+        "terms": "Poster design, one revision."
+      },
+      {
+        "price_gen": 420,
+        "quote_id": 5,
+        "supplier": "0xbad4a33758ba30acaa2371229d18b69b5aea6e71",
+        "terms": "Poster design, no revision rounds."
+      },
+      {
+        "price_gen": 460,
+        "quote_id": 6,
+        "supplier": "0x3a3c060698595901742047ec97cbc3294b113687",
+        "terms": "Will make the poster."
+      },
+      {
+        "price_gen": 440,
+        "quote_id": 7,
+        "supplier": "0x02f7828ef92643207e9c05ad8391cb033fdb3ea7",
+        "terms": "Poster, PDF only, no source file."
+      },
+      {
+        "price_gen": 490,
+        "quote_id": 8,
+        "supplier": "0x9e304487d0923a737629da064a14a32c25d72915",
+        "terms": "Poster design."
+      }
+    ],
+    "reason": "Quote 1 fully meets all requirements at the lowest compliant price with complete terms.",
+    "requirements": "Design a poster for a community book fair, print-ready PDF, editable source file, two revision rounds, delivery within 5 days.",
+    "status": "AWARDED",
+    "tender_id": 6,
+    "winner_credit": 10000000000000000000,
+    "winner_quote_id": 1,
+    "winner_supplier": "0x1cb1b87746bbbc5bea17a4ba3a469b328bd4d2f8",
+    "winner_withdrawn": true
+  }
+}

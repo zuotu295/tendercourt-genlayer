@@ -57,7 +57,7 @@ function errorObserved(tx, code) {
 }
 async function collect(client, hash, label) {
   console.log(label, hash);
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 3; i++) {
     try {
       const tx = await client.waitForTransactionReceipt({hash, status: 'FINALIZED', interval: 5000, retries: 12, fullTransaction: true});
       console.log(label, 'status=', tx.status, 'result=', tx.result, 'leader=', leaderExec(tx), 'leader_error=', leaderError(tx));
@@ -106,7 +106,7 @@ const NEG_ERRORS = {
   'neg10-award-unknown-quote': 'QUOTE_NOT_FOUND',
   'neg11-request-judgment-no-quotes': 'NO_QUOTES',
   'neg12-ninth-quote-full-tender': 'QUOTE_LIMIT',
-  'neg13-fifth-quote-over-terms-total': 'QUOTE_TERMS_TOTAL',
+  'neg13-oversized-quote': 'QUOTE_TERMS',
   'neg14-judge-while-open': 'TENDER_NOT_JUDGING',
   'neg15-quoter-request-not-full': 'ONLY_BUYER_CAN_REQUEST_JUDGMENT',
 };
@@ -123,7 +123,7 @@ const LABEL_ORDER = ['t1-create', 't2-create', 't3-create', 't4-create', 't5-cre
   't7-quote-1', 't7-quote-2', 't7-quote-3', 't7-quote-4',
   'neg0-wrong-fee-create', 'neg1-buyer-quotes-own', 'neg2-duplicate-quote', 'neg3-price-over-budget', 'neg4-price-zero',
   'neg5-outsider-award', 'neg6-outsider-cancel', 'neg7-outsider-request-judgment', 'neg9-cancel-after-quotes', 'neg10-award-unknown-quote', 'neg11-request-judgment-no-quotes',
-  'neg12-ninth-quote-full-tender', 'neg13-fifth-quote-over-terms-total', 'neg14-judge-while-open', 'neg15-quoter-request-not-full',
+  'neg12-ninth-quote-full-tender', 'neg13-oversized-quote', 'neg14-judge-while-open', 'neg15-quoter-request-not-full',
   't1-request-judgment', 't1-judge', 't2-award', 't3-request-judgment', 't3-judge', 't4-cancel', 't5-request-judgment', 't5-judge',
   't6-request-judgment-by-quoter', 't6-judge-by-out', 't7-request-judgment', 't7-judge',
   't1-winner-withdraw', 't2-winner-withdraw', 't3-buyer-withdraw', 't4-buyer-withdraw', 't5-winner-withdraw', 't6-winner-withdraw', 't7-winner-withdraw', 'neg8-double-withdraw'];
@@ -135,9 +135,21 @@ for (const label of LABEL_ORDER) {
   else if (JUDGE_INFO[label]) records.push({label, hash, result: 'ok', ...JUDGE_INFO[label]});
   else records.push({label, hash, result: 'ok'});
 }
+// Also seed any done labels NOT in LABEL_ORDER (e.g. *-attempt-N
+// consensus-disagreement records). LABEL_ORDER alone would silently
+// drop them on a restart, so the final transactions.json would lose
+// the disagreement history.
+for (const label of Object.keys(done).sort()) {
+  if (LABEL_ORDER.includes(label)) continue;
+  const hash = done[label];
+  if (label.startsWith('neg')) records.push({label, hash, result: 'error-observed', expected_error: NEG_ERRORS[label]});
+  else if (/-attempt-\d+$/.test(label)) records.push({label, hash, result: 'disagreed-retry'});
+  else records.push({label, hash, result: 'ok'});
+}
 if (records.length > 0) console.log('resumed:', records.length, 'txs already recorded from the checkpoint');
 function record(label, hash, result, extra = {}) {
   records.push({label, hash, result, ...extra});
+  fs.writeFileSync(TX_PATH, JSON.stringify({network: 'Stable Studionet', chain_id: CHAIN_ID, contract_address: ADDRESS, deploy_tx: cp.deploy_tx, complete: false, transactions: records}, null, 2));
   done[label] = hash;
   saveCheckpoint(cp);
 }
@@ -147,30 +159,77 @@ async function readTender(id) {
 async function readTotals() {
   return JSON.parse(await reader.readContract({address: ADDRESS, functionName: 'get_totals', args: [], transactionHashVariant: 'latest-final'}));
 }
+function tenderIdFor(label) {
+  const m = label.match(/^t(\d+)-/);
+  if (!m) throw new Error('cannot map judge label to tender: ' + label);
+  return ids['T' + m[1]];
+}
+// Resolve a pending tx left by an interrupted run: re-check the chain
+// for the hash and record its outcome instead of blindly re-sending.
+// A receipt timeout is NOT a failure — the tx may still have landed.
+// Called before any new send; after it returns, cp.pending is clear.
+async function resolvePending() {
+  if (!cp.pending) return;
+  const {label, hash} = cp.pending;
+  console.log('resolving pending tx:', label, hash);
+  const tx = await reader.waitForTransactionReceipt({hash, status: 'FINALIZED', interval: 5000, retries: 12, fullTransaction: true});
+  if (label.startsWith('neg')) {
+    const code = NEG_ERRORS[label];
+    if (!errorObserved(tx, code)) throw new Error('pending ' + label + ' did not show expected error ' + code + ': ' + JSON.stringify(tx).slice(0, 300));
+    record(label, hash, 'error-observed', {expected_error: code, unchanged_state: true});
+  } else if (JUDGE_INFO[label]) {
+    if ([5, 'MAJORITY_DISAGREE'].includes(tx.result)) {
+      const n = Object.keys(done).filter((k) => k.startsWith(label + '-attempt-')).length + 1;
+      record(`${label}-attempt-${n}`, hash, 'disagreed-retry');
+    } else if (good(tx)) {
+      const t = await readTender(tenderIdFor(label));
+      if (t.winner_quote_id !== JUDGE_INFO[label].winner_quote_id) throw new Error('pending ' + label + ' WRONG WINNER: expected ' + JUDGE_INFO[label].winner_quote_id + ', got ' + t.winner_quote_id);
+      record(label, hash, 'ok', {winner_quote_id: JUDGE_INFO[label].winner_quote_id, caller: JUDGE_INFO[label].caller});
+    } else throw new Error('pending ' + label + ' judge tx not good: ' + JSON.stringify(tx).slice(0, 300));
+  } else {
+    if (!good(tx)) throw new Error('pending ' + label + ' did not reach FINALIZED+AGREE+SUCCESS: ' + JSON.stringify(tx).slice(0, 300));
+    record(label, hash, 'ok');
+  }
+  delete cp.pending; saveCheckpoint(cp);
+  console.log('pending resolved:', label, hash);
+}
 async function writeOk(label, who, fn, args, value = 0n) {
   if (done[label]) { console.log(label, 'already done:', done[label]); return done[label]; }
-  await sleep(2000);
+  await sleep(1000);
+  await resolvePending();
   const hash = await clients[who].writeContract({address: ADDRESS, functionName: fn, args, value, leaderOnly: false});
+  cp.pending = {label, hash}; saveCheckpoint(cp);
   const tx = await collect(clients[who], hash, label);
+  delete cp.pending; saveCheckpoint(cp);
   if (!good(tx)) throw new Error(label + ' did not reach FINALIZED+AGREE+SUCCESS: ' + JSON.stringify(tx).slice(0, 400));
   record(label, hash, 'ok');
   return hash;
 }
 async function writeErr(label, who, fn, args, code, value = 0n) {
   if (done[label]) { console.log(label, 'already done:', done[label]); return done[label]; }
-  await sleep(2000);
+  await sleep(1000);
+  await resolvePending();
+  const before = await reader.readContract({address: ADDRESS, functionName: 'get_all_tenders', args: [], transactionHashVariant: 'latest-final'});
+  const totalsBefore = await readTotals();
   const hash = await clients[who].writeContract({address: ADDRESS, functionName: fn, args, value, leaderOnly: false});
+  cp.pending = {label, hash}; saveCheckpoint(cp);
   const tx = await collect(clients[who], hash, label);
+  delete cp.pending; saveCheckpoint(cp);
   if (!errorObserved(tx, code)) throw new Error(label + ' did not show expected error ' + code + ' (leader payload: ' + leaderError(tx) + '): ' + JSON.stringify(tx).slice(0, 400));
-  record(label, hash, 'error-observed', {expected_error: code});
+  const after = await reader.readContract({address: ADDRESS, functionName: 'get_all_tenders', args: [], transactionHashVariant: 'latest-final'});
+  if (before !== after || JSON.stringify(totalsBefore) !== JSON.stringify(await readTotals())) throw new Error(label + ' changed state');
+  record(label, hash, 'error-observed', {expected_error: code, unchanged_state: true});
   return hash;
 }
 async function judgeFlow(label, tenderId, expectedWinner, caller = 'B1') {
   if (done[label]) { console.log(label, 'already done:', done[label]); return done[label]; }
+  await resolvePending();
   for (let attempt = 1; attempt <= 3; attempt++) {
-    await sleep(2000);
+    await sleep(1000);
     const hash = await clients[caller].writeContract({address: ADDRESS, functionName: 'judge', args: [tenderId], value: 0n, leaderOnly: false});
+    cp.pending = {label, hash}; saveCheckpoint(cp);
     const tx = await collect(clients[caller], hash, `${label} attempt ${attempt} (caller ${caller})`);
+    delete cp.pending; saveCheckpoint(cp);
     if ([5, 'MAJORITY_DISAGREE'].includes(tx.result)) {
       console.log(label, 'consensus disagreed (attempt', attempt + '), retrying');
       record(`${label}-attempt-${attempt}`, hash, 'disagreed-retry');
@@ -201,9 +260,9 @@ function toLen(base, n) {
   return s;
 }
 const T7_TERMS = (who, focus) => toLen(
-  `Catalog writing for ${who}: ${focus}. Full 40-page catalog in English and German, print-ready PDF plus editable source files. Covers all product lines with specifications, pricing tables, and ordering instructions. Delivery within 4 weeks, with weekly drafts for review.`, 2000);
+  `Catalog writing for ${who}: ${focus}. Full 40-page catalog in English and German, print-ready PDF plus editable source files. Covers all product lines with specifications, pricing tables, and ordering instructions. Delivery within 4 weeks, with weekly drafts for review.`, 1000);
 
-// --- tender data (matches EXPECTED.md v2) ---
+// --- tender data (matches the capacity-revision EXPECTED.md) ---
 const T = {
   T1: {buyer: 'B1', req: 'Build a bilingual landing page for our bakery, with online ordering and a menu in English and Chinese, delivered within two weeks.', cat: 'Software Development', budget: 500,
     quotes: [
@@ -253,6 +312,7 @@ async function createTender(key) {
   return id;
 }
 
+for (const q of T.T6.quotes) q.terms = toLen(q.terms, 1000);
 const ids = {};
 for (const key of ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7']) ids[key] = await createTender(key);
 
@@ -277,7 +337,7 @@ await writeErr('neg9-cancel-after-quotes', 'B1', 'cancel_tender', [ids.T1], 'CAN
 await writeErr('neg10-award-unknown-quote', 'B2', 'award_tender', [ids.T2, 99], 'QUOTE_NOT_FOUND');
 await writeErr('neg11-request-judgment-no-quotes', 'B2', 'request_judgment', [ids.T4], 'NO_QUOTES');
 await writeErr('neg12-ninth-quote-full-tender', 'S9', 'submit_quote', [ids.T6, 300, 'Ninth quote on a full tender.'], 'QUOTE_LIMIT');
-await writeErr('neg13-fifth-quote-over-terms-total', 'S5', 'submit_quote', [ids.T7, 700, 'Fifth quote that would push total terms over 8000 chars.'], 'QUOTE_TERMS_TOTAL');
+await writeErr('neg13-oversized-quote', 'S5', 'submit_quote', [ids.T7, 700, 'x'.repeat(1001)], 'QUOTE_TERMS');
 await writeErr('neg14-judge-while-open', 'B1', 'judge', [ids.T2], 'TENDER_NOT_JUDGING');
 await writeErr('neg15-quoter-request-not-full', 'S1', 'request_judgment', [ids.T7], 'ONLY_BUYER_CAN_REQUEST_JUDGMENT');
 
@@ -307,7 +367,7 @@ await writeOk('t6-winner-withdraw', 'S1', 'withdraw', [ids.T6]);
 await writeOk('t7-winner-withdraw', 'S1', 'withdraw', [ids.T7]);
 await writeErr('neg8-double-withdraw', 'S1', 'withdraw', [ids.T1], 'NO_CREDIT');
 
-// Final readback vs EXPECTED.md v2.
+// Final readback vs EXPECTED.md.
 const expect = {1: {status: 'AWARDED', winner: 1}, 2: {status: 'AWARDED', winner: 1}, 3: {status: 'CANCELLED', winner: 0}, 4: {status: 'CANCELLED', winner: 0}, 5: {status: 'AWARDED', winner: 1}, 6: {status: 'AWARDED', winner: 1}, 7: {status: 'AWARDED', winner: 1}};
 for (const [key, id] of Object.entries(ids)) {
   const t = await readTender(id);
@@ -322,6 +382,6 @@ if (totals.total_received_wei !== 70000000000000000000 || totals.total_withdrawn
 }
 
 fs.mkdirSync(path.dirname(TX_PATH), {recursive: true});
-fs.writeFileSync(TX_PATH, JSON.stringify({network: 'Stable Studionet', chain_id: CHAIN_ID, contract_address: ADDRESS, deploy_tx: cp.deploy_tx, transactions: records}, null, 2));
+fs.writeFileSync(TX_PATH, JSON.stringify({network: 'Stable Studionet', chain_id: CHAIN_ID, contract_address: ADDRESS, deploy_tx: cp.deploy_tx, complete: true, transactions: records}, null, 2));
 console.log('evidence complete:', records.length, 'txs recorded in', TX_PATH);
 console.log('ALL EXPECTED OUTCOMES MATCH. 70 GEN in = 70 out, balance 0, escrow 0.');

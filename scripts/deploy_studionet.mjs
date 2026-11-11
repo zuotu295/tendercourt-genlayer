@@ -46,7 +46,7 @@ function good(tx) {
 }
 async function collect(client, hash, label) {
   console.log(label, hash);
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 3; i++) {
     try {
       const tx = await client.waitForTransactionReceipt({hash, status: 'FINALIZED', interval: 5000, retries: 12, fullTransaction: true});
       console.log(label, 'status=', tx.status, 'result=', tx.result, 'leader=', leaderExec(tx));
@@ -97,12 +97,16 @@ if (address && deployTx) {
   if (!good(tx)) throw new Error('recorded deploy tx is not good; inspect before redeploying');
 } else {
   await sleep(3000);
+  if (cp.pending_deploy_tx) throw new Error('Unresolved deployment: ' + cp.pending_deploy_tx + '; inspect before resubmitting');
   const hash = await deployer.deployContract({code: source, args: [], value: 0n, leaderOnly: false});
+  cp.pending_deploy_tx = hash;
+  saveCheckpoint(cp);
   const tx = await collect(deployer, hash, 'deploy');
   if (!good(tx)) throw new Error('deploy failed: ' + JSON.stringify(tx));
   address = tx.data?.contract_address || tx.contract_address;
   if (!address) throw new Error('no contract address in deploy receipt');
   deployTx = hash;
+  delete cp.pending_deploy_tx;
   cp.contract_address = address;
   cp.deploy_tx = deployTx;
   saveCheckpoint(cp);

@@ -398,8 +398,8 @@ export default function App() {
                   <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder={tr('budgetPh')} />
                   {priceErr && <p className="err">{tr('err_' + priceErr)}</p>}
                   <label>{tr('termsLabel')}</label>
-                  <textarea value={terms} maxLength={2000} onChange={(e) => setTerms(e.target.value)} placeholder={tr('termsPh')} />
-                  <div className={`count ${termsErr === 'terms_long' ? 'over' : ''}`}>{countOf(terms)} / 2000</div>
+                  <textarea value={terms} maxLength={1000} onChange={(e) => setTerms(e.target.value)} placeholder={tr('termsPh')} />
+                  <div className={`count ${termsErr === 'terms_long' ? 'over' : ''}`}>{countOf(terms)} / 1000</div>
                   <p className="hint">{tr('termsRemaining').replace('{x}', String(Math.max(0, termsLeft))).replace('{m}', String(limits.max_total_terms_chars))}</p>
                   {termsErr && <p className="err">{tr('err_' + termsErr)}</p>}
                   {termsTotalErr && <p className="err">{tr('err_' + termsTotalErr)}</p>}
@@ -433,7 +433,7 @@ export default function App() {
       </section>
 
       <footer className="site">
-        <p><b>TenderCourt 比选庭</b> · GenLayer Stable Studionet (Chain ID 61999) · Intelligent Contract · tendercourt-2</p>
+        <p><b>TenderCourt 比选庭</b> · GenLayer Stable Studionet (Chain ID 61999) · Intelligent Contract · tendercourt-2.1</p>
         <p className="mono">Contract: {dep ? dep.contract_address : 'awaiting deployment.json — UNCONFIRMED'}{dep && <> · <a href={explorerAddress(dep.contract_address)} target="_blank" rel="noreferrer">explorer-studio.genlayer.com</a></>}</p>
         <p className="mono small">Source SHA-256: {dep ? dep.source_sha256 : '—'} · Fee: 10 GEN fixed · {tr('awardExpl')}</p>
       </footer>

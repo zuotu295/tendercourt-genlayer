@@ -30,7 +30,7 @@ export function validatePrice(v: string, budget: number): VErr {
 export function validateTerms(v: string): VErr {
   const n = cpLen(v.trim());
   if (n < 10) return 'terms_short';
-  if (n > 2000) return 'terms_long';
+  if (n > 1000) return 'terms_long';
   return null;
 }
 export const countOf = cpLen;

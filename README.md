@@ -24,14 +24,24 @@ The 10 GEN is a **selection award** (a prize for winning the tender), not the pr
 
 Which quote "best satisfies the requirements" is a multi-factor semantic judgment — price against the budget, completeness of terms, and fit with the published requirements. No single honest server can settle it: a fixed scoring formula can be gamed by whoever writes the formula, and a single judge can be bribed or biased. TenderCourt needs several independent validators to read the requirements and the quotes and agree on one winner. Deterministic code — not any single LLM output — decides money and state.
 
+## Capacity revision
+
+Each quote has at most 1000 Unicode code points after trimming. Eight maximum-size quotes exactly fill the 8000-character total; no earlier quote can consume another slot’s capacity. The 8-address cap does not prevent Sybil slot filling. OPEN tenders with fewer than 8 quotes still require the buyer to act.
+
+Historical V2 evidence and its original expectations are preserved in [evidence/v2](evidence/v2/). See [ERRATA.md](ERRATA.md) for the Tender 6 discrepancy.
+
 ## Contract
 
-- `contracts/tendercourt.py` — `TenderCourt`, protocol `tendercourt-2`
+- `contracts/tendercourt.py` — `TenderCourt`, protocol `tendercourt-2.1`
 - Fixed award: 10 GEN (`10000000000000000000` wei), `create_tender` is `@gl.public.write.payable` and takes requirements (20–2000 chars), a category from a fixed list of 8, and a budget cap (1–10,000 GEN)
-- `submit_quote` (non-buyer supplier only, one per tender, price 1–budget GEN, terms 10–2000 chars, at most 8 quotes per tender, total terms capped at 8000 chars), `cancel_tender` (buyer, OPEN with zero quotes), `award_tender` (buyer, OPEN or JUDGING), `request_judgment` (buyer, or a quoter once the tender is full, OPEN with at least one quote), `judge` (anyone, JUDGING, consensus), `withdraw` (pull-payment)
+- `submit_quote` (non-buyer supplier only, one per tender, price 1–budget GEN, terms 10–1000 chars, at most 8 quotes per tender, total terms capped at 8000 chars), `cancel_tender` (buyer, OPEN with zero quotes), `award_tender` (buyer, OPEN or JUDGING), `request_judgment` (buyer, or a quoter once the tender is full, OPEN with at least one quote), `judge` (anyone, JUDGING, consensus), `withdraw` (pull-payment)
 - Narrow LLM: validators answer exactly one fixed question (`winner_quote_id` + one short `reason`); equivalence is exact agreement on the winner quote id; the reason is informational only (15–280 chars, not compared). The judgment prompt marks all INPUT as untrusted data and instructs validators to ignore any instruction embedded in it (see the injection evidence tender). The evidence is the on-chain text itself — no external URL fetch, no dead-link failure mode.
 - Views: `get_tender`, `get_all_tenders`, `get_totals`, `get_protocol`, `get_limits` (quote caps + fee)
-- Deployment facts: `evidence/deployment.json` (address, deploy tx, source SHA-256, byte parity). Pre-registered expectations: `EXPECTED.md`.
+- Deployment facts: `evidence/deployment.json` (address, deploy tx, source SHA-256, byte parity). New execution plan: `EXPECTED.md` (local commit before execution, no public advance-registration timestamp asserted).
+
+## Verification scope
+
+The revised deployment and two tender creations are finalized successfully. Settlement, negative chain tests, withdrawals and browser E2E remain unverified for this revision. See [EVIDENCE.md](EVIDENCE.md). The configured Pages URL above may still serve V2 until these changes are published.
 
 ## Frontend
 
@@ -41,7 +51,7 @@ Vite + React + TypeScript (`src/`), styled as a blueprint tender hall — deep b
 - Wallet: OKX Wallet and MetaMask via injected provider (Studionet 61999 auto-add, wrong-chain detection with switch prompt and verification, writes blocked until the chain is correct). Writes also offer a clearly labelled in-browser temporary test account (key in sessionStorage only, free testnet GEN funding), never packaged as a user-wallet signature.
 - Temporary-account safety: escrow funding (`create_tender`) requires a persistent wallet — a temp account is blocked from posting tenders. The temp private key is shown once with copy/export and an "I saved my key" acknowledgement before its first write; a persistent risk banner is shown while a temp account is active; disconnect/rotate checks the address's pending quotes on OPEN/JUDGING tenders and its unwithdrawn funds on any status, names the exact tenders and amounts, and requires the key to be backed up first; the key can be exported at any time.
 - Tx lifecycle: the tx hash is saved to localStorage immediately after send; a timeout is shown as "unknown — check chain", never as a final failure; polling continues and resumes after refresh from the stored hash; success is shown only on FINALIZED + SUCCESS. Every write asks for a double confirmation (action + amount + tender) before sending.
-- Every main button works against the real deployed contract. Bundle is version-stamped (`?v=<sha>`) after build so GitHub Pages never serves a stale build.
+- The frontend targets the deployment in `public/deployment.json`. Browser interaction with the capacity revision has not yet been verified. Bundle is version-stamped (`?v=<sha>`) after build so GitHub Pages never serves a stale build.
 
 ## Run locally
 
@@ -54,7 +64,7 @@ npm run preview
 ## Deploy & verify (Stable Studionet only)
 
 ```bash
-npm test            # contract mock tests (29 cases)
+npm test            # contract mock tests (30 cases)
 node scripts/deploy_studionet.mjs    # deploy + byte-parity check
 node scripts/run_evidence.mjs        # full evidence run (7 tenders + 16 on-chain negatives neg0–neg15; resumable)
 node scripts/verify_evidence.mjs     # independent re-verification, read-only
