@@ -1,0 +1,221 @@
+{
+  "network": "Stable Studionet",
+  "chain_id": 61999,
+  "contract_address": "0xD2A0Fe94cCb632D6307a4215b722643e6164ed0D",
+  "deploy_tx": "0xdb26699819ff328cd3dc57e2c26a07413d209227414114ac28b0b436c09afd4a",
+  "transactions": [
+    {
+      "label": "t1-create",
+      "hash": "0x4c73f70001ad3b1e6ce6cdca53eb3f1959a35dcfa04480d1d54dbaa8c9d3a5e0",
+      "result": "ok"
+    },
+    {
+      "label": "t2-create",
+      "hash": "0x25cfc5589762430ee40c8f1a1a532c6bc5a7f94de038f322d1dccadf52bbf6d2",
+      "result": "ok"
+    },
+    {
+      "label": "t3-create",
+      "hash": "0x1269ee71075375a290bdc876bb02664b5b24f0720383603b377411b890d5a668",
+      "result": "ok"
+    },
+    {
+      "label": "t4-create",
+      "hash": "0x97ade2cb431b1f28af65536dba1877aece88a8b8c80371f98d4e616bbbc23e7d",
+      "result": "ok"
+    },
+    {
+      "label": "t5-create",
+      "hash": "0x57a7b9611eefa2cb38088133daaef7d0b85562d1245abb74fb69fba17130ecb0",
+      "result": "ok"
+    },
+    {
+      "label": "t1-quote-1",
+      "hash": "0xf8942ddf07c6ea7b76f1499fd61a2b79c319462e45dd76eb131c1274fa97db6e",
+      "result": "ok"
+    },
+    {
+      "label": "t1-quote-2",
+      "hash": "0x01ce6459229826f7140cd6825e2ccdd858905344fb2924b65d4e51beff641734",
+      "result": "ok"
+    },
+    {
+      "label": "t1-quote-3",
+      "hash": "0x70d8f30d2755d554509846149a1af1b9a851ddf965d67f983673e6e942a7957a",
+      "result": "ok"
+    },
+    {
+      "label": "t2-quote-1",
+      "hash": "0xe194e0cecfe02128b82506b8e0d0e826ee0e0c4d63e39eee560ab928e2e4e083",
+      "result": "ok"
+    },
+    {
+      "label": "t2-quote-2",
+      "hash": "0x1a40a59dd32bf2da208f50752e360816f350c3a639e78d4ecd7ab3a9e461ccca",
+      "result": "ok"
+    },
+    {
+      "label": "t3-quote-1",
+      "hash": "0xac348f66518816e7decf56709d3b5d9b36b0e607f0f759a72386a9037080c721",
+      "result": "ok"
+    },
+    {
+      "label": "t3-quote-2",
+      "hash": "0x30221c78354cc3df7769385f004cb6467f46b8181bbca25968543a8ec74e73b0",
+      "result": "ok"
+    },
+    {
+      "label": "t5-quote-1",
+      "hash": "0xe87f0671c69cdb95ddd5dfbbc05df4c993e037e275151e8004b580e2f283e8d8",
+      "result": "ok"
+    },
+    {
+      "label": "t5-quote-2",
+      "hash": "0xb52428d847ef992d7edfb6eff578af5c94192aeb72312e43dbceedcf4a9ca38b",
+      "result": "ok"
+    },
+    {
+      "label": "neg0-wrong-fee-create",
+      "hash": "0x385820354ec3861740306cfd313c5f7bd17c68375da408a95daba7d4394065eb",
+      "result": "error-observed",
+      "expected_error": "FEE_MUST_BE_10_GEN"
+    },
+    {
+      "label": "neg1-buyer-quotes-own",
+      "hash": "0xae11464d0c1aa22e330e4f615afd2922006df631d9ccc41f1fa8954bff8afdd5",
+      "result": "error-observed",
+      "expected_error": "BUYER_CANNOT_QUOTE_OWN_TENDER"
+    },
+    {
+      "label": "neg2-duplicate-quote",
+      "hash": "0x74542b8e0c5b03d658dcee3722829a6c78c04a3a822569f9638a98583e0d7a09",
+      "result": "error-observed",
+      "expected_error": "DUPLICATE_QUOTE"
+    },
+    {
+      "label": "neg3-price-over-budget",
+      "hash": "0xaee9a3ad98d65da4a7fa4b02cd9487e04ee58802099c30df136f78d052c2fb52",
+      "result": "error-observed",
+      "expected_error": "QUOTE_PRICE"
+    },
+    {
+      "label": "neg4-price-zero",
+      "hash": "0x69dfe450905b1082ebd6ae8c6b2171b3af1244bccd25c72d7f18dd8223466b70",
+      "result": "error-observed",
+      "expected_error": "QUOTE_PRICE"
+    },
+    {
+      "label": "neg5-outsider-award",
+      "hash": "0x6d6388ca18f9f0119c34c1a696ee195132446fbd4394e4a16d16326fe847cdef",
+      "result": "error-observed",
+      "expected_error": "ONLY_BUYER_CAN_AWARD"
+    },
+    {
+      "label": "neg6-outsider-cancel",
+      "hash": "0x80725272e6fa6f60a24f7bc7e3e9ed1c7ff617f70a34e6c2bdb3220b83c9c893",
+      "result": "error-observed",
+      "expected_error": "ONLY_BUYER_CAN_CANCEL"
+    },
+    {
+      "label": "neg7-outsider-request-judgment",
+      "hash": "0xcfb1dd63234b574b4294abcf8e8c6ddcbe0396b207c29cf79e0770168c2f5eef",
+      "result": "error-observed",
+      "expected_error": "ONLY_BUYER_CAN_REQUEST_JUDGMENT"
+    },
+    {
+      "label": "neg9-cancel-after-quotes",
+      "hash": "0x58a0bf5e5ada483a8bf3955cf939462e37f84ae0ec8d20446f7f8b4329fd50b6",
+      "result": "error-observed",
+      "expected_error": "CANNOT_CANCEL_WITH_QUOTES"
+    },
+    {
+      "label": "neg10-award-unknown-quote",
+      "hash": "0xb7d2a56479796a72a67501a42450af3b96dce4b4923fe2794fedcfed2427659f",
+      "result": "error-observed",
+      "expected_error": "QUOTE_NOT_FOUND"
+    },
+    {
+      "label": "neg11-request-judgment-no-quotes",
+      "hash": "0xc9f3bacb84e5979193fbd28989c5cfba99a8518f7574fc01523b434538cf4cca",
+      "result": "error-observed",
+      "expected_error": "NO_QUOTES"
+    },
+    {
+      "label": "t1-request-judgment",
+      "hash": "0x59dc8387bce9f838e2abcd501c9306a3394875e119d9f5d9edff5615daceb583",
+      "result": "ok"
+    },
+    {
+      "label": "t1-judge",
+      "hash": "0xd20a59c3f1e85f559458663398e7749ad59d9a50fb450386a42afc4a5578be43",
+      "result": "ok",
+      "winner_quote_id": 1,
+      "attempts": 1
+    },
+    {
+      "label": "t2-award",
+      "hash": "0x2e43836a54171165c81d8480f8954b6c3482965bf2cd5ef5f8fc0231adfd36d9",
+      "result": "ok"
+    },
+    {
+      "label": "t3-request-judgment",
+      "hash": "0x4b7b324794cf0c57308ab79982ef61f15a046943b830b79e731a1c071fed22eb",
+      "result": "ok"
+    },
+    {
+      "label": "t3-judge",
+      "hash": "0xed5b93a5cb6d0aaec72e9577479236aad269fcd599b6d8420f9f2a0df39d21b9",
+      "result": "ok",
+      "winner_quote_id": 0,
+      "attempts": 1
+    },
+    {
+      "label": "t4-cancel",
+      "hash": "0x3e7045ebac85cb5105d15e9d141dc6215cca65f323406a63d58dbb9e6e33d56b",
+      "result": "ok"
+    },
+    {
+      "label": "t5-request-judgment",
+      "hash": "0x47b1bafdd7e88e044173524830744711530404f54a180e423775afe8f890ac8e",
+      "result": "ok"
+    },
+    {
+      "label": "t5-judge",
+      "hash": "0xa09c2f82a4f71c51800b79c6bda51740ed45e31233a10bff86ddd88d28b9cc3a",
+      "result": "ok",
+      "winner_quote_id": 1,
+      "attempts": 1
+    },
+    {
+      "label": "t1-winner-withdraw",
+      "hash": "0x2bffd0312ceef3dfc2f0aafd3cb629ffcb3c740923ad247e899776b2d6f92611",
+      "result": "ok"
+    },
+    {
+      "label": "t2-winner-withdraw",
+      "hash": "0x4a0374a4b326b64987be5b3a95f928d698ec2212cdec5c907d2f3dc06c8837b2",
+      "result": "ok"
+    },
+    {
+      "label": "t3-buyer-withdraw",
+      "hash": "0xff30407a5a6924efe91b50d8f08a5bc5f17b3e31142917f15aa1767651b98995",
+      "result": "ok"
+    },
+    {
+      "label": "t4-buyer-withdraw",
+      "hash": "0x00e5227707802a1cb9fb02f7c965e80278a7c6917d5d9948e3058a3694047334",
+      "result": "ok"
+    },
+    {
+      "label": "t5-winner-withdraw",
+      "hash": "0x7670b5589b71eb2a9ba5d536fc8788ba0dd07768bd1ebd0285c1303a850a43b6",
+      "result": "ok"
+    },
+    {
+      "label": "neg8-double-withdraw",
+      "hash": "0x430f65b95fff2df340b67f1f982c6ef4154c8f6327817471f227a669cd1ea289",
+      "result": "error-observed",
+      "expected_error": "NO_CREDIT"
+    }
+  ]
+}
