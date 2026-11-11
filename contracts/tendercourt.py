@@ -1,7 +1,7 @@
 # { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
-"""TenderCourt v1: procurement quote-selection court on GenLayer Studionet.
+"""TenderCourt v2: procurement quote-selection court on GenLayer Studionet.
 
-Protocol tendercourt-1. A buyer posts a tender (requirements text,
+Protocol tendercourt-2. A buyer posts a tender (requirements text,
 category, budget cap) and escrows a fixed 10 GEN award. Suppliers submit
 one quote each (price in GEN + terms text). The buyer awards directly to
 a quote, or requests judgment: GenLayer validators read the published
@@ -20,13 +20,36 @@ the procurement contract value: the real contract price is agreed
 off-chain between buyer and winner after the award. The on-chain part
 solves fair selection and award ownership.
 
+v2 hardening (vs tendercourt-1):
+  * Quote flood cap: at most MAX_QUOTES_PER_TENDER quotes per tender,
+    and the sum of all quotes' terms is capped at
+    MAX_TOTAL_TERMS_CHARS, so the consensus judging prompt stays
+    bounded. An attacker with many addresses cannot inflate the prompt
+    and stall judgment. Both caps are enforced in the contract, not
+    only in the frontend.
+  * Judgment liveness: once a tender is JUDGING, ANYONE may execute
+    judge(). The winner is decided by consensus, so the caller cannot
+    bias the outcome; quotes are frozen in JUDGING, so the caller
+    cannot change the quote set. A buyer who disappears after
+    requesting judgment can no longer stall the tender.
+  * Full-tender quoter request: when a tender has reached
+    MAX_QUOTES_PER_TENDER (no more quotes can arrive), any quoter may
+    request judgment. A supplier cannot freeze a tender early to
+    exclude competitors, because the tender must already be full.
+  * Direct award is the buyer's own choice and is NOT consensus
+    reviewed; the frontend marks it as such. Consensus judgment is
+    the reviewed selection path.
+
 Sender-bound roles: only the tender buyer can cancel (OPEN, zero
-quotes), award, or request judgment; only a supplier who is not the
-buyer can quote, one quote per supplier per tender; quotes only while
-OPEN; a tender with quotes cannot be cancelled (the buyer has already
-seen the quotes). No time gates anywhere: every transition is an
-explicit action (Studionet has no clock). A tender left JUDGING stays
-there until the buyer judges again or awards directly.
+quotes), award, or request judgment (except the full-tender quoter
+case above); only a supplier who is not the buyer can quote, one quote
+per supplier per tender; quotes only while OPEN; a tender with quotes
+cannot be cancelled (the buyer has already seen the quotes). No time
+gates anywhere: every transition is an explicit action (Studionet has
+no clock). Remaining known limit: a tender left OPEN with 1-7 quotes
+whose buyer disappears cannot advance (no clock means no fair
+timeout); the escrow is 10 test GEN and no supplier paid anything,
+so the harm is bounded to a lost chance at the award.
 """
 from genlayer import *
 import json
@@ -36,6 +59,8 @@ CATEGORIES = ["Software Development", "Design", "Writing & Translation",
               "Marketing", "Data & Research", "Consulting",
               "Maintenance & Repair", "Other"]
 MAX_BUDGET_GEN = 10000
+MAX_QUOTES_PER_TENDER = 8
+MAX_TOTAL_TERMS_CHARS = 8000
 
 
 def fail(s):
@@ -248,6 +273,11 @@ class TenderCourt(gl.Contract):
                 or not 1 <= price_gen <= int(t['budget_gen']):
             fail('QUOTE_PRICE')
         text = _bounded(terms, 10, 2000, 'QUOTE_TERMS')
+        if len(t['quotes']) >= MAX_QUOTES_PER_TENDER:
+            fail('QUOTE_LIMIT')
+        if sum(len(q['terms']) for q in t['quotes']) + len(text) \
+                > MAX_TOTAL_TERMS_CHARS:
+            fail('QUOTE_TERMS_TOTAL')
         q = {
             'quote_id': len(t['quotes']) + 1,
             'supplier': sender,
@@ -285,21 +315,20 @@ class TenderCourt(gl.Contract):
     def request_judgment(self, tender_id: int) -> str:
         t = self._load(tender_id)
         sender = str(gl.message.sender_address).lower()
-        if sender != t['buyer']:
-            fail('ONLY_BUYER_CAN_REQUEST_JUDGMENT')
         if t['status'] != 'OPEN':
             fail('TENDER_NOT_OPEN')
         if len(t['quotes']) == 0:
             fail('NO_QUOTES')
+        is_quoter = any(q['supplier'] == sender for q in t['quotes'])
+        if sender != t['buyer'] and not (
+                is_quoter and len(t['quotes']) >= MAX_QUOTES_PER_TENDER):
+            fail('ONLY_BUYER_CAN_REQUEST_JUDGMENT')
         t['status'] = 'JUDGING'
         return self._save(t)
 
     @gl.public.write
     def judge(self, tender_id: int) -> str:
         t = self._load(tender_id)
-        sender = str(gl.message.sender_address).lower()
-        if sender != t['buyer']:
-            fail('ONLY_BUYER_CAN_JUDGE')
         if t['status'] != 'JUDGING':
             fail('TENDER_NOT_JUDGING')
         return self._judge_and_settle(t)
@@ -332,7 +361,16 @@ class TenderCourt(gl.Contract):
 
     @gl.public.view
     def get_protocol(self) -> str:
-        return 'tendercourt-1'
+        return 'tendercourt-2'
+
+    @gl.public.view
+    def get_limits(self) -> str:
+        return packed({
+            'max_quotes_per_tender': MAX_QUOTES_PER_TENDER,
+            'max_total_terms_chars': MAX_TOTAL_TERMS_CHARS,
+            'max_budget_gen': MAX_BUDGET_GEN,
+            'fee_wei': FEE_WEI,
+        })
 
     @gl.public.view
     def get_tender(self, tender_id: int) -> str:

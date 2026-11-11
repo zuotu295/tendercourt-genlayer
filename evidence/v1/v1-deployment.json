@@ -1,0 +1,23 @@
+{
+  "network": "Stable Studionet",
+  "chain_id": 61999,
+  "rpc": "https://studio.genlayer.com/api",
+  "contract_address": "0xD2A0Fe94cCb632D6307a4215b722643e6164ed0D",
+  "deploy_tx": "0xdb26699819ff328cd3dc57e2c26a07413d209227414114ac28b0b436c09afd4a",
+  "explorer": "https://explorer-studio.genlayer.com/address/0xD2A0Fe94cCb632D6307a4215b722643e6164ed0D",
+  "source_sha256": "58333ca7185c0eccc123d3472f84035bf78e47d41a98518c0fc993b1af51d3bb",
+  "source_bytes": 13295,
+  "source_file": "contracts/tendercourt.py",
+  "byte_parity": "BYTE_PARITY_MATCH: TRUE",
+  "fee_wei": "10000000000000000000",
+  "fee_gen": 10,
+  "wallets": {
+    "B1": "0xa6953057a3ee92c636ce70bc8378c9a2e15ef9f1",
+    "B2": "0x5b280da4f785c88855aff158739045e9dfb48d0a",
+    "S1": "0xf26394b2bd3940c8c786779d2fdd19c046c41489",
+    "S2": "0x06c1ae5a813a317c1235d2071dbe248bc7c6476f",
+    "S3": "0xc4ba9f8499f69d0cb20ee013a5dadcb697fcd054",
+    "OUT": "0xe845b908f3e21c5c434bb418014d0bd3c4788e08"
+  },
+  "note": "Temp accounts generated for this evidence run only."
+}

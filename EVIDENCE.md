@@ -92,7 +92,7 @@ live site (https://zuotu295.github.io/tendercourt-genlayer/), bundle
 - Browser withdrew the 10 GEN award: withdraw tx
   [0xa6e48fc4…](https://explorer-studio.genlayer.com/tx/0xa6e48fc4b3c146b81f6c377960551cc8630c000ac0721f8cfe43cd48aa489663) (FINALIZED + SUCCESS). Supplier balance 100 → 110 GEN (+10 GEN exactly). Tender 6 AWARDED, winner quote 1, winner_withdrawn true.
 - Totals after the write loop: 60 GEN in = 60 GEN out, balance 0, escrow 0, tender count 6.
-- The temporary test accounts' keys were deleted when the flow completed (checkpoint rule): buyer B3 holds 90 test GEN and supplier SB holds 110 test GEN, both unrecoverable — testnet GEN only, zero economic impact.
+- The temporary test accounts' keys were deleted when the flow completed. Buyer B3 holds 90 test GEN and supplier SB holds 110 test GEN, both unrecoverable — testnet GEN only, zero economic impact.
 - 375px: the write loop first found horizontal overflow (scrollWidth 519 at a 375px viewport) from the unbreakable contract-address / Source SHA-256 lines. Fixed by `overflow-wrap: anywhere` on `.mono` (bundle ?v=b2041366, commit 31f23b3); re-check PASSED — scrollWidth 375, no element wider than the viewport, full address and SHA still visible as wrapped text.
 
 ## Notes

@@ -63,7 +63,7 @@ const source = fs.readFileSync(CONTRACT_PATH, 'utf8');
 console.log('contract source sha256:', sha(source), `(${Buffer.byteLength(source)} bytes)`);
 
 const cp = loadCheckpoint();
-for (const k of ['B1', 'B2', 'S1', 'S2', 'S3', 'OUT']) {
+for (const k of ['B1', 'B2', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'OUT']) {
   if (!cp.wallets[k]) { cp.wallets[k] = generatePrivateKey(); console.log('generated temp account', k); }
 }
 cp.chain_id = CHAIN_ID;

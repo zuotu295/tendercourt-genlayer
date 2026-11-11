@@ -17,6 +17,8 @@ export const EXPLORER_BASE = 'https://explorer-studio.genlayer.com';
 export const FEE_WEI = 10000000000000000000n; // fixed award: 10 GEN
 export const CATEGORIES = ['Software Development', 'Design', 'Writing & Translation', 'Marketing', 'Data & Research', 'Consulting', 'Maintenance & Repair', 'Other'];
 export const MAX_BUDGET_GEN = 10000;
+export const MAX_QUOTES_PER_TENDER = 8; // contract cap (tendercourt-2)
+export const MAX_TOTAL_TERMS_CHARS = 8000; // contract cap (tendercourt-2)
 
 export interface Deployment { contract_address: string; deploy_tx: string; source_sha256: string; network: string; chain_id: number }
 export let DEPLOYMENT: Deployment | null = null;
@@ -59,6 +61,17 @@ export async function readAllTenders(): Promise<{ tenders: TenderRec[]; is_final
 export async function readTotals(): Promise<Totals> {
   const raw = await reader.readContract({ address: contractAddress() as `0x${string}`, functionName: 'get_totals', args: [], transactionHashVariant: 'latest-final' as any });
   return JSON.parse(raw as unknown as string) as Totals;
+}
+export interface Limits { max_quotes_per_tender: number; max_total_terms_chars: number; max_budget_gen: number; fee_wei: number }
+// Contract limits (tendercourt-2 get_limits). Falls back to the v2
+// constants if the deployed contract predates the view (v1).
+export async function readLimits(): Promise<Limits> {
+  try {
+    const raw = await reader.readContract({ address: contractAddress() as `0x${string}`, functionName: 'get_limits', args: [], transactionHashVariant: 'latest-final' as any });
+    return JSON.parse(raw as unknown as string) as Limits;
+  } catch {
+    return { max_quotes_per_tender: MAX_QUOTES_PER_TENDER, max_total_terms_chars: MAX_TOTAL_TERMS_CHARS, max_budget_gen: MAX_BUDGET_GEN, fee_wei: Number(FEE_WEI) };
+  }
 }
 export async function readTender(id: number): Promise<TenderRec> {
   const raw = await reader.readContract({ address: contractAddress() as `0x${string}`, functionName: 'get_tender', args: [id], transactionHashVariant: 'latest-final' as any });

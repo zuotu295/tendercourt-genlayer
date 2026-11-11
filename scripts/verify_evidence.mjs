@@ -1,18 +1,20 @@
-// TenderCourt: one-command independent verification (read-only).
+// TenderCourt v2: one-command independent verification (read-only).
 // Re-reads everything live from Studionet and compares against
 // evidence/deployment.json, evidence/transactions.json and the
-// pre-registered EXPECTED.md outcomes (mirrored below).
+// pre-registered EXPECTED.md v2 outcomes (mirrored below).
 // No wallet, no transactions, no writes.
 // For error-observed steps it requires ALL of: FINALIZED,
-// MAJORITY_AGREE, leader execution_result ERROR, and the live receipt
-// containing the step's recorded expected error code — a
-// MAJORITY_DISAGREE or a wrong error code fails the check.
-// Scope note: this verifies the pre-registered 39-tx evidence set
-// (tenders 1–5). A post-evidence live-site write loop (tender 6) is
+// MAJORITY_AGREE, leader execution_result ERROR, and the leader
+// receipt's error payload EXACTLY equal to the step's recorded
+// expected error code. A MAJORITY_DISAGREE or a wrong error code
+// fails the check. A record with an unknown result value fails the
+// check — a consensus disagreement is never counted as a pass.
+// Scope note: this verifies the pre-registered v2 evidence set
+// (tenders 1-7, 70 GEN). A post-evidence live-site write loop is
 // documented separately in EVIDENCE.md; the checks below therefore
-// match tenders 1–5 by id (not by total count) and require GEN
+// match tenders 1-7 by id (not by total count) and require GEN
 // conservation (in == out, balance 0, escrow 0) with at least the
-// 50 GEN evidence baseline received.
+// 70 GEN evidence baseline received.
 // Usage: node scripts/verify_evidence.mjs
 import fs from 'node:fs';
 import path from 'node:path';
@@ -44,6 +46,9 @@ function leaderReceipt(tx) {
 function leaderExec(tx) {
   return leaderReceipt(tx)?.execution_result;
 }
+function leaderError(tx) {
+  return leaderReceipt(tx)?.result?.payload || '';
+}
 async function receiptOf(hash) {
   return reader.waitForTransactionReceipt({hash, status: 'FINALIZED', interval: 5000, retries: 12, fullTransaction: true});
 }
@@ -51,11 +56,11 @@ async function receiptOf(hash) {
 // 1. Byte parity: deployed code equals contracts/tendercourt.py.
 const onChain = await reader.getContractCode(ADDRESS);
 check('byte-parity', onChain === source, `source sha256 ${sha(source).slice(0, 12)}…`);
-check('source-sha-matches-deployment', sha(source) === deployment.source_sha256);
+check('source-sha-matches-deployment', sha(source) === deployment.sourceSha256);
 
 // 2. Protocol + deploy tx.
 const protocol = await reader.readContract({address: ADDRESS, functionName: 'get_protocol', args: [], transactionHashVariant: 'latest-final'});
-check('protocol', protocol === 'tendercourt-1', String(protocol));
+check('protocol', protocol === 'tendercourt-2', String(protocol));
 const deployTx = await receiptOf(deployment.deploy_tx);
 check('deploy-tx', [7, 'FINALIZED'].includes(deployTx.status) && [6, 'MAJORITY_AGREE'].includes(deployTx.result) && leaderExec(deployTx) === 'SUCCESS',
   `status=${deployTx.status} result=${deployTx.result} leader=${leaderExec(deployTx)}`);
@@ -67,22 +72,31 @@ for (const rec of evidence.transactions) {
     check(rec.label, [7, 'FINALIZED'].includes(tx.status) && [6, 'MAJORITY_AGREE'].includes(tx.result) && leaderExec(tx) === 'SUCCESS',
       `status=${tx.status} result=${tx.result} leader=${leaderExec(tx)}`);
   } else if (rec.result === 'error-observed') {
-    check(rec.label, [7, 'FINALIZED'].includes(tx.status) && [6, 'MAJORITY_AGREE'].includes(tx.result) && leaderExec(tx) === 'ERROR' && JSON.stringify(tx).includes(rec.expected_error),
-      `status=${tx.status} result=${tx.result} leader=${leaderExec(tx)} error=${rec.expected_error}`);
+    check(rec.label, [7, 'FINALIZED'].includes(tx.status) && [6, 'MAJORITY_AGREE'].includes(tx.result) && leaderExec(tx) === 'ERROR' && leaderError(tx) === rec.expected_error,
+      `status=${tx.status} result=${tx.result} leader=${leaderExec(tx)} leader_error=${leaderError(tx)} expected=${rec.expected_error}`);
+  } else if (rec.result === 'disagreed-retry') {
+    // A consensus disagreement is recorded for transparency only. It
+    // must itself be FINALIZED + MAJORITY_DISAGREE; it is never a pass
+    // for the business outcome (the retry's own record carries that).
+    check(rec.label + ' (disagreed retry)', [7, 'FINALIZED'].includes(tx.status) && [5, 'MAJORITY_DISAGREE'].includes(tx.result),
+      `status=${tx.status} result=${tx.result}`);
   } else {
-    check(rec.label + ' (disagreed retry, recorded only)', true, rec.hash);
+    check(rec.label + ' (unknown result value)', false, `result=${rec.result} hash=${rec.hash}`);
   }
 }
 
-// 4. Tender outcomes vs EXPECTED.md (T1 AWARDED/1, T2 AWARDED/1,
-//    T3 CANCELLED/0, T4 CANCELLED/0, T5 AWARDED/1).
+// 4. Tender outcomes vs EXPECTED.md v2 (T1 AWARDED/1, T2 AWARDED/1,
+//    T3 CANCELLED/0, T4 CANCELLED/0, T5 AWARDED/1, T6 AWARDED/1,
+//    T7 AWARDED/1).
 const expected = {1: {status: 'AWARDED', winner: 1, winner_credit: 10000000000000000000, buyer_credit: 0},
   2: {status: 'AWARDED', winner: 1, winner_credit: 10000000000000000000, buyer_credit: 0},
   3: {status: 'CANCELLED', winner: 0, winner_credit: 0, buyer_credit: 10000000000000000000},
   4: {status: 'CANCELLED', winner: 0, winner_credit: 0, buyer_credit: 10000000000000000000},
-  5: {status: 'AWARDED', winner: 1, winner_credit: 10000000000000000000, buyer_credit: 0}};
+  5: {status: 'AWARDED', winner: 1, winner_credit: 10000000000000000000, buyer_credit: 0},
+  6: {status: 'AWARDED', winner: 1, winner_credit: 10000000000000000000, buyer_credit: 0},
+  7: {status: 'AWARDED', winner: 1, winner_credit: 10000000000000000000, buyer_credit: 0}};
 const all = JSON.parse(await reader.readContract({address: ADDRESS, functionName: 'get_all_tenders', args: [], transactionHashVariant: 'latest-final'}));
-check('tender-count', all.length >= 5, `got ${all.length} (evidence set is tenders 1-5; any extra tender is the separately documented post-evidence write loop)`);
+check('tender-count', all.length >= 7, `got ${all.length} (evidence set is tenders 1-7; any extra tender is the separately documented post-evidence write loop)`);
 for (const t of all) {
   const e = expected[t.tender_id];
   if (!e) { console.log('NOTE extra tender (post-evidence write loop):', `id=${t.tender_id} status=${t.status} winner=${t.winner_quote_id}`); continue; }
@@ -91,9 +105,9 @@ for (const t of all) {
 }
 
 // 5. GEN accounting: conservation must hold (in == out, balance 0,
-//    escrow 0) with at least the 50 GEN evidence baseline received.
+//    escrow 0) with at least the 70 GEN evidence baseline received.
 const totals = JSON.parse(await reader.readContract({address: ADDRESS, functionName: 'get_totals', args: [], transactionHashVariant: 'latest-final'}));
-check('accounting', BigInt(totals.total_received_wei) === BigInt(totals.total_withdrawn_wei) && BigInt(totals.total_received_wei) >= 50000000000000000000n && totals.contract_balance_wei === 0 && totals.escrowed_wei === 0,
+check('accounting', BigInt(totals.total_received_wei) === BigInt(totals.total_withdrawn_wei) && BigInt(totals.total_received_wei) >= 70000000000000000000n && totals.contract_balance_wei === 0 && totals.escrowed_wei === 0,
   `in=${totals.total_received_wei} out=${totals.total_withdrawn_wei} balance=${totals.contract_balance_wei} escrowed=${totals.escrowed_wei}`);
 
 console.log(`\n${pass} PASS, ${fail} FAIL`);

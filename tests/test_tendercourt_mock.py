@@ -124,6 +124,12 @@ BUYER = '0x' + '11' * 20
 SUP1 = '0x' + '22' * 20
 SUP2 = '0x' + '33' * 20
 SUP3 = '0x' + '44' * 20
+SUP4 = '0x' + '66' * 20
+SUP5 = '0x' + '77' * 20
+SUP6 = '0x' + '88' * 20
+SUP7 = '0x' + '99' * 20
+SUP8 = '0x' + 'aa' * 20
+SUP9 = '0x' + 'bb' * 20
 OUT = '0x' + '55' * 20
 
 REQ = 'Build a bilingual landing page for our bakery, with online ordering and a menu in English and Chinese, delivered within two weeks.'
@@ -213,6 +219,20 @@ class TenderCourtTest(unittest.TestCase):
     def test_quote_terms_bounds(self):
         t = self.create()
         self.expect_error('QUOTE_TERMS', self.quote, t['tender_id'], SUP1, 400, 'short')
+
+    def test_quote_limit(self):
+        t = self.create()
+        for i, s in enumerate([SUP1, SUP2, SUP3, SUP4, SUP5, SUP6, SUP7, SUP8]):
+            self.quote(t['tender_id'], s, 400 - i * 10)
+        self.assertEqual(len(json.loads(self.c.get_tender(t['tender_id']))['quotes']), 8)
+        self.expect_error('QUOTE_LIMIT', self.quote, t['tender_id'], SUP9, 300)
+
+    def test_quote_terms_total_limit(self):
+        t = self.create()
+        for s in [SUP1, SUP2, SUP3, SUP4]:
+            self.quote(t['tender_id'], s, 400, 'x' * 2000)
+        self.assertEqual(sum(len(q['terms']) for q in json.loads(self.c.get_tender(t['tender_id']))['quotes']), 8000)
+        self.expect_error('QUOTE_TERMS_TOTAL', self.quote, t['tender_id'], SUP5, 400)
 
     # -- cancel ------------------------------------------------------------
     def test_cancel_no_quotes_refunds(self):
@@ -315,13 +335,34 @@ class TenderCourtTest(unittest.TestCase):
         cur = json.loads(self.c.get_tender(t['tender_id']))
         self.assertEqual(cur['status'], 'JUDGING')
 
-    def test_judge_by_outsider(self):
+    def test_judge_by_anyone_in_judging(self):
+        # v2: once JUDGING, anyone may execute the consensus judgment.
+        # The winner is decided by consensus, so the caller cannot bias it.
         t = self.create()
         self.quote(t['tender_id'], SUP1, 400)
         self.as_sender(BUYER)
         self.c.request_judgment(t['tender_id'])
+        _Nondet.answers = [judge_answer(1), judge_answer(1)]
         self.as_sender(OUT)
-        self.expect_error('ONLY_BUYER_CAN_JUDGE', self.c.judge, t['tender_id'])
+        done = json.loads(self.c.judge(t['tender_id']))
+        self.assertEqual(done['status'], 'AWARDED')
+        self.assertEqual(done['winner_quote_id'], 1)
+
+    def test_request_judgment_by_quoter_when_full(self):
+        # v2: a quoter may request judgment once the tender is full
+        # (no more quotes can arrive, so nobody is cut off).
+        t = self.create()
+        for i, s in enumerate([SUP1, SUP2, SUP3, SUP4, SUP5, SUP6, SUP7, SUP8]):
+            self.quote(t['tender_id'], s, 400 - i * 10)
+        self.as_sender(SUP1)
+        mid = json.loads(self.c.request_judgment(t['tender_id']))
+        self.assertEqual(mid['status'], 'JUDGING')
+
+    def test_request_judgment_by_quoter_when_not_full(self):
+        t = self.create()
+        self.quote(t['tender_id'], SUP1, 400)
+        self.as_sender(SUP1)
+        self.expect_error('ONLY_BUYER_CAN_REQUEST_JUDGMENT', self.c.request_judgment, t['tender_id'])
 
     def test_judge_while_open(self):
         t = self.create()
