@@ -55,6 +55,15 @@ before the evidence run).
   price zero; outsider award; outsider cancel; outsider request judgment;
   double withdraw; cancel after quotes; award of a nonexistent quote;
   request judgment with zero quotes.
+- Post-evidence live-site write loop (tender 6, documented in
+  EVIDENCE.md, not part of the pre-registered 39-tx set): tender 6 was
+  created after the evidence run and proven end-to-end in a real browser
+  (temp supplier: over-budget quote blocked with no tx, valid quote
+  submitted, award, 10 GEN withdrawn; totals 60/60/0/0). The verify
+  script matches tenders 1–5 by id and requires GEN conservation, so it
+  still passes with tender 6 present. A 375px overflow found in the same
+  check (unbreakable address/SHA lines) was fixed with `overflow-wrap`
+  on `.mono` and re-verified (scrollWidth 375).
 
 ## Consensus re-audit (done before deployment)
 

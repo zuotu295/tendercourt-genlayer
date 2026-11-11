@@ -76,4 +76,5 @@ Evidence transactions: `evidence/transactions.json` (see `EVIDENCE.md`).
 - Quotes are the suppliers' own words; consensus judges fit with the published requirements, it does not verify off-chain delivery capability.
 - No time gates: every transition is an explicit action; a tender stays OPEN until the buyer awards, requests judgment, or cancels (zero quotes only), and stays JUDGING until the buyer judges or awards directly.
 - One quote per supplier per tender; a supplier cannot revise a quote — a new tender is needed for a revised offer.
+- `get_all_tenders` returns the full tender list in one view call: fine at v1 scale, but a large tender count will eventually hit Studionet's view-payload limits — the board has no pagination yet.
 - Platform behavior (verified live 2026-11-11): on Studionet a FAILED payable call does not refund the sent value — it stays in the contract with no entitlement. Evidence never sends value on an expected-failure payable call. The frontend validates every `create_tender` / `submit_quote` input against the contract bounds (code-point counts) before any payable send.

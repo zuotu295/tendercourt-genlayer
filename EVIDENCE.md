@@ -74,6 +74,27 @@ All transactions below are FINALIZED on Stable Studionet (Chain ID 61999). Succe
 | t5-winner-withdraw | ok | [0x7670b558…](https://explorer-studio.genlayer.com/tx/0x7670b5589b71eb2a9ba5d536fc8788ba0dd07768bd1ebd0285c1303a850a43b6) |
 | neg8-double-withdraw | error-observed (NO_CREDIT) | [0x430f65b9…](https://explorer-studio.genlayer.com/tx/0x430f65b95fff2df340b67f1f982c6ef4154c8f6327817471f227a669cd1ea289) |
 
+## Live-site write loop (post-evidence, tender 6)
+
+Not part of the pre-registered 39-tx evidence set (tenders 1–5 only).
+Proven 2026-11-12 ~01:46 CST in a real Chromium browser against the
+live site (https://zuotu295.github.io/tendercourt-genlayer/), bundle
+?v=9f8793c2.
+
+- Tender 6 created (script, buyer 0xbe5c49b1d0a19d58fc7078560c44903e1b60b0f3):
+  create tx [0xf023541f…](https://explorer-studio.genlayer.com/tx/0xf023541f8b1e90de14e8a871be7a09636ad0f7ea03b481a3c1c1f3f02b45e89e) (FINALIZED + SUCCESS). Design, budget 300 GEN, 10 GEN award.
+- Browser as a fresh temporary supplier (0x4e7ff940625bd500d5f8519a2a1a2f575f7c29fa):
+  over-budget quote (301 GEN) blocked in the UI — error “报价为 1–预算之间的整数 GEN。”, submit disabled, supplier nonce 0 → 0 (no tx sent).
+  Valid quote (240 GEN) submitted from the browser: quote tx
+  [0x6e9e38ce…](https://explorer-studio.genlayer.com/tx/0x6e9e38ce133295237ca1d08938555367ef7ea535e05e234ab3a45966ad3b6278) (FINALIZED + SUCCESS), nonce 0 → 1. The double-confirm appeared with tender / price / terms before sending.
+- Buyer awarded the browser's quote (script): award tx
+  [0x62e5d6a4…](https://explorer-studio.genlayer.com/tx/0x62e5d6a48e38887e3751ed2c6e7909011383cca093caff98eaaf42ab49e4b075) (FINALIZED + SUCCESS).
+- Browser withdrew the 10 GEN award: withdraw tx
+  [0xa6e48fc4…](https://explorer-studio.genlayer.com/tx/0xa6e48fc4b3c146b81f6c377960551cc8630c000ac0721f8cfe43cd48aa489663) (FINALIZED + SUCCESS). Supplier balance 100 → 110 GEN (+10 GEN exactly). Tender 6 AWARDED, winner quote 1, winner_withdrawn true.
+- Totals after the write loop: 60 GEN in = 60 GEN out, balance 0, escrow 0, tender count 6.
+- The temporary test accounts' keys were deleted when the flow completed (checkpoint rule): buyer B3 holds 90 test GEN and supplier SB holds 110 test GEN, both unrecoverable — testnet GEN only, zero economic impact.
+- 375px: the write loop first found horizontal overflow (scrollWidth 519 at a 375px viewport) from the unbreakable contract-address / Source SHA-256 lines. Fixed by `overflow-wrap: anywhere` on `.mono` (bundle ?v=b2041366, commit 31f23b3); re-check PASSED — scrollWidth 375, no element wider than the viewport, full address and SHA still visible as wrapped text.
+
 ## Notes
 
 - The 10 GEN is the selection award, not the procurement contract value.
