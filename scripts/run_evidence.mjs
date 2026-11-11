@@ -197,6 +197,7 @@ async function writeOk(label, who, fn, args, value = 0n) {
   if (done[label]) { console.log(label, 'already done:', done[label]); return done[label]; }
   await sleep(1000);
   await resolvePending();
+  if (done[label]) { console.log(label, 'resolved as done:', done[label]); return done[label]; }
   const hash = await clients[who].writeContract({address: ADDRESS, functionName: fn, args, value, leaderOnly: false});
   cp.pending = {label, hash}; saveCheckpoint(cp);
   const tx = await collect(clients[who], hash, label);
@@ -209,6 +210,7 @@ async function writeErr(label, who, fn, args, code, value = 0n) {
   if (done[label]) { console.log(label, 'already done:', done[label]); return done[label]; }
   await sleep(1000);
   await resolvePending();
+  if (done[label]) { console.log(label, 'resolved as done:', done[label]); return done[label]; }
   const before = await reader.readContract({address: ADDRESS, functionName: 'get_all_tenders', args: [], transactionHashVariant: 'latest-final'});
   const totalsBefore = await readTotals();
   const hash = await clients[who].writeContract({address: ADDRESS, functionName: fn, args, value, leaderOnly: false});
@@ -224,6 +226,7 @@ async function writeErr(label, who, fn, args, code, value = 0n) {
 async function judgeFlow(label, tenderId, expectedWinner, caller = 'B1') {
   if (done[label]) { console.log(label, 'already done:', done[label]); return done[label]; }
   await resolvePending();
+  if (done[label]) { console.log(label, 'resolved as done:', done[label]); return done[label]; }
   for (let attempt = 1; attempt <= 3; attempt++) {
     await sleep(1000);
     const hash = await clients[caller].writeContract({address: ADDRESS, functionName: 'judge', args: [tenderId], value: 0n, leaderOnly: false});
