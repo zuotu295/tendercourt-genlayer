@@ -41,7 +41,7 @@ body {
 html.static body { animation: none; }
 a { color: #9ec5ff; }
 .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px 64px; }
-.mono { font-family: var(--mono); font-size: 13px; }
+.mono { font-family: var(--mono); font-size: 13px; overflow-wrap: anywhere; }
 .small { font-size: 13px; opacity: 0.85; }
 .hint { font-size: 13px; color: var(--ink-soft); margin: 6px 0 0; }
 .hint.light { color: #c7d6e6; }
