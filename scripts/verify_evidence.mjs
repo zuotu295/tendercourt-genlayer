@@ -56,7 +56,7 @@ async function receiptOf(hash) {
 // 1. Byte parity: deployed code equals contracts/tendercourt.py.
 const onChain = await reader.getContractCode(ADDRESS);
 check('byte-parity', onChain === source, `source sha256 ${sha(source).slice(0, 12)}…`);
-check('source-sha-matches-deployment', sha(source) === deployment.sourceSha256);
+check('source-sha-matches-deployment', sha(source) === deployment.source_sha256);
 
 // 2. Protocol + deploy tx.
 const protocol = await reader.readContract({address: ADDRESS, functionName: 'get_protocol', args: [], transactionHashVariant: 'latest-final'});

@@ -27,13 +27,15 @@ const totals = JSON.parse(await reader.readContract({address: ADDRESS, functionN
 const fmt = (wei) => `${Number(BigInt(wei) / 1000000000000000000n)} GEN`;
 const link = (h) => `[${h.slice(0, 10)}…](${EX}/tx/${h})`;
 
-let md = `# TenderCourt v1 — Evidence
+let md = `# TenderCourt v2 — Evidence
 
 Contract: [${ADDRESS}](${EX}/address/${ADDRESS})
 Deploy tx: [${deployment.deploy_tx.slice(0, 10)}…](${EX}/tx/${deployment.deploy_tx})
-Protocol: tendercourt-1 · Source SHA-256: ${sha(source)} · Byte parity with \`contracts/tendercourt.py\`: ${parity ? 'TRUE' : 'FALSE'}
+Protocol: tendercourt-2 · Source SHA-256: ${sha(source)} · Byte parity with \`contracts/tendercourt.py\`: ${parity ? 'TRUE' : 'FALSE'}
 
-All transactions below are FINALIZED on Stable Studionet (Chain ID 61999). Success steps: FINALIZED + MAJORITY_AGREE + leader SUCCESS. Negative steps (neg0–neg11): FINALIZED + MAJORITY_AGREE + leader ERROR with the expected error code in the live receipt, and no state change.
+All transactions below are FINALIZED on Stable Studionet (Chain ID 61999). Success steps: FINALIZED + MAJORITY_AGREE + leader SUCCESS. Negative steps (neg0–neg15): FINALIZED + MAJORITY_AGREE + leader ERROR with the expected error code exactly equal to the leader receipt's error payload, and no state change.
+
+v1 evidence (tenders 1-5 on contract 0xD2A0Fe94cCb632D6307a4215b722643e6164ed0D) is archived in evidence/v1/. It does NOT prove this contract; the evidence below is fresh, on this deployment.
 
 ## Tender outcomes (live readback, latest-final)
 
@@ -49,10 +51,12 @@ md += `
 - Tender 3 (CANCELLED, NO_AWARD): both quotes fail the requirements — machine-only translation with no review, and the first 5 pages only — validators return NO_AWARD (0); the buyer withdraws the full 10 GEN refund.
 - Tender 4 (CANCELLED): the buyer cancels while OPEN with zero quotes; the buyer withdraws the full 10 GEN refund.
 - Tender 5 (AWARDED, winner quote 1, injection): quote 2 embeds an instruction telling validators to pick it — validators judge quote 1 the winner (not the injected quote 2); the supplier withdraws 10 GEN.
+- Tender 6 (AWARDED, winner quote 1, liveness): eight quotes fill the tender to the 8-quote cap; a ninth quote is rejected on-chain (QUOTE_LIMIT). Quoter S1 requests judgment (the tender is full) and a non-buyer (OUT) executes the consensus judgment; validators judge quote 1 the winner; the supplier withdraws 10 GEN.
+- Tender 7 (AWARDED, winner quote 1, terms cap): four quotes carry exactly 2000 chars of terms each (8000 total = the cap); a fifth quote is rejected on-chain (QUOTE_TERMS_TOTAL). The buyer requests judgment and the judgment runs over the 8000-char prompt; validators judge quote 1 the winner; the supplier withdraws 10 GEN.
 
 ## GEN accounting (live readback, latest-final)
 
-- Total received: ${fmt(totals.total_received_wei)} (5 tenders × 10 GEN)
+- Total received: ${fmt(totals.total_received_wei)} (7 tenders × 10 GEN)
 - Total withdrawn: ${fmt(totals.total_withdrawn_wei)}
 - Contract balance: ${fmt(totals.contract_balance_wei)}
 - Escrowed: ${fmt(totals.escrowed_wei)}
@@ -72,6 +76,7 @@ md += `
 - The 10 GEN is the selection award, not the procurement contract value.
 - No value was sent on any expected-failure payable call. Platform behavior (verified live 2026-11-11): on Studionet a FAILED payable call does not refund the sent value — it stays in the contract with no entitlement — so evidence never sends value on a negative payable.
 - Pre-registered expectations: EXPECTED.md (written before the evidence run). Independent re-verification: \`node scripts/verify_evidence.mjs\`.
+- Resume artifacts: the evidence run was interrupted twice by runtime restarts. Two transactions landed before the restart but were not yet recorded in the run's checkpoint; both were recovered from the explorer and verified live before the run resumed: t3-quote-2 (0x23184c05…, FINALIZED + MAJORITY_AGREE + SUCCESS) and neg7 (0xb80a3c54…, FINALIZED + MAJORITY_AGREE + leader ERROR ONLY_BUYER_CAN_REQUEST_JUDGMENT). A duplicate t3-quote-2 attempt sent by the first resume (0xbe866a60…) correctly failed on-chain with DUPLICATE_QUOTE — it is not part of the evidence set, but it confirms the original quote was already on-chain.
 `;
 
 fs.writeFileSync(path.join(REPO, 'EVIDENCE.md'), md);

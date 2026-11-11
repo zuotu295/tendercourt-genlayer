@@ -1,4 +1,4 @@
-# TenderCourt v1 — Reviewer notes
+# TenderCourt v2 — Reviewer notes
 
 ## How to verify (one command, read-only)
 
@@ -9,17 +9,18 @@ node scripts/verify_evidence.mjs
 
 This re-reads everything live from Stable Studionet (Chain ID 61999) and
 checks: deployed code equals `contracts/tendercourt.py` byte for byte;
-protocol is `tendercourt-1`; the deploy tx and every evidence tx are
-FINALIZED with the expected consensus/execution result — for the 12
-on-chain negatives (neg0–neg11) that means FINALIZED + MAJORITY_AGREE +
-leader ERROR + the live receipt containing the expected error code
-recorded in `evidence/transactions.json` (a MAJORITY_DISAGREE or a wrong
-error code fails the check, it never counts as a pass); the five tenders
-end AWARDED / AWARDED / CANCELLED (NO_AWARD) / CANCELLED / AWARDED with
-the exact credits the settlement rules require; tender 5's winner is NOT
-the injected quote; GEN accounting is 50 GEN in = 50 GEN out, contract
-balance 0, escrow 0. Pre-registered expectations: `EXPECTED.md` (written
-before the evidence run).
+protocol is `tendercourt-2`; the deploy tx and every evidence tx are
+FINALIZED with the expected consensus/execution result — for the 16
+on-chain negatives (neg0–neg15) that means FINALIZED + MAJORITY_AGREE +
+leader ERROR + the leader receipt's error payload EXACTLY equal to the
+expected error code recorded in `evidence/transactions.json` (a
+MAJORITY_DISAGREE or a wrong error code fails the check, it never counts
+as a pass; a record with an unknown result value also fails); the seven
+tenders end AWARDED / AWARDED / CANCELLED (NO_AWARD) / CANCELLED /
+AWARDED / AWARDED / AWARDED with the exact credits the settlement rules
+require; tender 5's winner is NOT the injected quote; GEN accounting is
+70 GEN in = 70 GEN out, contract balance 0, escrow 0. Pre-registered
+expectations: `EXPECTED.md` (written before the evidence run).
 
 ## What to check by hand
 
@@ -32,9 +33,11 @@ before the evidence run).
   submit a quote as a supplier, award / request judgment / judge / cancel,
   watch the real transaction progress to FINALIZED, export the tender
   dossier. Note: a temporary test account is BLOCKED from posting tenders
-  (escrow funding needs a persistent wallet).
+  (escrow funding needs a persistent wallet). In JUDGING, anyone may run
+  the consensus judgment (not only the buyer); a direct award is labelled
+  in the UI as not consensus-reviewed.
 
-## Evidence map (v1)
+## Evidence map (v2)
 
 - Tender 1 (AWARDED, winner Q1): three quotes — Q1 complete terms at 400
   GEN, Q2 thin terms at 480 GEN, Q3 at 350 GEN with no ordering/menu —
@@ -49,21 +52,36 @@ before the evidence run).
 - Tender 5 (AWARDED, winner Q1, injection): Q2 embeds an instruction
   telling validators to pick it — validators judge Q1 the winner (not the
   injected Q2), supplier withdraws 10 GEN.
-- Negatives — 12 on-chain (neg0–neg11, all FINALIZED + MAJORITY_AGREE +
-  leader ERROR with the expected error code, no state change): wrong-fee
-  create; buyer quoting own tender; duplicate quote; price over budget;
-  price zero; outsider award; outsider cancel; outsider request judgment;
-  double withdraw; cancel after quotes; award of a nonexistent quote;
-  request judgment with zero quotes.
-- Post-evidence live-site write loop (tender 6, documented in
-  EVIDENCE.md, not part of the pre-registered 39-tx set): tender 6 was
+- Tender 6 (AWARDED, winner Q1, liveness): eight quotes fill the tender
+  to the 8-quote cap; a ninth quote is rejected on-chain (QUOTE_LIMIT).
+  Quoter S1 requests judgment (the tender is full) and a non-buyer (OUT)
+  executes the consensus judgment; validators judge Q1 the winner,
+  supplier withdraws 10 GEN.
+- Tender 7 (AWARDED, winner Q1, terms cap): four quotes carry exactly
+  2000 chars of terms each (8000 total = the cap); a fifth quote is
+  rejected on-chain (QUOTE_TERMS_TOTAL). The buyer requests judgment and
+  the judgment runs over the 8000-char prompt; validators judge Q1 the
+  winner, supplier withdraws 10 GEN.
+- Negatives — 16 on-chain (neg0–neg15, all FINALIZED + MAJORITY_AGREE +
+  leader ERROR with the exact expected error code in the leader receipt
+  payload, no state change): wrong-fee create; buyer quoting own tender;
+  duplicate quote; price over budget; price zero; outsider award;
+  outsider cancel; outsider request judgment; double withdraw; cancel
+  after quotes; award of a nonexistent quote; request judgment with zero
+  quotes; ninth quote on a full tender (QUOTE_LIMIT); fifth quote over
+  the terms total (QUOTE_TERMS_TOTAL); judge while OPEN
+  (TENDER_NOT_JUDGING); quoter requesting judgment on a non-full tender
+  (ONLY_BUYER_CAN_REQUEST_JUDGMENT).
+- Post-evidence live-site write loop (tender 8, documented in
+  EVIDENCE.md, not part of the pre-registered 63-tx set): tender 8 was
   created after the evidence run and proven end-to-end in a real browser
   (temp supplier: over-budget quote blocked with no tx, valid quote
-  submitted, award, 10 GEN withdrawn; totals 60/60/0/0). The verify
-  script matches tenders 1–5 by id and requires GEN conservation, so it
-  still passes with tender 6 present. A 375px overflow found in the same
-  check (unbreakable address/SHA lines) was fixed with `overflow-wrap`
-  on `.mono` and re-verified (scrollWidth 375).
+  submitted, the temp supplier itself executes the consensus judgment in
+  JUDGING — the v2 anyone-may-judge path — and withdraws 10 GEN; totals
+  80/80/0/0). The verify script matches tenders 1–7 by id and requires
+  GEN conservation, so it still passes with tender 8 present. The v1
+  375px overflow fix (`overflow-wrap: anywhere` on `.mono`) is still in
+  place and was re-verified (scrollWidth 375).
 
 ## Consensus re-audit (done before deployment)
 
@@ -111,7 +129,17 @@ Read `validator_fn` in `contracts/tendercourt.py` (`_run_judge`):
   required; deterministic code settles the award.
 - No time gates: every transition is an explicit user action (Studionet
   has no clock). The escrow-lock fix is cancel-while-OPEN-with-zero-quotes
-  and the buyer's direct-award right, not a deadline.
+  and the buyer's direct-award right, not a deadline. v2 adds: once
+  JUDGING, anyone may execute the judgment (the winner is decided by
+  consensus, so the caller cannot bias it); a quoter may request judgment
+  once the tender is full. The remaining stall is a tender left OPEN
+  with 1–7 quotes whose buyer disappears — no fair timeout exists
+  without a clock, and the harm is bounded (10 test GEN, no supplier
+  paid anything).
+- Quote flood is capped in the contract: at most 8 quotes per tender and
+  8000 chars of quote terms in total, so the consensus judging prompt
+  stays bounded. A frontend-only cap would not stop a direct contract
+  call, so the caps are enforced on-chain.
 - Fixed 10 GEN award; no variable pricing. The 10 GEN is the selection
   award, not the procurement contract value.
 - One quote per supplier per tender; quotes cannot be revised.

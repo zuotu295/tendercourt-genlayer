@@ -1,219 +1,352 @@
 {
   "network": "Stable Studionet",
   "chain_id": 61999,
-  "contract_address": "0xD2A0Fe94cCb632D6307a4215b722643e6164ed0D",
-  "deploy_tx": "0xdb26699819ff328cd3dc57e2c26a07413d209227414114ac28b0b436c09afd4a",
+  "contract_address": "0xfbF78EB703FBaaD95DCc05263DAF8cf3E6c64A45",
+  "deploy_tx": "0x6859d0ec7f4050a4a4c74f8f8aef2c6e04f33621bb7e416904f2e5bdf5ad664f",
   "transactions": [
     {
       "label": "t1-create",
-      "hash": "0x4c73f70001ad3b1e6ce6cdca53eb3f1959a35dcfa04480d1d54dbaa8c9d3a5e0",
+      "hash": "0x2dc62f33a6ed640e0684819c5d74c7df99e8afbb92b4bdfd419e36becbf0fe9c",
       "result": "ok"
     },
     {
       "label": "t2-create",
-      "hash": "0x25cfc5589762430ee40c8f1a1a532c6bc5a7f94de038f322d1dccadf52bbf6d2",
+      "hash": "0xbac7baf5e814eefe92b79bc2c5bd4d914974228b9c87f8520d23bf970fb0775b",
       "result": "ok"
     },
     {
       "label": "t3-create",
-      "hash": "0x1269ee71075375a290bdc876bb02664b5b24f0720383603b377411b890d5a668",
+      "hash": "0xe2270c943b03544ddf4af6c75a5421f820475908a555cbb2b68a9f100dd86bc2",
       "result": "ok"
     },
     {
       "label": "t4-create",
-      "hash": "0x97ade2cb431b1f28af65536dba1877aece88a8b8c80371f98d4e616bbbc23e7d",
+      "hash": "0xc3590d2255b18d1b01a9d94be825635da99c7d8a32566ab9bc54b5ce15439df6",
       "result": "ok"
     },
     {
       "label": "t5-create",
-      "hash": "0x57a7b9611eefa2cb38088133daaef7d0b85562d1245abb74fb69fba17130ecb0",
+      "hash": "0x9561f3a1f611551254b4a4c031204fd9d35afed505e9daf868e1080bbfe581b7",
+      "result": "ok"
+    },
+    {
+      "label": "t6-create",
+      "hash": "0x1a1bf0010a62fd92a98aaa55dd681f4dc79da0f36cc976cb33bac8845e76baa9",
+      "result": "ok"
+    },
+    {
+      "label": "t7-create",
+      "hash": "0x0465dd5c4bdf422e57063677135641e59f69747155894a88cdce834064030ec4",
       "result": "ok"
     },
     {
       "label": "t1-quote-1",
-      "hash": "0xf8942ddf07c6ea7b76f1499fd61a2b79c319462e45dd76eb131c1274fa97db6e",
+      "hash": "0x58026fdd0ed615efae95776c07626e01b0a4d20ebe26bef90c26421b884b029c",
       "result": "ok"
     },
     {
       "label": "t1-quote-2",
-      "hash": "0x01ce6459229826f7140cd6825e2ccdd858905344fb2924b65d4e51beff641734",
+      "hash": "0xc62fa5a95db2073469686d4c1e4f1a3aabb2159bf4b9a21d4ee6c8becb6de51b",
       "result": "ok"
     },
     {
       "label": "t1-quote-3",
-      "hash": "0x70d8f30d2755d554509846149a1af1b9a851ddf965d67f983673e6e942a7957a",
+      "hash": "0xfc30fb55a7b9324e7fd86ce736965db28e49151d4dc8f170e84d41af9d1abd2a",
       "result": "ok"
     },
     {
       "label": "t2-quote-1",
-      "hash": "0xe194e0cecfe02128b82506b8e0d0e826ee0e0c4d63e39eee560ab928e2e4e083",
+      "hash": "0xd2c743b84f97afd4b3099b9bd3de05be87b4e325ec234b0b1fdd907ff8de16c6",
       "result": "ok"
     },
     {
       "label": "t2-quote-2",
-      "hash": "0x1a40a59dd32bf2da208f50752e360816f350c3a639e78d4ecd7ab3a9e461ccca",
+      "hash": "0x13f1634aaeb989e9d876b9b665492d54256a3f297d0449b9d151e95980b9f67e",
       "result": "ok"
     },
     {
       "label": "t3-quote-1",
-      "hash": "0xac348f66518816e7decf56709d3b5d9b36b0e607f0f759a72386a9037080c721",
+      "hash": "0x1bec242714bc35ee6b568152236ca572fbf3ff7627c1c140b507e9c7c61b6ef9",
       "result": "ok"
     },
     {
       "label": "t3-quote-2",
-      "hash": "0x30221c78354cc3df7769385f004cb6467f46b8181bbca25968543a8ec74e73b0",
+      "hash": "0x23184c05dfa3dd242128b366251f6a4ec76e15f3849911e38e117b4008c9443c",
       "result": "ok"
     },
     {
       "label": "t5-quote-1",
-      "hash": "0xe87f0671c69cdb95ddd5dfbbc05df4c993e037e275151e8004b580e2f283e8d8",
+      "hash": "0x759671c995304610f13673195865f47d479ac2ac7f364c5b4d64141de3c71f04",
       "result": "ok"
     },
     {
       "label": "t5-quote-2",
-      "hash": "0xb52428d847ef992d7edfb6eff578af5c94192aeb72312e43dbceedcf4a9ca38b",
+      "hash": "0x3f27071b1f33bccd2746f8fc4617a5640986416bca504296efc0ecd915dfb6c5",
+      "result": "ok"
+    },
+    {
+      "label": "t6-quote-1",
+      "hash": "0x660b35f4d0d0e7a72d723a6574e9c8e61722bb05cf8922c567a9c607a244027d",
+      "result": "ok"
+    },
+    {
+      "label": "t6-quote-2",
+      "hash": "0x216ebbc47b4e30e41da496a4d49b809ee0d9c7b90423bd4edd34cb92ff2d1383",
+      "result": "ok"
+    },
+    {
+      "label": "t6-quote-3",
+      "hash": "0x6efddaaffdc1996177801c3350b0b20ea4238821c184c8ec42f08d04e969671d",
+      "result": "ok"
+    },
+    {
+      "label": "t6-quote-4",
+      "hash": "0xa275f8566610a330b56d1ccee06e736ce7e5c55174a876699678a8aae50f8149",
+      "result": "ok"
+    },
+    {
+      "label": "t6-quote-5",
+      "hash": "0xf88c5d43a57bf7a7e92009b1bd44ff4ee63c20bc443ec77deb6d0373f25513f1",
+      "result": "ok"
+    },
+    {
+      "label": "t6-quote-6",
+      "hash": "0x2f373e46b2c5de71106555acc1756c88d7beb8703fb05c366051fc343da25c95",
+      "result": "ok"
+    },
+    {
+      "label": "t6-quote-7",
+      "hash": "0xeaa9002ccfbae1471eecbc7f80cb1b757628b7c6becd39d7de414d187751741c",
+      "result": "ok"
+    },
+    {
+      "label": "t6-quote-8",
+      "hash": "0x849d0e3c880393444a405eef2bf6ec60f1e79b6b002a7e78e7bdc6cd1c303a3f",
+      "result": "ok"
+    },
+    {
+      "label": "t7-quote-1",
+      "hash": "0xd4a2270b457eb138428a502a6b4feb32953f6dfaa90214db1ccf4cc8086d4a73",
+      "result": "ok"
+    },
+    {
+      "label": "t7-quote-2",
+      "hash": "0xfb80f17d5a807f2265a0b7c05b9d31a48c18ec79f01b853ed1f1c0339c46e91f",
+      "result": "ok"
+    },
+    {
+      "label": "t7-quote-3",
+      "hash": "0x3cb602e19bf52f0d00b45b638cf5f830868cf1f5b89aa16e81ae101d9ac25efe",
+      "result": "ok"
+    },
+    {
+      "label": "t7-quote-4",
+      "hash": "0x8533e4f61229a618e463780b3aee9a3af01444372ff204ba983f9392f2049ac4",
       "result": "ok"
     },
     {
       "label": "neg0-wrong-fee-create",
-      "hash": "0x385820354ec3861740306cfd313c5f7bd17c68375da408a95daba7d4394065eb",
+      "hash": "0x7dd9bfa6595ddb4c521a4c82d6dbed65413190bf9a591d079f4361915c638ee5",
       "result": "error-observed",
       "expected_error": "FEE_MUST_BE_10_GEN"
     },
     {
       "label": "neg1-buyer-quotes-own",
-      "hash": "0xae11464d0c1aa22e330e4f615afd2922006df631d9ccc41f1fa8954bff8afdd5",
+      "hash": "0xc7b91ca54e378bc0598f6f8cdfc26d879c49f91779a3d2bc7f89b8c0a0168f2b",
       "result": "error-observed",
       "expected_error": "BUYER_CANNOT_QUOTE_OWN_TENDER"
     },
     {
       "label": "neg2-duplicate-quote",
-      "hash": "0x74542b8e0c5b03d658dcee3722829a6c78c04a3a822569f9638a98583e0d7a09",
+      "hash": "0x8abdc4063872333ebf31837c19dd8a067cd3e292a96f5dd98bee442f330f36e0",
       "result": "error-observed",
       "expected_error": "DUPLICATE_QUOTE"
     },
     {
       "label": "neg3-price-over-budget",
-      "hash": "0xaee9a3ad98d65da4a7fa4b02cd9487e04ee58802099c30df136f78d052c2fb52",
+      "hash": "0x0442821c36b0be1b41727e599217af6159f0704b2e680c89070a41883145149d",
       "result": "error-observed",
       "expected_error": "QUOTE_PRICE"
     },
     {
       "label": "neg4-price-zero",
-      "hash": "0x69dfe450905b1082ebd6ae8c6b2171b3af1244bccd25c72d7f18dd8223466b70",
+      "hash": "0xf344c65223eedab5ae2854347a4282d19e4902232c12c36177a29c2596fdc83a",
       "result": "error-observed",
       "expected_error": "QUOTE_PRICE"
     },
     {
       "label": "neg5-outsider-award",
-      "hash": "0x6d6388ca18f9f0119c34c1a696ee195132446fbd4394e4a16d16326fe847cdef",
+      "hash": "0xaf861410466155455f0e6856ebe36b32b9ea601b1bce1e5b93cc921104a1a89f",
       "result": "error-observed",
       "expected_error": "ONLY_BUYER_CAN_AWARD"
     },
     {
       "label": "neg6-outsider-cancel",
-      "hash": "0x80725272e6fa6f60a24f7bc7e3e9ed1c7ff617f70a34e6c2bdb3220b83c9c893",
+      "hash": "0x229f2ca46675e8076d04396e683a031ce3626d230eed211a479930c6ece7ba80",
       "result": "error-observed",
       "expected_error": "ONLY_BUYER_CAN_CANCEL"
     },
     {
       "label": "neg7-outsider-request-judgment",
-      "hash": "0xcfb1dd63234b574b4294abcf8e8c6ddcbe0396b207c29cf79e0770168c2f5eef",
+      "hash": "0xb80a3c54671922c7d15f91965f66e023d9bab8e565d8db491c531ddb2fc10805",
       "result": "error-observed",
       "expected_error": "ONLY_BUYER_CAN_REQUEST_JUDGMENT"
     },
     {
       "label": "neg9-cancel-after-quotes",
-      "hash": "0x58a0bf5e5ada483a8bf3955cf939462e37f84ae0ec8d20446f7f8b4329fd50b6",
+      "hash": "0x9499b9108483d0e8e9a0af74848edab8025efd1c2bf22ec03c6e267db0deded1",
       "result": "error-observed",
       "expected_error": "CANNOT_CANCEL_WITH_QUOTES"
     },
     {
       "label": "neg10-award-unknown-quote",
-      "hash": "0xb7d2a56479796a72a67501a42450af3b96dce4b4923fe2794fedcfed2427659f",
+      "hash": "0xdb99e7f054467e559ac0df7eddc673f0a19dfe076054327213d59155b66ee756",
       "result": "error-observed",
       "expected_error": "QUOTE_NOT_FOUND"
     },
     {
       "label": "neg11-request-judgment-no-quotes",
-      "hash": "0xc9f3bacb84e5979193fbd28989c5cfba99a8518f7574fc01523b434538cf4cca",
+      "hash": "0x619f0b2ba65c69c45ae97eba3d4a66a8a373b6deb71cd87630f7eb6bef9be94c",
       "result": "error-observed",
       "expected_error": "NO_QUOTES"
     },
     {
+      "label": "neg12-ninth-quote-full-tender",
+      "hash": "0x00780aa3754bc7e53202c445e4e9bbae1783c8fdda89ace32019bb8ef96d19ca",
+      "result": "error-observed",
+      "expected_error": "QUOTE_LIMIT"
+    },
+    {
+      "label": "neg13-fifth-quote-over-terms-total",
+      "hash": "0x11a519fa322d5a2a56c087b04c3739f68b1636c59dbc355961461641c7afea01",
+      "result": "error-observed",
+      "expected_error": "QUOTE_TERMS_TOTAL"
+    },
+    {
+      "label": "neg14-judge-while-open",
+      "hash": "0xfb8b1b53c34f42477240936a8cd5fe2bc5adce4ecb2d1f291ebe194c462277ba",
+      "result": "error-observed",
+      "expected_error": "TENDER_NOT_JUDGING"
+    },
+    {
+      "label": "neg15-quoter-request-not-full",
+      "hash": "0x9ddead290adc3808b90e34ea55461aa79f07da72fb0815a09cca542b81de45d9",
+      "result": "error-observed",
+      "expected_error": "ONLY_BUYER_CAN_REQUEST_JUDGMENT"
+    },
+    {
       "label": "t1-request-judgment",
-      "hash": "0x59dc8387bce9f838e2abcd501c9306a3394875e119d9f5d9edff5615daceb583",
+      "hash": "0x5082a145eacb68c36e26093e4870da2bd28e546c15bfd4195b53c28cb1aeec78",
       "result": "ok"
     },
     {
       "label": "t1-judge",
-      "hash": "0xd20a59c3f1e85f559458663398e7749ad59d9a50fb450386a42afc4a5578be43",
+      "hash": "0x2c4347d3b6e783f986898dd25357775ad78c15bc145e0ee49350bdc0fbfc0492",
       "result": "ok",
       "winner_quote_id": 1,
-      "attempts": 1
+      "attempts": 1,
+      "caller": "B1"
     },
     {
       "label": "t2-award",
-      "hash": "0x2e43836a54171165c81d8480f8954b6c3482965bf2cd5ef5f8fc0231adfd36d9",
+      "hash": "0x14a5ce096fbd5f1515568d016185b9f0008c9e88a0810eb58a2bc4f08982a3fa",
       "result": "ok"
     },
     {
       "label": "t3-request-judgment",
-      "hash": "0x4b7b324794cf0c57308ab79982ef61f15a046943b830b79e731a1c071fed22eb",
+      "hash": "0xc31b4a80703f9a38b3e1c37d05b6ae369f6c8f56583a14f74b0e7ba65d11182c",
       "result": "ok"
     },
     {
       "label": "t3-judge",
-      "hash": "0xed5b93a5cb6d0aaec72e9577479236aad269fcd599b6d8420f9f2a0df39d21b9",
+      "hash": "0x435a1c0ce347d39557d14c4a446c7754c2cef949237b520022d4a066c43aeb9b",
       "result": "ok",
       "winner_quote_id": 0,
-      "attempts": 1
+      "attempts": 1,
+      "caller": "B1"
     },
     {
       "label": "t4-cancel",
-      "hash": "0x3e7045ebac85cb5105d15e9d141dc6215cca65f323406a63d58dbb9e6e33d56b",
+      "hash": "0xd68758644f7ac5e9a7f7ec5df1821faffd8930f16493e120351c200b0c5fcc82",
       "result": "ok"
     },
     {
       "label": "t5-request-judgment",
-      "hash": "0x47b1bafdd7e88e044173524830744711530404f54a180e423775afe8f890ac8e",
+      "hash": "0xcf3319607332ae364b9fb2393973178453b3db02975f0a789a0806ce4ec33c79",
       "result": "ok"
     },
     {
       "label": "t5-judge",
-      "hash": "0xa09c2f82a4f71c51800b79c6bda51740ed45e31233a10bff86ddd88d28b9cc3a",
+      "hash": "0x61d64ea81e8ad245cc8145a22a70838895a440be4efa23136c1254abb5281b7f",
       "result": "ok",
       "winner_quote_id": 1,
-      "attempts": 1
+      "attempts": 1,
+      "caller": "B1"
+    },
+    {
+      "label": "t6-request-judgment-by-quoter",
+      "hash": "0xee56c8e727f37a9a7307da347cc7154d478362665b33b8dbcadc817a5f4bfa96",
+      "result": "ok"
+    },
+    {
+      "label": "t6-judge-by-out",
+      "hash": "0xbd707dad5225d5454fc6a2f675625882595638c7a2e9b94ee9c9c0a64b98438a",
+      "result": "ok",
+      "winner_quote_id": 1,
+      "attempts": 1,
+      "caller": "OUT"
+    },
+    {
+      "label": "t7-request-judgment",
+      "hash": "0x225efe212d46d578b42d045de1701840fef4a2487e3bff9887254f738b269e7b",
+      "result": "ok"
+    },
+    {
+      "label": "t7-judge",
+      "hash": "0x826c9e957a8dd2617e872295f0b687654598ecbbfa02acf18d641f1278d1f09e",
+      "result": "ok",
+      "winner_quote_id": 1,
+      "attempts": 1,
+      "caller": "B1"
     },
     {
       "label": "t1-winner-withdraw",
-      "hash": "0x2bffd0312ceef3dfc2f0aafd3cb629ffcb3c740923ad247e899776b2d6f92611",
+      "hash": "0x23442dc1cc048da534453fb16de3fa2f545f6b4e7d85f09ae6653900ed86dce1",
       "result": "ok"
     },
     {
       "label": "t2-winner-withdraw",
-      "hash": "0x4a0374a4b326b64987be5b3a95f928d698ec2212cdec5c907d2f3dc06c8837b2",
+      "hash": "0x786b6d6d2b546220ed982e83f501947a7c0ca1aba1abbdfd89afdc424f867f7a",
       "result": "ok"
     },
     {
       "label": "t3-buyer-withdraw",
-      "hash": "0xff30407a5a6924efe91b50d8f08a5bc5f17b3e31142917f15aa1767651b98995",
+      "hash": "0x7e122d0de72ec2e4448df50880de4ffa0cd8512c318e3b2f74e82809e31fca55",
       "result": "ok"
     },
     {
       "label": "t4-buyer-withdraw",
-      "hash": "0x00e5227707802a1cb9fb02f7c965e80278a7c6917d5d9948e3058a3694047334",
+      "hash": "0x8744c95b89cd682aee7334dd2b42e56a62023dff08574c5b9c0c45ac2d052b3e",
       "result": "ok"
     },
     {
       "label": "t5-winner-withdraw",
-      "hash": "0x7670b5589b71eb2a9ba5d536fc8788ba0dd07768bd1ebd0285c1303a850a43b6",
+      "hash": "0x75f3e611844d2e8d80f35643e973340c2c38488f6e1bd760be515258f676ee20",
+      "result": "ok"
+    },
+    {
+      "label": "t6-winner-withdraw",
+      "hash": "0x04c1591fd9573983e0faf6df6a2b7023d16942124aa370655aaba3456d22dcdb",
+      "result": "ok"
+    },
+    {
+      "label": "t7-winner-withdraw",
+      "hash": "0xac4b3fdd772da512dbc81c70dc4ee6e7347dafd9d5abd3e73f9db0447805326a",
       "result": "ok"
     },
     {
       "label": "neg8-double-withdraw",
-      "hash": "0x430f65b95fff2df340b67f1f982c6ef4154c8f6327817471f227a669cd1ea289",
+      "hash": "0x9f0058f0d89ee2c87f7f818fcd9dc1faa2a47b013286084dab19aa1f57ad562a",
       "result": "error-observed",
       "expected_error": "NO_CREDIT"
     }

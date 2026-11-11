@@ -85,6 +85,57 @@ for (const k of Object.keys(accounts)) console.log(k, ':', accounts[k].address);
 const ev = cp.evidence || (cp.evidence = {done: {}, tenders: {}});
 const done = ev.done;
 const records = [];
+// Resume seeding: the checkpoint only stores label -> hash, so a process
+// restart loses the in-memory `records`. Rebuild them from the
+// checkpoint here, or the final transactions.json would silently drop
+// every tx from the earlier run. Results are inferred from the label:
+// negatives are error-observed (expected error from the table below),
+// '-attempt-N' labels are disagreed-retry, everything else is ok.
+// Judge labels also carry their pre-registered winner + caller.
+const NEG_ERRORS = {
+  'neg0-wrong-fee-create': 'FEE_MUST_BE_10_GEN',
+  'neg1-buyer-quotes-own': 'BUYER_CANNOT_QUOTE_OWN_TENDER',
+  'neg2-duplicate-quote': 'DUPLICATE_QUOTE',
+  'neg3-price-over-budget': 'QUOTE_PRICE',
+  'neg4-price-zero': 'QUOTE_PRICE',
+  'neg5-outsider-award': 'ONLY_BUYER_CAN_AWARD',
+  'neg6-outsider-cancel': 'ONLY_BUYER_CAN_CANCEL',
+  'neg7-outsider-request-judgment': 'ONLY_BUYER_CAN_REQUEST_JUDGMENT',
+  'neg8-double-withdraw': 'NO_CREDIT',
+  'neg9-cancel-after-quotes': 'CANNOT_CANCEL_WITH_QUOTES',
+  'neg10-award-unknown-quote': 'QUOTE_NOT_FOUND',
+  'neg11-request-judgment-no-quotes': 'NO_QUOTES',
+  'neg12-ninth-quote-full-tender': 'QUOTE_LIMIT',
+  'neg13-fifth-quote-over-terms-total': 'QUOTE_TERMS_TOTAL',
+  'neg14-judge-while-open': 'TENDER_NOT_JUDGING',
+  'neg15-quoter-request-not-full': 'ONLY_BUYER_CAN_REQUEST_JUDGMENT',
+};
+const JUDGE_INFO = {
+  't1-judge': {winner_quote_id: 1, caller: 'B1'},
+  't3-judge': {winner_quote_id: 0, caller: 'B1'},
+  't5-judge': {winner_quote_id: 1, caller: 'B1'},
+  't6-judge-by-out': {winner_quote_id: 1, caller: 'OUT'},
+  't7-judge': {winner_quote_id: 1, caller: 'B1'},
+};
+const LABEL_ORDER = ['t1-create', 't2-create', 't3-create', 't4-create', 't5-create', 't6-create', 't7-create',
+  't1-quote-1', 't1-quote-2', 't1-quote-3', 't2-quote-1', 't2-quote-2', 't3-quote-1', 't3-quote-2', 't5-quote-1', 't5-quote-2',
+  't6-quote-1', 't6-quote-2', 't6-quote-3', 't6-quote-4', 't6-quote-5', 't6-quote-6', 't6-quote-7', 't6-quote-8',
+  't7-quote-1', 't7-quote-2', 't7-quote-3', 't7-quote-4',
+  'neg0-wrong-fee-create', 'neg1-buyer-quotes-own', 'neg2-duplicate-quote', 'neg3-price-over-budget', 'neg4-price-zero',
+  'neg5-outsider-award', 'neg6-outsider-cancel', 'neg7-outsider-request-judgment', 'neg9-cancel-after-quotes', 'neg10-award-unknown-quote', 'neg11-request-judgment-no-quotes',
+  'neg12-ninth-quote-full-tender', 'neg13-fifth-quote-over-terms-total', 'neg14-judge-while-open', 'neg15-quoter-request-not-full',
+  't1-request-judgment', 't1-judge', 't2-award', 't3-request-judgment', 't3-judge', 't4-cancel', 't5-request-judgment', 't5-judge',
+  't6-request-judgment-by-quoter', 't6-judge-by-out', 't7-request-judgment', 't7-judge',
+  't1-winner-withdraw', 't2-winner-withdraw', 't3-buyer-withdraw', 't4-buyer-withdraw', 't5-winner-withdraw', 't6-winner-withdraw', 't7-winner-withdraw', 'neg8-double-withdraw'];
+for (const label of LABEL_ORDER) {
+  const hash = done[label];
+  if (!hash) continue;
+  if (label.startsWith('neg')) records.push({label, hash, result: 'error-observed', expected_error: NEG_ERRORS[label]});
+  else if (/-attempt-\d+$/.test(label)) records.push({label, hash, result: 'disagreed-retry'});
+  else if (JUDGE_INFO[label]) records.push({label, hash, result: 'ok', ...JUDGE_INFO[label]});
+  else records.push({label, hash, result: 'ok'});
+}
+if (records.length > 0) console.log('resumed:', records.length, 'txs already recorded from the checkpoint');
 function record(label, hash, result, extra = {}) {
   records.push({label, hash, result, ...extra});
   done[label] = hash;
