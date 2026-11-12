@@ -57,7 +57,7 @@ Buyer-path failure (honest record): the buyer's private key was not persisted �
 | t8-judge-by-out (OUT, non-buyer) | ok | [0x7324c221…](https://explorer-studio.genlayer.com/tx/0x7324c22186ed573e2d98e9631d182f38e80f1462635171133c41a380093e4212) |
 | t8-winner-withdraw (temp account) | ok | [0xb7f50769…](https://explorer-studio.genlayer.com/tx/0xb7f507698303c90b9f80e7767946152b4ff282c5bc8d6cc2b73fbe8a5cc90380) |
 
-Tender 8 final state (live readback, latest-final): AWARDED, winner quote 1, winner_supplier 0x73350588DE99cF1066e3E38522Dbb438f38680Db, 8 quotes. Winner balance after payout: 110 GEN (started 100, quote is free, +10 GEN award). All 12 write-loop transactions independently re-read live: FINALIZED + MAJORITY_AGREE + leader SUCCESS (except the one failed request_judgment above, which is an expected guard error, not part of the settled flow).
+Tender 8 final state (live readback, latest-final): AWARDED, winner quote 1, winner_supplier 0x73350588DE99cF1066e3E38522Dbb438f38680Db, 8 quotes. Winner balance after payout: 110 GEN (started 100, quote is free, +10 GEN award). 12 successful business transactions, all independently re-read live: FINALIZED + MAJORITY_AGREE + leader SUCCESS. Separately, 1 additional expected guard-error transaction: the failed request_judgment above (ONLY_BUYER_CAN_REQUEST_JUDGMENT), which is not part of the settled flow and is not counted among the 12.
 
 ## Evidence transactions
 

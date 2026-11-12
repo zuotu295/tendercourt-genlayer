@@ -14,6 +14,11 @@ import { t, type Lang } from './i18n';
 
 interface TxState { label: string; hash: string; stage: 'sent' | 'ok' | 'unknown' | 'failed'; detail?: string }
 
+// Truncate to n Unicode code points (matches the contract's Python len()
+// and validate.ts countOf). HTML maxLength counts UTF-16 code units, so
+// it would block emoji/astral input earlier than the contract does.
+const capCp = (s: string, n: number) => { const a = [...s]; return a.length > n ? a.slice(0, n).join('') : s; };
+
 export default function App() {
   const [lang, setLang] = useState<Lang>('zh');
   const [dep, setDep] = useState<typeof DEPLOYMENT>(null);
@@ -206,9 +211,9 @@ export default function App() {
   const selTender = tenders.find((x) => x.tender_id === quoteTender) || null;
   const priceErr = price === '' || !selTender ? null : validatePrice(price, selTender.budget_gen);
   const termsErr = terms === '' ? null : validateTerms(terms);
-  const termsUsed = selTender ? selTender.quotes.reduce((s, q) => s + q.terms.length, 0) : 0;
+  const termsUsed = selTender ? selTender.quotes.reduce((s, q) => s + countOf(q.terms), 0) : 0;
   const termsLeft = limits.max_total_terms_chars - termsUsed;
-  const termsTotalErr = terms !== '' && terms.length > termsLeft ? 'terms_total' : null;
+  const termsTotalErr = terms !== '' && countOf(terms) > termsLeft ? 'terms_total' : null;
   const quoteValid = !!selTender && price !== '' && !priceErr && terms !== '' && !termsErr && !termsTotalErr;
   async function submitQuote() {
     if (!quoteValid || !selTender || !wallet) return;
@@ -309,7 +314,7 @@ export default function App() {
         <h2><span className="no">§01</span>{tr('createTitle')}</h2>
         <p className="sub">{tr('feeNote')}</p>
         <label>{tr('reqLabel')}</label>
-        <textarea value={req} maxLength={2000} onChange={(e) => setReq(e.target.value)} placeholder={tr('reqPh')} />
+        <textarea value={req} onChange={(e) => setReq(capCp(e.target.value, 2000))} placeholder={tr('reqPh')} />
         <div className={`count ${reqErr === 'req_long' ? 'over' : ''}`}>{countOf(req)} / 2000</div>
         {reqErr && <p className="err">{tr('err_' + reqErr)}</p>}
         <div className="row">
@@ -398,7 +403,7 @@ export default function App() {
                   <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder={tr('budgetPh')} />
                   {priceErr && <p className="err">{tr('err_' + priceErr)}</p>}
                   <label>{tr('termsLabel')}</label>
-                  <textarea value={terms} maxLength={1000} onChange={(e) => setTerms(e.target.value)} placeholder={tr('termsPh')} />
+                  <textarea value={terms} onChange={(e) => setTerms(capCp(e.target.value, 1000))} placeholder={tr('termsPh')} />
                   <div className={`count ${termsErr === 'terms_long' ? 'over' : ''}`}>{countOf(terms)} / 1000</div>
                   <p className="hint">{tr('termsRemaining').replace('{x}', String(Math.max(0, termsLeft))).replace('{m}', String(limits.max_total_terms_chars))}</p>
                   {termsErr && <p className="err">{tr('err_' + termsErr)}</p>}
