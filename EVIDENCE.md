@@ -30,11 +30,34 @@ v1 evidence (tenders 1-5 on contract 0xD2A0Fe94cCb632D6307a4215b722643e6164ed0D)
 
 ## GEN accounting (live readback, latest-final)
 
-- Total received: 70 GEN (7 tenders × 10 GEN)
-- Total withdrawn: 70 GEN
+- Total received: 70 GEN (7 tenders × 10 GEN) for the evidence set; 80 GEN including the post-evidence write loop tender 8
+- Total withdrawn: 70 GEN for the evidence set; 80 GEN including tender 8
 - Contract balance: 0 GEN
 - Escrowed: 0 GEN
-- Tender count: 7
+- Tender count: 7 for the evidence set; 8 including tender 8
+
+## Post-evidence live-site write loop (tender 8)
+
+Proves the live site works end-to-end on this contract. Tender 8 was created by a script-side buyer (B3, 0xFDCcc586975Ba048945E34B343dBb8B1753d5493) — temp accounts are blocked from create_tender in the frontend by design. The quote was submitted in a real browser by a temporary test account (0x73350588DE99cF1066e3E38522Dbb438f38680Db), clicked by a human because the site gates sends behind a native window.confirm that the automated browser auto-dismisses. Over-budget validation was checked in the browser first: a 301 GEN quote on the 300 GEN budget was blocked in the UI with "报价为 1–预算之间的整数 GEN。" and no transaction was sent (tried twice).
+
+Buyer-path failure (honest record): the buyer's private key was not persisted — genlayer-js `createAccount()` does not expose `.privateKey`, so the save wrote nothing and the key was lost. A request_judgment sent from a wrong account failed on-chain with ONLY_BUYER_CAN_REQUEST_JUDGMENT ([0xea468896…](https://explorer-studio.genlayer.com/tx/0xea468896b069e95eba1195c1c632389567aecc1da4e5b6817390bcbaa15b7e83)). Tender 8 was settled instead through the contract's built-in liveness path: 7 filler quotes filled it to 8, a quoter requested judgment, a non-buyer executed the consensus judgment, and the winner withdrew. The filler quotes were deliberately thin so validators judged the browser's complete 240 GEN quote the winner.
+
+| Step | Result | Transaction |
+| --- | --- | --- |
+| t8-create (B3, script) | ok | [0xad4a15f0…](https://explorer-studio.genlayer.com/tx/0xad4a15f0d2879b828dea39bb7961f3a3d6c234dc4fa2d664861cebd06e2c2ed4) |
+| t8-quote-1 (browser temp account, 240 GEN) | ok | [0x352147dd…](https://explorer-studio.genlayer.com/tx/0x352147ddea869e1524152babe1a541244088e2fc8323c7704686c0e2929149dd) |
+| t8-quote-2 (S1, 280 GEN, thin) | ok | [0x58a5d580…](https://explorer-studio.genlayer.com/tx/0x58a5d5806fb6807b4f1224e281a13157afd12a0ea7559f2b8daa61981fcb5030) |
+| t8-quote-3 (S2, 300 GEN, no PDF) | ok | [0xb5625b45…](https://explorer-studio.genlayer.com/tx/0xb5625b456582f581737da2bda12501ca534cb3c6428abd3296ea63370b210951) |
+| t8-quote-4 (S3, 250 GEN, one revision) | ok | [0xb9f22f20…](https://explorer-studio.genlayer.com/tx/0xb9f22f203d6b0f9f002c0e9244c188f6d2843e9abba727e6429499e44d9fc9c1) |
+| t8-quote-5 (S4, 290 GEN, no revisions) | ok | [0xc21b2b9a…](https://explorer-studio.genlayer.com/tx/0xc21b2b9a44d10521bf751cc624a3b391dc6b77c2c333608037af24b49cc4240e) |
+| t8-quote-6 (S5, 260 GEN, no source) | ok | [0x86ea067e…](https://explorer-studio.genlayer.com/tx/0x86ea067e689036616f2dbcf7460ff364d8e3570e6ccc6d5fec39e03ebc02b806) |
+| t8-quote-7 (S6, 270 GEN, thin) | ok | [0xfce543ca…](https://explorer-studio.genlayer.com/tx/0xfce543ca74b43d792d3e685205413cb94b173dc050a62af2ff80c3d9819cef64) |
+| t8-quote-8 (S7, 295 GEN, thin) | ok | [0xe05980ab…](https://explorer-studio.genlayer.com/tx/0xe05980ab7cd5f857e05ae222e6f43f094a2a10f1c541ef84cad10fba5137a68b) |
+| t8-request-judgment-by-quoter (S1) | ok | [0xb4753477…](https://explorer-studio.genlayer.com/tx/0xb4753477a2d87ea9d6a594fcdc278a4aefe053e124b76eca64a81e8360511809) |
+| t8-judge-by-out (OUT, non-buyer) | ok | [0x7324c221…](https://explorer-studio.genlayer.com/tx/0x7324c22186ed573e2d98e9631d182f38e80f1462635171133c41a380093e4212) |
+| t8-winner-withdraw (temp account) | ok | [0xb7f50769…](https://explorer-studio.genlayer.com/tx/0xb7f507698303c90b9f80e7767946152b4ff282c5bc8d6cc2b73fbe8a5cc90380) |
+
+Tender 8 final state (live readback, latest-final): AWARDED, winner quote 1, winner_supplier 0x73350588DE99cF1066e3E38522Dbb438f38680Db, 8 quotes. Winner balance after payout: 110 GEN (started 100, quote is free, +10 GEN award). All 12 write-loop transactions independently re-read live: FINALIZED + MAJORITY_AGREE + leader SUCCESS (except the one failed request_judgment above, which is an expected guard error, not part of the settled flow).
 
 ## Evidence transactions
 

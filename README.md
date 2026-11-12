@@ -41,7 +41,7 @@ Historical V2 evidence and its original expectations are preserved in [evidence/
 
 ## Verification scope
 
-The revised deployment and two tender creations are finalized successfully. Settlement, negative chain tests, withdrawals and browser E2E remain unverified for this revision. See [EVIDENCE.md](EVIDENCE.md). The configured Pages URL above may still serve V2 until these changes are published.
+Independent verification: `node scripts/verify_evidence.mjs` — 78/78 PASS (all 63 evidence transactions re-read live, byte parity, 7 tenders match EXPECTED.md, 70 GEN in = 70 out, balance 0, escrow 0). Post-evidence live-site write loop on tender 8 also complete (browser quote, fill-to-8, quoter-requested judgment, non-buyer judge, winner withdraw; 80 GEN in = 80 out). See [EVIDENCE.md](EVIDENCE.md). The configured Pages URL serves this revision (contract 0x616A603D3e95b5b871F4f1784e4F9E66e66104C4, protocol tendercourt-2.1).
 
 ## Frontend
 
