@@ -10,7 +10,7 @@ const argv=process.argv.slice(2);
 const opt=(name,fallback)=>argv.includes(name)?argv[argv.indexOf(name)+1]:fallback;
 const CASE=opt('--case',null);
 const CP=path.resolve(opt('--checkpoint',path.resolve(ROOT,'..','.tendercourt-v2.2-checkpoint.json')));
-const DIR=path.resolve(opt('--output',path.join(ROOT,'evidence','v2.2')));
+const DIR=path.resolve(opt('--output',path.join(ROOT,'evidence','v2.2','cases',CASE||'preflight')));
 fs.mkdirSync(DIR,{recursive:true});
 const FILE=path.join(DIR,'transactions.json');
 const cp=JSON.parse(fs.readFileSync(CP,'utf8'));
@@ -27,20 +27,27 @@ const clients={};const accounts={};
 for(const[k,key]of Object.entries(cp.wallets)){accounts[k]=createAccount(key);clients[k]=createClient({chain:studionet,account:accounts[k]})}
 if(!/^(winner|refund)-[1-7]$/.test(CASE||''))throw Error('EXPLICIT_CASE_REQUIRED: --case winner-1 through refund-7');
 const suite=cp.recovery||(cp.recovery={ids:{},records:[],pending:null});
+if(suite.records.some(r=>!r.label.startsWith(CASE+'-')))throw Error('CHECKPOINT_CASE_MISMATCH: each case requires a separate checkpoint');
 const FEE=10000000000000000000n;
-function save(){fs.writeFileSync(CP,JSON.stringify(cp,null,2),{mode:0o600});fs.chmodSync(CP,0o600);fs.writeFileSync(FILE,JSON.stringify({network:'Stable Studionet',chain_id:61999,protocol:'tendercourt-2.2',contract_address:address,deploy_tx:cp.deploy_tx,complete:false,transactions:suite.records},null,2))}
+function save(){fs.writeFileSync(CP,JSON.stringify(cp,null,2),{mode:0o600});fs.chmodSync(CP,0o600);fs.writeFileSync(FILE,JSON.stringify({network:'Stable Studionet',chain_id:61999,protocol:'tendercourt-2.2',contract_address:address,deploy_tx:cp.deploy_tx,case:CASE,complete:false,transactions:suite.records},null,2))}
 function leader(tx){const r=tx.consensus_data?.leader_receipt;return Array.isArray(r)?r.find(x=>x.mode==='leader'):r}
 function good(tx){return[7,'FINALIZED'].includes(tx.status)&&[6,'MAJORITY_AGREE'].includes(tx.result)&&leader(tx)?.execution_result==='SUCCESS'}
 const tender=async id=>JSON.parse(await read('get_tender',[id]));
 const totals=async()=>JSON.parse(await read('get_totals'));
 async function state(id){return {tender:await tender(id)}}
 function equal(a,b,msg){if(JSON.stringify(a)!==JSON.stringify(b))throw Error(msg)}
+async function receipt(hash){
+ for(let attempt=1;attempt<=3;attempt++){
+  try{return await reader.waitForTransactionReceipt({hash,status:'FINALIZED',interval:3000,retries:80,fullTransaction:true})}
+  catch(error){console.warn('RECEIPT_READ_INTERRUPTED',hash,'attempt',attempt,error.shortMessage||error.message);if(attempt===3)throw error;await new Promise(r=>setTimeout(r,5000))}
+ }
+}
 async function resolve(){
  const p=suite.pending;if(!p)return;
- const tx=await reader.waitForTransactionReceipt({hash:p.hash,status:'FINALIZED',interval:3000,retries:80,fullTransaction:true});
+ const tx=await receipt(p.hash);
  const receiptFile=`receipts/${p.hash}.json`;fs.mkdirSync(path.join(DIR,'receipts'),{recursive:true});
  fs.writeFileSync(path.join(DIR,receiptFile),JSON.stringify(tx,(_,v)=>typeof v==='bigint'?v.toString():v,2));
- const l=leader(tx);const rec={...p,receipt:receiptFile,status:tx.status,result:tx.result,leader_execution:l?.execution_result,leader_error:l?.result?.payload};
+ const l=leader(tx);const rec={...p,receipt:receiptFile,status:tx.status,result:tx.result,leader_execution:l?.execution_result,leader_error:l?.execution_result==='ERROR'?l?.result?.payload:undefined};
  if(p.error){
    rec.observed_error=l?.result?.payload;
    rec.after=await state(p.args[0]);
@@ -103,12 +110,23 @@ for(const outcome of ['winner','refund'])for(let n=1;n<=7;n++){
  await send(key+'-wrong-withdraw',want?buyer:'S1','withdraw',[id],0n,'NO_CREDIT');
  await send(key+'-withdraw',recipient,'withdraw',[id]);
  const b=suite.balances[key];
- if(!b.after){b.after=(await reader.getBalance({address:accounts[recipient].address})).toString();b.contract_after=(await reader.getBalance({address})).toString();save()}
- if(BigInt(b.after)-BigInt(b.before)!==FEE)throw Error('TRANSFER_BALANCE_MISMATCH '+key+' '+JSON.stringify(b));
+ // FINALIZED parent receipts can precede external-transfer recipient credit.
+ // Keep every observation, including the initial stale balance; never resend.
+ b.observations||=[];
+ if(b.after&&!b.observations.length)b.observations.push({balance:b.after,note:'initial post-parent-finality read'});
+ for(let attempt=0;attempt<60;attempt++){
+  const observed=(await reader.getBalance({address:accounts[recipient].address})).toString();
+  b.observations.push({balance:observed,at:new Date().toISOString()});save();
+  const delta=BigInt(observed)-BigInt(b.before);
+  if(delta===FEE){b.after=observed;b.contract_after=(await reader.getBalance({address})).toString();save();break}
+  if(delta>FEE)throw Error('UNEXPECTED_RECIPIENT_BALANCE '+key);
+  if(attempt===59)throw Error('TRANSFER_BALANCE_NOT_YET_CONFIRMED '+key+' '+JSON.stringify(b));
+  await new Promise(r=>setTimeout(r,3000));
+ }
  await send(key+'-double-withdraw',recipient,'withdraw',[id],0n,'NO_CREDIT');
  console.log('CASE_PASS',key,'tender',id,'recipient_delta',BigInt(b.after)-BigInt(b.before));
 }
 const all=JSON.parse(await read('get_all_tenders'));const sum=await totals();
 fs.writeFileSync(path.join(DIR,'readback.json'),JSON.stringify({protocol:await read('get_protocol'),tenders:all,totals:sum,balances:suite.balances,readback_at:new Date().toISOString()},null,2));
-fs.writeFileSync(FILE,JSON.stringify({network:'Stable Studionet',chain_id:61999,protocol:'tendercourt-2.2',contract_address:address,deploy_tx:cp.deploy_tx,complete:true,transactions:suite.records},null,2));
+fs.writeFileSync(FILE,JSON.stringify({network:'Stable Studionet',chain_id:61999,protocol:'tendercourt-2.2',contract_address:address,deploy_tx:cp.deploy_tx,case:CASE,complete:true,transactions:suite.records},null,2));
 console.log('CASE_COMPLETE',CASE,suite.records.length,'receipts; recipient balance verified');

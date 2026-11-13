@@ -5,3 +5,9 @@ dist/
 .tendercourt-checkpoint.json
 __pycache__/
 .pytest_cache/
+
+# Original v2.2 receipt JSONs are preserved byte-for-byte in receipts.tar.gz.
+evidence/v2.2/**/receipts/
+
+# Full SDK exports include provider metadata; public proof uses whitelisted fields.
+evidence/v2.2/receipts.tar.gz

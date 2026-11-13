@@ -44,8 +44,12 @@ Direct awards while OPEN remain the buyer's choice, without consensus.
 The current deployment in `public/deployment.json` is **tendercourt-2.2**:
 [0xD879F2Aa15f8420694872e229424AF06cD9929B9](https://explorer-studio.genlayer.com/address/0xD879F2Aa15f8420694872e229424AF06cD9929B9).
 The frontend rejects writes unless the configured contract returns this protocol.
+This remediation branch contains the new Pages build; publication to the
+default-branch site is still pending.
 
-[EVIDENCE.md](EVIDENCE.md) documents the current deployment and recovery matrix.
+[EVIDENCE.md](EVIDENCE.md) documents the current deployment and recovery matrix:
+14 cases, 156 matrix transaction receipts, 364 independent checks passed;
+140 test GEN received and withdrawn, zero contract balance and escrow.
 [evidence/v2.2](evidence/v2.2/) contains raw receipts and verification results.
 The original v2.1 deployment/transaction JSONs remain at `evidence/deployment.json`
 and `evidence/transactions.json`; [evidence/v2.1](evidence/v2.1/) preserves the
@@ -73,7 +77,10 @@ source. After live validation, update the frontend deployment metadata and rebui
 The live recovery runner accepts an explicit case (`--case winner-1` through
 `refund-7`), checkpoint and output directory; it resolves pending hashes before
 any new send. `npm run verify:recovery` independently re-reads every current
-receipt, source and final state. The old `run_evidence.mjs` suite is disabled because its partial-fill denial
+receipt, source and final state. Public receipt summaries are in `evidence/v2.2/public-receipts.json`. They
+contain only transaction identities, status, execution/error results and votes.
+Full SDK exports, including provider metadata, are retained separately; their
+original byte hashes are listed in `receipt-index.json`. The old `run_evidence.mjs` suite is disabled because its partial-fill denial
 expectation is incompatible; it must not overwrite the historical receipts.
 `verify_evidence.mjs` verifies only the preserved v2.1 source/receipts, read-only.
 

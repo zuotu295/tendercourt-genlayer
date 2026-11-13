@@ -47,3 +47,20 @@ negative payable calls. Check aggregate received equals withdrawn, zero residual
 escrow, and actual recipient balance changes. Mock transfers cannot prove these.
 Update deployment metadata only with the new verified deployment, rebuild Pages,
 and exercise the supplier action and withdrawal from the browser.
+
+## Reproduction paths
+
+Each explicit case uses its own private checkpoint and writes to
+`evidence/v2.2/cases/<winner-or-refund>-<count>/`. The winner-1 case uses
+the deployment checkpoint; `prepare_recovery_cases.mjs --execute` prepares
+the other case checkpoints without printing private keys. These checkpoints
+remain outside the repository. Only the tender-creation buyer needs free
+Studionet funding for payable calls.
+
+The aggregate manifest is assembled from all 14 completed case manifests.
+Original SDK receipt exports are retained separately as a byte-preserving
+archive; `receipt-index.json` gives their paths, sizes and SHA-256 hashes.
+Public proof uses whitelisted summaries in `public-receipts.json`, omitting
+provider configurations and raw payloads.
+`verify_recovery_evidence.mjs` is read-only and independently checks every live
+receipt and the latest-final state; it needs no checkpoint or private key.

@@ -1,5 +1,9 @@
 # TenderCourt v2.2 local validation — 2026-11-13
 
+This is the pre-deployment validation snapshot. Subsequent live results are
+recorded separately in [../../EVIDENCE.md](../../EVIDENCE.md). The initial browser
+startup failures below are retained; they are not represented as browser passes.
+
 Source SHA-256: `555f777f9f3aed483aab78623592909bccd5e3be9821b3cd7c21796b438ed944`
 Source bytes: 14980. No v2.2 deployed address or transactions exist in this record.
 

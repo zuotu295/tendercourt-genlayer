@@ -1,0 +1,485 @@
+{
+  "network": "Stable Studionet",
+  "chain_id": 61999,
+  "protocol": "tendercourt-2.2",
+  "contract_address": "0xD879F2Aa15f8420694872e229424AF06cD9929B9",
+  "deploy_tx": "0xe2c7a22fe59c70b672167929986df05db628ce00166c01abdf019722fe8d3d96",
+  "complete": true,
+  "transactions": [
+    {
+      "label": "winner-1-create",
+      "who": "B1",
+      "fn": "create_tender",
+      "args": [
+        "Recovery winner-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+        "Design",
+        500
+      ],
+      "value_wei": "10000000000000000000",
+      "error": null,
+      "hash": "0x0ea222815e4095317785f1ae4aad7b9924794653e88672ae441d1cd49f20f875",
+      "receipt": "receipts/0x0ea222815e4095317785f1ae4aad7b9924794653e88672ae441d1cd49f20f875.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "SUCCESS",
+      "passed": true
+    },
+    {
+      "label": "winner-1-quote-1",
+      "who": "S1",
+      "fn": "submit_quote",
+      "args": [
+        1,
+        301,
+        "Complete print-ready A4 poster PDF plus editable source file, two revision rounds, delivered within five days."
+      ],
+      "value_wei": "0",
+      "error": null,
+      "hash": "0x7402f4d0351304de52b88b1e0de5f4eda170118fb7fa5aeeffa3a550a1eff10d",
+      "receipt": "receipts/0x7402f4d0351304de52b88b1e0de5f4eda170118fb7fa5aeeffa3a550a1eff10d.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "SUCCESS",
+      "passed": true
+    },
+    {
+      "label": "winner-1-outsider-request",
+      "who": "OUT",
+      "fn": "request_judgment",
+      "args": [
+        1
+      ],
+      "value_wei": "0",
+      "error": "ONLY_BUYER_OR_QUOTER_CAN_REQUEST_JUDGMENT",
+      "hash": "0x10b9ffe11795e08c0f20e66963ba2dd4424f34e07be73c96cf86da01f3e1886c",
+      "before": {
+        "tenders": "[{\"budget_gen\":500,\"buyer\":\"0xbac86943290b3ac56b11bcd8e02726491af12b8b\",\"buyer_credit\":0,\"buyer_withdrawn\":false,\"category\":\"Design\",\"fee_wei\":10000000000000000000,\"quotes\":[{\"price_gen\":301,\"quote_id\":1,\"supplier\":\"0xea5ddf104264f86d223599bb12f508c773fcfc3f\",\"terms\":\"Complete print-ready A4 poster PDF plus editable source file, two revision rounds, delivered within five days.\"}],\"reason\":\"\",\"requirements\":\"Recovery winner-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.\",\"status\":\"OPEN\",\"tender_id\":1,\"winner_credit\":0,\"winner_quote_id\":0,\"winner_supplier\":\"\",\"winner_withdrawn\":false}]",
+        "totals": {
+          "contract_balance_wei": 10000000000000000000,
+          "escrowed_wei": 10000000000000000000,
+          "tender_count": 1,
+          "total_received_wei": 10000000000000000000,
+          "total_withdrawn_wei": 0
+        }
+      },
+      "receipt": "receipts/0x10b9ffe11795e08c0f20e66963ba2dd4424f34e07be73c96cf86da01f3e1886c.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "ERROR",
+      "leader_error": "ONLY_BUYER_OR_QUOTER_CAN_REQUEST_JUDGMENT",
+      "observed_error": "ONLY_BUYER_OR_QUOTER_CAN_REQUEST_JUDGMENT",
+      "after": {
+        "tenders": "[{\"budget_gen\":500,\"buyer\":\"0xbac86943290b3ac56b11bcd8e02726491af12b8b\",\"buyer_credit\":0,\"buyer_withdrawn\":false,\"category\":\"Design\",\"fee_wei\":10000000000000000000,\"quotes\":[{\"price_gen\":301,\"quote_id\":1,\"supplier\":\"0xea5ddf104264f86d223599bb12f508c773fcfc3f\",\"terms\":\"Complete print-ready A4 poster PDF plus editable source file, two revision rounds, delivered within five days.\"}],\"reason\":\"\",\"requirements\":\"Recovery winner-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.\",\"status\":\"OPEN\",\"tender_id\":1,\"winner_credit\":0,\"winner_quote_id\":0,\"winner_supplier\":\"\",\"winner_withdrawn\":false}]",
+        "totals": {
+          "contract_balance_wei": 10000000000000000000,
+          "escrowed_wei": 10000000000000000000,
+          "tender_count": 1,
+          "total_received_wei": 10000000000000000000,
+          "total_withdrawn_wei": 0
+        }
+      },
+      "passed": true
+    },
+    {
+      "label": "winner-1-supplier-request",
+      "who": "S1",
+      "fn": "request_judgment",
+      "args": [
+        1
+      ],
+      "value_wei": "0",
+      "error": null,
+      "hash": "0xb13c46e16d384e0947972eaef310c1bdd4e92232ba132629dbc6d2b129bf33aa",
+      "receipt": "receipts/0xb13c46e16d384e0947972eaef310c1bdd4e92232ba132629dbc6d2b129bf33aa.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "SUCCESS",
+      "passed": true
+    },
+    {
+      "label": "winner-1-buyer-override",
+      "who": "B1",
+      "fn": "award_tender",
+      "args": [
+        1,
+        1
+      ],
+      "value_wei": "0",
+      "error": "TENDER_NOT_OPEN",
+      "hash": "0x1f74eaa5e6394263bf1ef18df3d6dc0f8593de08fae8845cfa1d48822b577f44",
+      "before": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xbac86943290b3ac56b11bcd8e02726491af12b8b",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0xea5ddf104264f86d223599bb12f508c773fcfc3f",
+              "terms": "Complete print-ready A4 poster PDF plus editable source file, two revision rounds, delivered within five days."
+            }
+          ],
+          "reason": "",
+          "requirements": "Recovery winner-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "JUDGING",
+          "tender_id": 1,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "receipt": "receipts/0x1f74eaa5e6394263bf1ef18df3d6dc0f8593de08fae8845cfa1d48822b577f44.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "ERROR",
+      "leader_error": "TENDER_NOT_OPEN",
+      "observed_error": "TENDER_NOT_OPEN",
+      "after": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xbac86943290b3ac56b11bcd8e02726491af12b8b",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0xea5ddf104264f86d223599bb12f508c773fcfc3f",
+              "terms": "Complete print-ready A4 poster PDF plus editable source file, two revision rounds, delivered within five days."
+            }
+          ],
+          "reason": "",
+          "requirements": "Recovery winner-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "JUDGING",
+          "tender_id": 1,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "passed": true
+    },
+    {
+      "label": "winner-1-late-quote",
+      "who": "S8",
+      "fn": "submit_quote",
+      "args": [
+        1,
+        300,
+        "Late complete poster offer with source."
+      ],
+      "value_wei": "0",
+      "error": "TENDER_NOT_OPEN",
+      "hash": "0x4d16264ab37d14a97278e707e2646d4b203f5bec397891f2a606ba66d9aae8f5",
+      "before": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xbac86943290b3ac56b11bcd8e02726491af12b8b",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0xea5ddf104264f86d223599bb12f508c773fcfc3f",
+              "terms": "Complete print-ready A4 poster PDF plus editable source file, two revision rounds, delivered within five days."
+            }
+          ],
+          "reason": "",
+          "requirements": "Recovery winner-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "JUDGING",
+          "tender_id": 1,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "receipt": "receipts/0x4d16264ab37d14a97278e707e2646d4b203f5bec397891f2a606ba66d9aae8f5.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "ERROR",
+      "leader_error": "TENDER_NOT_OPEN",
+      "observed_error": "TENDER_NOT_OPEN",
+      "after": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xbac86943290b3ac56b11bcd8e02726491af12b8b",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0xea5ddf104264f86d223599bb12f508c773fcfc3f",
+              "terms": "Complete print-ready A4 poster PDF plus editable source file, two revision rounds, delivered within five days."
+            }
+          ],
+          "reason": "",
+          "requirements": "Recovery winner-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "JUDGING",
+          "tender_id": 1,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "passed": true
+    },
+    {
+      "label": "winner-1-early-withdraw",
+      "who": "S1",
+      "fn": "withdraw",
+      "args": [
+        1
+      ],
+      "value_wei": "0",
+      "error": "NO_CREDIT",
+      "hash": "0x7a04eedb474dcc6cf6b9c65d2aa7f2d25eabdb94e9d8d53b2699d25c814e2da5",
+      "before": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xbac86943290b3ac56b11bcd8e02726491af12b8b",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0xea5ddf104264f86d223599bb12f508c773fcfc3f",
+              "terms": "Complete print-ready A4 poster PDF plus editable source file, two revision rounds, delivered within five days."
+            }
+          ],
+          "reason": "",
+          "requirements": "Recovery winner-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "JUDGING",
+          "tender_id": 1,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "receipt": "receipts/0x7a04eedb474dcc6cf6b9c65d2aa7f2d25eabdb94e9d8d53b2699d25c814e2da5.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "ERROR",
+      "leader_error": "NO_CREDIT",
+      "observed_error": "NO_CREDIT",
+      "after": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xbac86943290b3ac56b11bcd8e02726491af12b8b",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0xea5ddf104264f86d223599bb12f508c773fcfc3f",
+              "terms": "Complete print-ready A4 poster PDF plus editable source file, two revision rounds, delivered within five days."
+            }
+          ],
+          "reason": "",
+          "requirements": "Recovery winner-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "JUDGING",
+          "tender_id": 1,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "passed": true
+    },
+    {
+      "label": "winner-1-judge",
+      "who": "OUT",
+      "fn": "judge",
+      "args": [
+        1
+      ],
+      "value_wei": "0",
+      "error": null,
+      "hash": "0x12ea61e8dedc860af60a59c3d13661afa4647393670be2460819714db732ebce",
+      "receipt": "receipts/0x12ea61e8dedc860af60a59c3d13661afa4647393670be2460819714db732ebce.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "SUCCESS",
+      "passed": true
+    },
+    {
+      "label": "winner-1-wrong-withdraw",
+      "who": "B1",
+      "fn": "withdraw",
+      "args": [
+        1
+      ],
+      "value_wei": "0",
+      "error": "NO_CREDIT",
+      "hash": "0xd0cf0da9bb8af698ce83cd876b3b68159e6932fcd419f09c695da5d92cfffd8c",
+      "before": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xbac86943290b3ac56b11bcd8e02726491af12b8b",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0xea5ddf104264f86d223599bb12f508c773fcfc3f",
+              "terms": "Complete print-ready A4 poster PDF plus editable source file, two revision rounds, delivered within five days."
+            }
+          ],
+          "reason": "Quote 1 meets all deliverable, revision, and five-day delivery requirements with complete terms at 301, within the 500 budget.",
+          "requirements": "Recovery winner-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "AWARDED",
+          "tender_id": 1,
+          "winner_credit": 10000000000000000000,
+          "winner_quote_id": 1,
+          "winner_supplier": "0xea5ddf104264f86d223599bb12f508c773fcfc3f",
+          "winner_withdrawn": false
+        }
+      },
+      "receipt": "receipts/0xd0cf0da9bb8af698ce83cd876b3b68159e6932fcd419f09c695da5d92cfffd8c.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "ERROR",
+      "leader_error": "NO_CREDIT",
+      "observed_error": "NO_CREDIT",
+      "after": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xbac86943290b3ac56b11bcd8e02726491af12b8b",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0xea5ddf104264f86d223599bb12f508c773fcfc3f",
+              "terms": "Complete print-ready A4 poster PDF plus editable source file, two revision rounds, delivered within five days."
+            }
+          ],
+          "reason": "Quote 1 meets all deliverable, revision, and five-day delivery requirements with complete terms at 301, within the 500 budget.",
+          "requirements": "Recovery winner-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "AWARDED",
+          "tender_id": 1,
+          "winner_credit": 10000000000000000000,
+          "winner_quote_id": 1,
+          "winner_supplier": "0xea5ddf104264f86d223599bb12f508c773fcfc3f",
+          "winner_withdrawn": false
+        }
+      },
+      "passed": true
+    },
+    {
+      "label": "winner-1-withdraw",
+      "who": "S1",
+      "fn": "withdraw",
+      "args": [
+        1
+      ],
+      "value_wei": "0",
+      "error": null,
+      "hash": "0x04292769e8805c93e0cb99d2e445c5823fb1df21b58bbb16f23651cc1e33be0b",
+      "receipt": "receipts/0x04292769e8805c93e0cb99d2e445c5823fb1df21b58bbb16f23651cc1e33be0b.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "SUCCESS",
+      "passed": true
+    },
+    {
+      "label": "winner-1-double-withdraw",
+      "who": "S1",
+      "fn": "withdraw",
+      "args": [
+        1
+      ],
+      "value_wei": "0",
+      "error": "NO_CREDIT",
+      "hash": "0x7584e2db9602ee75d8c770b7d01a45f0f4da16b66444b29c953162cd878c6c62",
+      "before": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xbac86943290b3ac56b11bcd8e02726491af12b8b",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0xea5ddf104264f86d223599bb12f508c773fcfc3f",
+              "terms": "Complete print-ready A4 poster PDF plus editable source file, two revision rounds, delivered within five days."
+            }
+          ],
+          "reason": "Quote 1 meets all deliverable, revision, and five-day delivery requirements with complete terms at 301, within the 500 budget.",
+          "requirements": "Recovery winner-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "AWARDED",
+          "tender_id": 1,
+          "winner_credit": 10000000000000000000,
+          "winner_quote_id": 1,
+          "winner_supplier": "0xea5ddf104264f86d223599bb12f508c773fcfc3f",
+          "winner_withdrawn": true
+        }
+      },
+      "receipt": "receipts/0x7584e2db9602ee75d8c770b7d01a45f0f4da16b66444b29c953162cd878c6c62.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "ERROR",
+      "leader_error": "NO_CREDIT",
+      "observed_error": "NO_CREDIT",
+      "after": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xbac86943290b3ac56b11bcd8e02726491af12b8b",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0xea5ddf104264f86d223599bb12f508c773fcfc3f",
+              "terms": "Complete print-ready A4 poster PDF plus editable source file, two revision rounds, delivered within five days."
+            }
+          ],
+          "reason": "Quote 1 meets all deliverable, revision, and five-day delivery requirements with complete terms at 301, within the 500 budget.",
+          "requirements": "Recovery winner-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "AWARDED",
+          "tender_id": 1,
+          "winner_credit": 10000000000000000000,
+          "winner_quote_id": 1,
+          "winner_supplier": "0xea5ddf104264f86d223599bb12f508c773fcfc3f",
+          "winner_withdrawn": true
+        }
+      },
+      "passed": true
+    }
+  ]
+}

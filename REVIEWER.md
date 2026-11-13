@@ -18,5 +18,8 @@ buyer override rejection. See EXPECTED.md for scope and the live validation plan
 
 Current deployment: `0xD879F2Aa15f8420694872e229424AF06cD9929B9`,
 protocol tendercourt-2.2, FINALIZED successful deployment and exact source byte
-parity. Recovery matrix validation is recorded in EVIDENCE.md. The previous
+parity. All 14 recovery cases (1–7 quotes, winner and NO_AWARD) completed, with
+156 matrix transactions independently re-read: 364 PASS, 0 FAIL. Actual
+recipient balance deltas and 140 GEN in = 140 GEN out were verified.
+See EVIDENCE.md for all hashes and verification scope. The previous
 v2.1 transactions and all recorded failures remain historical evidence only.

@@ -1,0 +1,782 @@
+[
+  {
+    "path": "cases/refund-1/receipts/0x12f92f5aca86257a492003d945b9c98462ca6c8d6c72b2f964da1d7545df4d2c.json",
+    "bytes": 94531,
+    "sha256": "839f3f3443514c4ee6a598f80e8fff88b47ed4af302e762c767587ceddf2eb35"
+  },
+  {
+    "path": "cases/refund-1/receipts/0x4ae285703c5a5bba910ba0242aca8b85e6612b7cf7e1558ddca5c12a8455c17f.json",
+    "bytes": 96515,
+    "sha256": "8933075563f5ff2f4ded55b179ee067efd75088383ab2af8fd20b5c5701fc6d7"
+  },
+  {
+    "path": "cases/refund-1/receipts/0x51fc9e98695207b8f48d6e050ddcf2f1573f5e1a5d4170e8fd87e181ddf34f0d.json",
+    "bytes": 113645,
+    "sha256": "5d661cc6ca99381a0a7a6d9ae7c6acfc373b18ebbb7fe7315fe54551fdf770d7"
+  },
+  {
+    "path": "cases/refund-1/receipts/0x5c33409de19da8c691ca54d8e32b48296422f6f528aec2efe925a16f00cefccb.json",
+    "bytes": 118715,
+    "sha256": "91b5d58af99ec8957e8d53be9e6909ed58f83de34b1f071444e016bf2b2149a5"
+  },
+  {
+    "path": "cases/refund-1/receipts/0x65ce29dbe53f847ece6b67049f88127e4507b8299ded7610eb4328df0ccc495f.json",
+    "bytes": 90837,
+    "sha256": "415d296036cd9df55fd48923e013f2f969bcefc5d276719952e5c55ee44b1dca"
+  },
+  {
+    "path": "cases/refund-1/receipts/0x97138e71e7687d83a6edba3f7c5a9156b209b3b7dfaa7fc2286929cd43251149.json",
+    "bytes": 88658,
+    "sha256": "a378dd89a3a4cbc720d6861b1e2e7a4ebf6d4458388f634f5f2de6bd35d2dd01"
+  },
+  {
+    "path": "cases/refund-1/receipts/0xa17c3a4fc645dff066f2491042908e405bc14b56d040f1c9d031c87d86ca2548.json",
+    "bytes": 137259,
+    "sha256": "cd3713bfa32ea78db252d8db1ab006f6335467a8390074feafab5e8095ebf396"
+  },
+  {
+    "path": "cases/refund-1/receipts/0xd12f2640cd0e2611eedbca525e996080a1300f6a6203e79c1cefdc11150a13b6.json",
+    "bytes": 87666,
+    "sha256": "2428700d9be926e72e8e421bf320167248de00e40d6a070ef357781fb7ef8340"
+  },
+  {
+    "path": "cases/refund-1/receipts/0xecfde16b4476a440fd58e0d6f8ecdbd0c21e5d8e08c2d8e99d1dd563dac7058b.json",
+    "bytes": 119021,
+    "sha256": "9e61a12ad8cc5618c9ab4a7a4548a2f4844e1a5fbdd5aaf5db09c24de88683e7"
+  },
+  {
+    "path": "cases/refund-1/receipts/0xf825afc2e8cee58783a58324a1d9b72ddc09e21d32758fad7885739d96fd4d00.json",
+    "bytes": 83349,
+    "sha256": "c365e78c6e68441fff3df9ffea7bf77fc84a329e42cffb7a53ec378ccd8fe125"
+  },
+  {
+    "path": "cases/refund-1/receipts/0xfbb7360a24832b8864938cd7dc77870d0b0b2545185130ead548962eb5c1ce98.json",
+    "bytes": 80107,
+    "sha256": "270235613e8a5f7e1d52fd3133d0c986ec4a078821ad3278e12a80a5eca809aa"
+  },
+  {
+    "path": "cases/refund-2/receipts/0x26a1a240dd7b71457027c08d12d4b8f9e62b6c18ac2f5585112305c9544457ea.json",
+    "bytes": 147443,
+    "sha256": "4758afc83fd531c4ac32efefb628a1124dc18f9e355e835fa20c98e1599fcf14"
+  },
+  {
+    "path": "cases/refund-2/receipts/0x629f9409e037e024486712098501f70aca3ccb214af7bc5de5e718af9a3236be.json",
+    "bytes": 87580,
+    "sha256": "29fba2005db4354c9568031974225ca9bc65f73ee16a7f2ad157e39f7fcef8e1"
+  },
+  {
+    "path": "cases/refund-2/receipts/0x6960790f113a860fec7c9f92faa979a0a421dd142ab9d6ae8f82e98ba2b9027f.json",
+    "bytes": 96575,
+    "sha256": "aad29c5f5dec7755b25caa77ce3fd17cb2ab74f2b927a27c7076db2fbdca2631"
+  },
+  {
+    "path": "cases/refund-2/receipts/0x81c5c5270721892faa45c273564a763580f9c5690a9daeea62a861bf7a8c354b.json",
+    "bytes": 126291,
+    "sha256": "a6450e4623b43ede18aa70656114269e09af4b0eaa8bc047741cf9678b040636"
+  },
+  {
+    "path": "cases/refund-2/receipts/0x835e6ad2c3e10398d9b9157ff28bd957911111ac227c2c8389118f6792f3bb28.json",
+    "bytes": 90933,
+    "sha256": "adf4c07ab542cafa20a590de731a38ca855de14a5ef68cf89cc66d736494c5e7"
+  },
+  {
+    "path": "cases/refund-2/receipts/0xa816d5617eb95f0626cf27d86b68bb2ce83400bd52f279ed0352c22d8310c585.json",
+    "bytes": 119088,
+    "sha256": "d9f36ccc139b26c46e8e20b1b84414052a3a9367885c55da9053bd167144722a"
+  },
+  {
+    "path": "cases/refund-2/receipts/0xae5773fd0726c80f01d13addeae664027ad4ea265b3ef0d64571c4b626dfc5dd.json",
+    "bytes": 134002,
+    "sha256": "b068746c67b5b755e1d294a0590b8e3c855b3a574ec9ce43aa392c92c9240e91"
+  },
+  {
+    "path": "cases/refund-2/receipts/0xf9a71b66a3994ee3d519c17724a942ee660d6bd2e721ddb6699111711d5cbf25.json",
+    "bytes": 122959,
+    "sha256": "462270bbc66a0c44a09beabcd274d295ef3b78a8f51641e6dd3ad375f52aad5e"
+  },
+  {
+    "path": "cases/refund-3/receipts/0x0a3c623eeab820aa54841a3c2a803225d0c712bd88d84f82562ce8eef9440f2e.json",
+    "bytes": 87796,
+    "sha256": "0c3d4e823e9ee465a4b5e709db5a9cd9b1a9f2dbd0c5cbb4a42c22f22a7b5722"
+  },
+  {
+    "path": "cases/refund-3/receipts/0x12367ae315c34508d893f22776f9b8cd4a0c194fb8dc8cd73b353003e76c7d1e.json",
+    "bytes": 80072,
+    "sha256": "07f6bfe3e366724a397aa74227ccc7945655c2535a68a37f3426d218392156c6"
+  },
+  {
+    "path": "cases/refund-3/receipts/0x42d11f66b6b227c663c25667836d222e3e43213344bc2d79f315dd194446d610.json",
+    "bytes": 119082,
+    "sha256": "8a030ce12d558143f8adb087f35723daecc4a826e1245afc878b7ab17e2059be"
+  },
+  {
+    "path": "cases/refund-3/receipts/0x67eed40be163ecca1be421dd835ff474ccaaf14c81661a923d8d45f1f75c2e74.json",
+    "bytes": 145306,
+    "sha256": "69105c9b25da1f283f3f0d4947d580e277cba543409d0858eb116fde556e45fd"
+  },
+  {
+    "path": "cases/refund-3/receipts/0x7c5e54b14345d091c9ff18ad6444006fb2823cf96cff7a0ef1a6fd5fdb3f3e20.json",
+    "bytes": 141575,
+    "sha256": "912d63b183bf23f4139a988feb728ec86f43aba09ce23d1d86643c73ef3c8111"
+  },
+  {
+    "path": "cases/refund-3/receipts/0x8e8cba60bb82a33c83f21ab2a932b0e55fef4ffff0a83a38fe23d136e5bea959.json",
+    "bytes": 121361,
+    "sha256": "d86ee9e9f462528d67b9ae3bb44471d35830a85c1a1655732ed790e02f62f60c"
+  },
+  {
+    "path": "cases/refund-3/receipts/0x92049b8c4347b449e6aaa3776353324f301d71a50de52eb9c3636ce01f3ae547.json",
+    "bytes": 96529,
+    "sha256": "f3d72ddc56dc6f284626bb9241f4f4e3404732ebff85f0422a6aa75253ea205c"
+  },
+  {
+    "path": "cases/refund-3/receipts/0xe803fe7042a1018c6f9a9fc37971a2af25af1c109b1de22598730d9e07091e2a.json",
+    "bytes": 145578,
+    "sha256": "3f44b9a161bb9ccb075f8c4ddd5e5fc901021d7af3b77ec63ec8db3c141d636a"
+  },
+  {
+    "path": "cases/refund-3/receipts/0xf8e0acd7ca69b91d0bac0a18137ab20f72684030a3fb7466a98be69d478f514a.json",
+    "bytes": 139629,
+    "sha256": "d833e8026312c41c1f99b825c5b8b08674404ccb1731467fdf3902e4169e0f2a"
+  },
+  {
+    "path": "cases/refund-4/receipts/0x2b2607b3414f1acf95b1b8134d3387e76057e7dcb34b2b2aa084beb10b5090d6.json",
+    "bytes": 149003,
+    "sha256": "7dd34ef8f0239cc91c7f75cb3a7cd2e4e86d15363c663686bfcdf28ab05ebd26"
+  },
+  {
+    "path": "cases/refund-4/receipts/0x5151ac1684c109144d15c6f96513c2f653b1a33915705295cf22e4d05f8caad3.json",
+    "bytes": 161269,
+    "sha256": "3f2c6391a0a0b4a39e01616a46c27748f3393726b94d8119f084c197234a9227"
+  },
+  {
+    "path": "cases/refund-4/receipts/0x5b09cf94f9736362d469e39434d79e383a52aa81029faac5f17681ea79219744.json",
+    "bytes": 166104,
+    "sha256": "e221365e12b509130c86e248989f3fd851069254b7dccf415e50e6dd3f52dbaa"
+  },
+  {
+    "path": "cases/refund-4/receipts/0x5ca458067333ea400e94aae8ba500ff04a298b193c3df7b64028a1f166b56eb6.json",
+    "bytes": 87565,
+    "sha256": "eac4f32d53ee3f25966d5dbb8fc28c93268014686608841dfd9a934f0eae740b"
+  },
+  {
+    "path": "cases/refund-4/receipts/0x67a05bf08f058bf2488bae024889bfa21f51a972d204ba8da96335a07f87777d.json",
+    "bytes": 87665,
+    "sha256": "5326d5c13bb5eb4b92009866a8fa1f179f63d475638e9aaa3c6f8e0e3ed36e9a"
+  },
+  {
+    "path": "cases/refund-4/receipts/0x6d07675264f1460c868f09d84e6ec2b5e00c16ae72a213a4684a3c8dce398434.json",
+    "bytes": 126603,
+    "sha256": "7a4fb99a7bbd516d02d05d32a72f4f80acd3bb179fcbb42432c1de97b1aaa180"
+  },
+  {
+    "path": "cases/refund-4/receipts/0x810439973d15240cf3fd5a21d3599904560c314756c2a72b17a0755654d9dd5a.json",
+    "bytes": 121406,
+    "sha256": "2f8f18e8700819f46c46fdb45dd27fbe57980a1cb2745730a25b39c15a9efbe6"
+  },
+  {
+    "path": "cases/refund-4/receipts/0x92aa27c038cd4f60be757b7f4c44f4d04ee30de1104844a295a78e15ebd996de.json",
+    "bytes": 143999,
+    "sha256": "f7bcc3ccd0c4cd644b3b182cffe6016baff25c8c1e9c94a31b78e8089e6c130b"
+  },
+  {
+    "path": "cases/refund-4/receipts/0xe33eee27efa1019a0cfe61b37d0f28dfb9a64b036d255fb4b28fc81364b5aa53.json",
+    "bytes": 100761,
+    "sha256": "3767d11ffe58e25acaacc193bae014209a9144ba8d2244b1f81d4d131b1915d4"
+  },
+  {
+    "path": "cases/refund-4/receipts/0xe9a904208c24920b56596d8a7532313d33226c4bf1a2c25232b2a190e61bcc02.json",
+    "bytes": 120898,
+    "sha256": "78500d8823d719ef176d641e8068ba85752fa3bf9a0aee02bd006f18a9055e75"
+  },
+  {
+    "path": "cases/refund-5/receipts/0x3295fb455b09ad7693a00d2e83af9c9d76200587f0098bf983fc2aa4783add11.json",
+    "bytes": 154406,
+    "sha256": "d183ef6b523a69974da2faad9bcff21e1c191fc4358dbfcd4abfb0eb4312d92f"
+  },
+  {
+    "path": "cases/refund-5/receipts/0x5839f252e7dcc90a4cabf154151c4a6588f0f080ae7ad9fce24acc00353e5e71.json",
+    "bytes": 104706,
+    "sha256": "87e5ee519c4f4b88e90f6d61cc3e45c43545e9a574b33a55b0de51ea359f5405"
+  },
+  {
+    "path": "cases/refund-5/receipts/0x6a389c2dc125d442f689ec5eaa7434724ca25203f3c2271c352d14c9ad99695f.json",
+    "bytes": 137809,
+    "sha256": "69ba58cb2999188f812056a971a63a4e04a169694c6e457b5002c1af4bc229bb"
+  },
+  {
+    "path": "cases/refund-5/receipts/0x71604cf96bbb2bb0a2a422e8f52bc4d877f596fa824c3544004ff1e3ec29115f.json",
+    "bytes": 119244,
+    "sha256": "8f230e5ed40204bc6df7a1040bac51c2375ffb4d295484fe9440931cd2fb4bef"
+  },
+  {
+    "path": "cases/refund-5/receipts/0x9f2d7385973c4e5d28b27a8880abbe7769343cbd7822a4c0aca276a0905dc76b.json",
+    "bytes": 113836,
+    "sha256": "6ca55735fbdcabf17a6195b6ef1226d58a20584b99c28ccbf609b161b42f26ae"
+  },
+  {
+    "path": "cases/refund-5/receipts/0xbd7c277eec0552ec29df36263686c22c9124fae17f9cf6d94e2d605beeae504d.json",
+    "bytes": 172379,
+    "sha256": "4cbec6cff07e7a807312b19374a88bab51abb883cfaa67551cb236a7f7390e06"
+  },
+  {
+    "path": "cases/refund-5/receipts/0xbeb7c2c78549466e76da3bf4babca3168920de1e0a5bdcd32529ee4fbfa96a86.json",
+    "bytes": 80070,
+    "sha256": "f5188bb7b2bd697a30fa830911b4d6727e3b60c66943e37555cbca71b3eb5e7c"
+  },
+  {
+    "path": "cases/refund-5/receipts/0xbf06f366fe7e4f756470dcf291fec010876ee72d2ad6ff3ba4861b68802239f8.json",
+    "bytes": 156311,
+    "sha256": "d7d9c60f2bf000855f66fea411b9879e7c93c6364a4a9da16ab239307eb7228e"
+  },
+  {
+    "path": "cases/refund-5/receipts/0xcf8770d4efac62b25f3a65f153dee094ca5f96001fe8a462092368837bbeac54.json",
+    "bytes": 87751,
+    "sha256": "46b78aed7fa9cdde41365712b8746e139022b97b430545177b98ac6f79085fcc"
+  },
+  {
+    "path": "cases/refund-5/receipts/0xd1aa055f5b21b14aaa67ce07f237d5c9b902cd68ed6b67b4af4a9c56575364e3.json",
+    "bytes": 158347,
+    "sha256": "d5f508896354c29c82c44be408bb33f83534c1fe2511b496d7ac432708bf9afe"
+  },
+  {
+    "path": "cases/refund-5/receipts/0xeaf752658bda3bfa7623a7b49231fd8debbba5e985dfd7eea34232c70e0977d7.json",
+    "bytes": 135837,
+    "sha256": "7075268e0441e90c7d80df80c14e1a3b150ad924231633498fe9fa14ada91157"
+  },
+  {
+    "path": "cases/refund-6/receipts/0x03f63f3cde3cef6c02b21eab2fefbfd8457007096fca34e31752ddbeaeaac42d.json",
+    "bytes": 154481,
+    "sha256": "d46cd36440f84d3a9eb347369310e651c0983125c8ed6e68e23eecab2333276d"
+  },
+  {
+    "path": "cases/refund-6/receipts/0x0a18a06b8f934ac9fd52f5370a4b316cc9c9b104deeb43d69673534f67af9580.json",
+    "bytes": 137684,
+    "sha256": "3f08dbde73a11eab7135f7306453360d2f588223b6d19b23c4586d77c60288a4"
+  },
+  {
+    "path": "cases/refund-6/receipts/0x10c961461fd940ac05009966945f99ebc6f664e517a13ea51f25e8fd7aad2017.json",
+    "bytes": 126591,
+    "sha256": "23fa539e1f4cd3408e77b4d4b38f856e85c2214a53a7e176d6746db8710ac238"
+  },
+  {
+    "path": "cases/refund-6/receipts/0x2510051b5b16cbb2998568b1298234639f079f144070eb59fa872de035abb099.json",
+    "bytes": 126187,
+    "sha256": "5715f1c914c53fc919bf126c8a75f0dc4fe6e8bfe8379ba6f5da61a2b7289319"
+  },
+  {
+    "path": "cases/refund-6/receipts/0x342ec4a7c801b3c5d563040d93802b743e7cdbb351ee0abbd192f18b78efa40f.json",
+    "bytes": 167688,
+    "sha256": "67a4d9707d6cebc9ff31bd6a45434049f24f65360bb1a87d62363efb6ee5e985"
+  },
+  {
+    "path": "cases/refund-6/receipts/0x6db07a695b964f59b2fda10f1e414e47adba91c270b510d98e8a38c9f1a857ff.json",
+    "bytes": 94190,
+    "sha256": "b176e351bfd3bcc80b8fb02311094dce314ee6b60706a26d39690245d9fcabdd"
+  },
+  {
+    "path": "cases/refund-6/receipts/0x8f54c784a888080518add4b59581a14a1ec3b78d0cfc160738331df2eb427f34.json",
+    "bytes": 90936,
+    "sha256": "272d03f2c1978e4d6b85078a77a4d927289a932513b7d045e17f267ad1e27e53"
+  },
+  {
+    "path": "cases/refund-6/receipts/0x971435b6b048d204b4fe5eb9b5fe8f7b177a422bcbf2af42a3a2930eace2a279.json",
+    "bytes": 96591,
+    "sha256": "aded51158b7d50d66371d80aec22e74b1209f1cf539b83a262ee77283ed01d9d"
+  },
+  {
+    "path": "cases/refund-6/receipts/0x9f3c126a84c5c45e5f3d9bc87b78821a4071ed2c4d1982248909e10e61bdb451.json",
+    "bytes": 163804,
+    "sha256": "b4ace09eaaddcaa643058456336876fb2e0fdef3c831498d539f2ae1707a08e0"
+  },
+  {
+    "path": "cases/refund-6/receipts/0xc549b7ea5bbaeeed164241bc5cc9f6a68a04a506db20feec1ca7c97d93a74b9e.json",
+    "bytes": 140111,
+    "sha256": "7de4ea796ad3bfc5e62cf1d1d1256ab11c72f165b5a811c3f6f746df8db5cced"
+  },
+  {
+    "path": "cases/refund-6/receipts/0xec5c8d1226b78351ecc5f95d665c1c91d62a6f7abcaf2b8d11bdfd150802be67.json",
+    "bytes": 173250,
+    "sha256": "15da0ca5714b15fbe741bd56ab558230b863dfac6d7009b5195ec4cadc035813"
+  },
+  {
+    "path": "cases/refund-6/receipts/0xfd9eaa06f8b5e277c8cafc28f53d26637a252b6f9e31c65b2e45596afcdc4221.json",
+    "bytes": 135886,
+    "sha256": "a4250d9856c5b9a139a3f3d02b3e78d5f771ad1afa8498acb8fb9e7ba7ffe06f"
+  },
+  {
+    "path": "cases/refund-7/receipts/0x07eaa5921f84dcc79f6a9d813308f4159d2636aec8799a66b412e7c2ab931304.json",
+    "bytes": 182292,
+    "sha256": "f09174a8f1bc4ceff40326c110079cc0d8823a079d0d377e91d0b30dc2f3d82f"
+  },
+  {
+    "path": "cases/refund-7/receipts/0x1727d961e12ad635bcb231301819c38cf38d53f2ac1f6a983e2decb6aa5a2c3a.json",
+    "bytes": 154540,
+    "sha256": "fa4132e2b47c5245c67e1b65a9b1b3657aca3472ca144441c81ba4bef15018cb"
+  },
+  {
+    "path": "cases/refund-7/receipts/0x17f7bfd27abf16ddc3abb94d60fcb31155976a3eec5688905a8970ff2843e061.json",
+    "bytes": 120963,
+    "sha256": "2526fe349c23fdd8ae9ed4131c28804c3f9dc4a4d21d6660cbcb6d6e0fafb3e3"
+  },
+  {
+    "path": "cases/refund-7/receipts/0x20a11146aa9a52a6e8f155e7883ae7c573fa8550e2ef57af51bfb9c40d5f89c6.json",
+    "bytes": 89067,
+    "sha256": "5f7826608c1e1e363ef4daab2b7c0b7d5217d8720e95c4414ce28b11cc5a24be"
+  },
+  {
+    "path": "cases/refund-7/receipts/0x2f3fe5fda1c455045cfd1eef12d1642101a28ce6e64446c25bfc80fa3f4b508a.json",
+    "bytes": 184792,
+    "sha256": "695f52333d6340d263dd0442fc633b1d2ba59f190757f33346449304753d848d"
+  },
+  {
+    "path": "cases/refund-7/receipts/0x3dcf8498ce3df362a68fac0207acaa14a3ee6311ed70d87dc7548fc8341678d0.json",
+    "bytes": 173282,
+    "sha256": "f2d24aeadce68b410ae8fbf787bcdcf3ab3fe200c0904cdc5b77ed046c400a9f"
+  },
+  {
+    "path": "cases/refund-7/receipts/0x40be81ecf4a33764561324c668cd75ec6cc73fe2c82398f05016bc597682a65d.json",
+    "bytes": 94344,
+    "sha256": "5a2f1fb8cc4e0b80fc78a7d04cdd86a6a74e6a6eb5ce34604d72b4f539893369"
+  },
+  {
+    "path": "cases/refund-7/receipts/0x488dacad35bb9f13c067a879b1f81d2b7f22d971f0c3ec4015ca5c5d2d5bb5bd.json",
+    "bytes": 118659,
+    "sha256": "5607c30383ac65ff324c1ff14aa35e67f80b81521c77d92024d10fc8bfb23a46"
+  },
+  {
+    "path": "cases/refund-7/receipts/0x4a7c1dba0c420b57654abdd21f39644e20152b1b0c812d836a4e54e6a79e7e34.json",
+    "bytes": 94250,
+    "sha256": "eb96b329ca5e68300e9a90e0700b65a956b0b7dbe2ff7ae382a32ce2cf0ac193"
+  },
+  {
+    "path": "cases/refund-7/receipts/0x564886bb18290d2827ad8c1317de924e23584899021c78683d116a3b189012be.json",
+    "bytes": 91935,
+    "sha256": "3d5ddb9090ed5190e14e7eb74835eb21c4984c51f20cfc8f6dbd300787e7fbb4"
+  },
+  {
+    "path": "cases/refund-7/receipts/0x5e9c23f25b5bfbc364e1a9e0d9610875856c39f09e394433f874e6888c57d2a6.json",
+    "bytes": 137522,
+    "sha256": "84cabf8f8e0b0cb3a857248fade4379f20ba72465e5e93db47d3204413e17a77"
+  },
+  {
+    "path": "cases/refund-7/receipts/0x6c530533012313f7ce98ff893877e9fd1dde455301ac9627ac477f596bcb28c7.json",
+    "bytes": 163710,
+    "sha256": "4cf4beedabe8e24470ee529e4ed02ba22022cef10258c1c35b75e5685594aa07"
+  },
+  {
+    "path": "cases/refund-7/receipts/0x9bd0f8f27a597b6995aad6c4f86f8d5398d7bdb4e43524b5ed49f8c1d07fc3e1.json",
+    "bytes": 94678,
+    "sha256": "b6cd9d741bae088bba86b2bb0418188d5f3f189f16aa37ec89840b1170c5236e"
+  },
+  {
+    "path": "cases/refund-7/receipts/0x9f30fa5c307c45b076770fae2907bb32aacaf5db851b19e9b7b69376a604119e.json",
+    "bytes": 90958,
+    "sha256": "304ead79aa67fbea96e049617982daf883bba68e1c28651fa02d989a6b35ae22"
+  },
+  {
+    "path": "cases/refund-7/receipts/0xa20605dd7d589883dd0b07b6f5b84bf83b651bc15b00eb210089b70db6562d91.json",
+    "bytes": 190651,
+    "sha256": "a25efa2dbc3e9494bf8c88d3bfad853183a27594274ddbf0150502b8f75f2c4d"
+  },
+  {
+    "path": "cases/refund-7/receipts/0xc608cd7085a6ce46e665caf911256ceff60015678b028ce8e4bb980033e02977.json",
+    "bytes": 87618,
+    "sha256": "7ce0703ab26b46369248dabe27bea820ed35334e1d9b4238b4c132587ebea64a"
+  },
+  {
+    "path": "cases/refund-7/receipts/0xfa3dd3020b60d9a9fae7cb99d1b24a4ccaf6b2d2fac5be75bc25225c59539052.json",
+    "bytes": 126288,
+    "sha256": "46c6ca01f9d1c99b267eb0d4426c2af6033254c6f83e13591081125bac3a15ec"
+  },
+  {
+    "path": "cases/winner-1/receipts/0x04292769e8805c93e0cb99d2e445c5823fb1df21b58bbb16f23651cc1e33be0b.json",
+    "bytes": 96567,
+    "sha256": "745c25fa801b8be9353cb40d994627e07ba592ac45960b15a60e9ea8c554dfc1"
+  },
+  {
+    "path": "cases/winner-1/receipts/0x0ea222815e4095317785f1ae4aad7b9924794653e88672ae441d1cd49f20f875.json",
+    "bytes": 121343,
+    "sha256": "34e50d1f7ac9c6c989fbc61747ceb337c2335ee581459217df5da613d7973127"
+  },
+  {
+    "path": "cases/winner-1/receipts/0x10b9ffe11795e08c0f20e66963ba2dd4424f34e07be73c96cf86da01f3e1886c.json",
+    "bytes": 88759,
+    "sha256": "ebf8700884d6811882cd2d1c486131f23f4f400ad67383a56b9abca6788ff122"
+  },
+  {
+    "path": "cases/winner-1/receipts/0x12ea61e8dedc860af60a59c3d13661afa4647393670be2460819714db732ebce.json",
+    "bytes": 130451,
+    "sha256": "00aa9fb77f0b2f820cc777e4b0a84e316660512b656cdac99188a76699106b08"
+  },
+  {
+    "path": "cases/winner-1/receipts/0x1f74eaa5e6394263bf1ef18df3d6dc0f8593de08fae8845cfa1d48822b577f44.json",
+    "bytes": 80516,
+    "sha256": "b970da56961339f1e569b430374e1531d15775c757d7c305a7c5a9a597a9c8f3"
+  },
+  {
+    "path": "cases/winner-1/receipts/0x4d16264ab37d14a97278e707e2646d4b203f5bec397891f2a606ba66d9aae8f5.json",
+    "bytes": 86805,
+    "sha256": "525671c91e577675dc03a2058bff38a31aa5a825847cef87fac7d568d3d74f3a"
+  },
+  {
+    "path": "cases/winner-1/receipts/0x7402f4d0351304de52b88b1e0de5f4eda170118fb7fa5aeeffa3a550a1eff10d.json",
+    "bytes": 134373,
+    "sha256": "8e7d620d22f9e879024c60e34e1e19a5b31e9a3800aed2de70869ecd2d78d018"
+  },
+  {
+    "path": "cases/winner-1/receipts/0x7584e2db9602ee75d8c770b7d01a45f0f4da16b66444b29c953162cd878c6c62.json",
+    "bytes": 87698,
+    "sha256": "cbc529f7b3dab62f450df7010590fdc730aa5633554b29579adcdd288ad6d7f8"
+  },
+  {
+    "path": "cases/winner-1/receipts/0x7a04eedb474dcc6cf6b9c65d2aa7f2d25eabdb94e9d8d53b2699d25c814e2da5.json",
+    "bytes": 94113,
+    "sha256": "923020e6b6367bc307eb79bef323c07fe45c11a0ae18cfead7b6d92b498fa8e4"
+  },
+  {
+    "path": "cases/winner-1/receipts/0xb13c46e16d384e0947972eaef310c1bdd4e92232ba132629dbc6d2b129bf33aa.json",
+    "bytes": 122169,
+    "sha256": "51f0cb9c1a7efaf9df8a11a7d1e50f6bdd95d27243267cdc8ca1dec6c82dda80"
+  },
+  {
+    "path": "cases/winner-1/receipts/0xd0cf0da9bb8af698ce83cd876b3b68159e6932fcd419f09c695da5d92cfffd8c.json",
+    "bytes": 87691,
+    "sha256": "35b536106ac5bcd437f9cee111c1eb5ad590b87f7c1041705ec00ecd3a7b61c8"
+  },
+  {
+    "path": "cases/winner-2/receipts/0x05a855d5adfadc68efea203eb9591a1f3972d01841dd8beb31c7f879a6f6712e.json",
+    "bytes": 129537,
+    "sha256": "749cd3e5f66e98ca202cb3644acf25258692df306db9a6ea7c0b0429a898188f"
+  },
+  {
+    "path": "cases/winner-2/receipts/0x091942c2ac7d6efffd610e6d920f8606419dcf4c3ff581e1cba609828081f1ee.json",
+    "bytes": 80134,
+    "sha256": "5c5979843e365238bd84d5ac13a17193ddf8c798610d966f6e0e88056fea32fa"
+  },
+  {
+    "path": "cases/winner-2/receipts/0x2c77e768a6913c95dfd616a1bc057707ba56b9847ca632d6cd425e8ba73a05b6.json",
+    "bytes": 127016,
+    "sha256": "763a877abc51e1decc73d12700c4e27121edc41ee2537d26024abc2bed8baa8c"
+  },
+  {
+    "path": "cases/winner-2/receipts/0x328d9d15e8a1b07e69ee8889fdf0fc729bf1880787350a767748aab15cb14277.json",
+    "bytes": 123995,
+    "sha256": "46b03dc458fad4e9b7115c9fe41ca85bc161f7b7b222199dc9152de740e9ebfa"
+  },
+  {
+    "path": "cases/winner-2/receipts/0x6d61e7b42b3d88ca6e2cc926b84b45c2daa6e36e0066afadba2a1a7fdf963efd.json",
+    "bytes": 113861,
+    "sha256": "7c8f7c8eb107b3c3cfaed77c1984a23cc45930c82971fe1dba60df6db2df0c47"
+  },
+  {
+    "path": "cases/winner-2/receipts/0x992d3eb2ea6a3f0412d4ae49dbd92a80de9fcf69a504ef0fcd470aefb5dcc131.json",
+    "bytes": 121662,
+    "sha256": "700ae285127e56ffeafdaae20e7c65645512362b09315dd7ccce38b01b3d543b"
+  },
+  {
+    "path": "cases/winner-2/receipts/0xa88ac6985a7fd3cbb2fd7ec392759885c3ec304f9069f2cc65b956295d4b80a1.json",
+    "bytes": 87751,
+    "sha256": "a4ef9a7243ca6f365db5aa0ebae39043b6f4c054c00f1eb2564b25bcb08b7a00"
+  },
+  {
+    "path": "cases/winner-2/receipts/0xab28430fa16c621c7ea97d57bf62a9a24245f8456290480e4d8d523a812e81c1.json",
+    "bytes": 96681,
+    "sha256": "b6e3f112ce2ced39b3481b86d3fd8742d27ba3537162d68cf195323f0b734410"
+  },
+  {
+    "path": "cases/winner-3/receipts/0x3fe138cb212cf3e177050745ad278ec71db03ebb79de9d4cb984938692dbb427.json",
+    "bytes": 87726,
+    "sha256": "5a4d1555df951d2b60e6723fc9eb23fda2db5556234c19273fac138a6fdb2e1c"
+  },
+  {
+    "path": "cases/winner-3/receipts/0x6ecbd91978e74ee4c59f93770ec07ff0b3bf91c51dc542c466cebf20e4ff02a7.json",
+    "bytes": 129205,
+    "sha256": "e0ceea15f4e3f0a12bd3718acaf015285a8b576bc1f601eca02c24e17ffde241"
+  },
+  {
+    "path": "cases/winner-3/receipts/0x86273b88006f3e22ad4cfea7b60c60030797e4a90b0cf7b12f9ec4ef3f0f97d9.json",
+    "bytes": 96581,
+    "sha256": "71a9751c533a2bfd1809f60832b33beaa2593d7a38badc99eb614dd7239f18e8"
+  },
+  {
+    "path": "cases/winner-3/receipts/0x9a88ccd7670d402bf7b0c689bb2283030da57abdd3ea37c89ed9026e474bb7e1.json",
+    "bytes": 133339,
+    "sha256": "caf0955fe8c5a17a77fb1e18d27f1afbee294c85281276fceb3b11b58cc13a5a"
+  },
+  {
+    "path": "cases/winner-3/receipts/0xaf240fd731f52de87cf8d1b68add45b523bd24c1fa586b274d5b47bba4d3b61c.json",
+    "bytes": 132780,
+    "sha256": "14d8101375eeca00782c0ec829c59c60a4c44d14a76477a14d7d3b539be73183"
+  },
+  {
+    "path": "cases/winner-3/receipts/0xb4c94c56b21156d4de2448f1f456b9cde9544225f3b76f4d8d401fa39dbc856a.json",
+    "bytes": 113871,
+    "sha256": "4ce23cc687ea082ced119ff07d63f193283f126382288411faf114a2cf1e532e"
+  },
+  {
+    "path": "cases/winner-3/receipts/0xcfd43aaab96e555f129aabb078a1f645a3e4a06260035ec5004e8a4148e881e3.json",
+    "bytes": 142672,
+    "sha256": "241218cbfa5f7e18d190f63b204701e6e582d38634b96386dab8150297b99f3b"
+  },
+  {
+    "path": "cases/winner-3/receipts/0xde75c7597bb97f6001d6712ea06b0fa8dc5d4d01f7553bf7e3213009ea382950.json",
+    "bytes": 80216,
+    "sha256": "d468f9da2eb0a0ff1ca7ab4249b8ff1ecd083d1894d6fff211247f76f90900f0"
+  },
+  {
+    "path": "cases/winner-3/receipts/0xe2ad74a56a382b71f18bb3f6f15c1c9a2be2dabde994e5f5c86a85a67c362858.json",
+    "bytes": 146180,
+    "sha256": "5492ede1edb741ac2db47aa75d5593e6539a1e72989c15e74e1b797ba2cb6f3a"
+  },
+  {
+    "path": "cases/winner-4/receipts/0x443dea7a7ad18aa9cf089e9925b13fb1bb14524b64ba2fd4a75fab515105a28b.json",
+    "bytes": 80195,
+    "sha256": "ac605ed1405387bae601937f6304002f793ab274eab7c3227d2084fb077ee0fa"
+  },
+  {
+    "path": "cases/winner-4/receipts/0x5060f5b380aeb4294aa6c2edb395077165f496f9d390bceb2ef5fbd8d0bf6063.json",
+    "bytes": 89150,
+    "sha256": "faf87b86e0383c70341b993fdb1effc14ce89f2510e0ec28163c82a5c36be3fd"
+  },
+  {
+    "path": "cases/winner-4/receipts/0x565a29c3ccd09d46072ad31a330913bdd1b30fe08c1b55086eb2750f3864fa89.json",
+    "bytes": 126319,
+    "sha256": "cb4400da545ffcd5aaaabe17431d2e9f6446c095793078885f7148a3d5434903"
+  },
+  {
+    "path": "cases/winner-4/receipts/0x619c551a1ea542cd196c5b72a5ca2ae3e57e12b3ac102f2a7f534af647d08a11.json",
+    "bytes": 156405,
+    "sha256": "44e05529777a85b659dc2157330035ac706fe339f73fa39fe89e14bdb9f95d91"
+  },
+  {
+    "path": "cases/winner-4/receipts/0x832ddcf733e731abfeaf637e72a55602c53eb817e44db40eff04a512d994f544.json",
+    "bytes": 158818,
+    "sha256": "d45942ddb11ccd37eed5201a0fb4fe0f766faff36d282fe1cf26f761129a2445"
+  },
+  {
+    "path": "cases/winner-4/receipts/0x92869b0e99544418a917aada0f25212c9fea41a891e839150d2cbd89279f02bd.json",
+    "bytes": 142780,
+    "sha256": "6c3a87667453db5d386d1736521a821006e620d8475023e08d80ae55d2bd6c97"
+  },
+  {
+    "path": "cases/winner-4/receipts/0xaebd7f7cac8f96b7ee29a916cac065de6f660f6eb1b85565337a8e0da69a215f.json",
+    "bytes": 134609,
+    "sha256": "72dfe430a05725d5bba38e6c1e578c003f6cc5828230570ea8c350de32942e60"
+  },
+  {
+    "path": "cases/winner-4/receipts/0xb739b353a2497857d3fc9dfc126822515b85f18d7730e5198ffbb598401c11b3.json",
+    "bytes": 155633,
+    "sha256": "489d5364f5376c52d48927863cab75ec0818a99c3d176858012308d445bf6c55"
+  },
+  {
+    "path": "cases/winner-4/receipts/0xbca42bc1bdfd761ae3ccfadf16b28f2b5345083c0cb64803424623054c1dad36.json",
+    "bytes": 90930,
+    "sha256": "c1a29721ee24b87a5016dfd6d51e7cc8df7af6257b38b7bb5c56033d69a6cfff"
+  },
+  {
+    "path": "cases/winner-4/receipts/0xd6a434a6cc2d885ab2fbc09ad8ec222795086c4ddde31bffd5ce5ab50f5f3a83.json",
+    "bytes": 149988,
+    "sha256": "7c262ca33f45de639fbf53ec0cdeb0be011f8f88bc2c20adf703e4336fc0d9c6"
+  },
+  {
+    "path": "cases/winner-5/receipts/0x027b5b402e60c36fa9c6d3c2aaec0427ae1f42c9f1429bb45286cc5bc2836544.json",
+    "bytes": 148018,
+    "sha256": "70def94d8269ef8c6ad381eb0aedcdda3bbd3964a3a53e94a9a1c4281bcd4743"
+  },
+  {
+    "path": "cases/winner-5/receipts/0x05f37655c366e5d9206542df029768a31c066c1c0adc5a66bf07979a14a7e462.json",
+    "bytes": 176970,
+    "sha256": "5af50473d42e83093781901cf2b5157981b210de8617734df7c37f43723a0695"
+  },
+  {
+    "path": "cases/winner-5/receipts/0x325f2f5b93a474763e697f347c5466e93c333130b6292e5586a1a5d88b68c486.json",
+    "bytes": 129460,
+    "sha256": "c3732ab2e817f0388ffb172226491e7c8e7a6c5056ce1496b97de7349e1fe550"
+  },
+  {
+    "path": "cases/winner-5/receipts/0x54913b497bc0001719f9d5acfaad92421f787ceb41e43060b9a4855a4f48e8ac.json",
+    "bytes": 80220,
+    "sha256": "537e95567514dfd7acf95bb9ab198228d261ee198b86bbf141a59141adee4e7e"
+  },
+  {
+    "path": "cases/winner-5/receipts/0x5bbc776b1679ca03e99cc99e135106018d0de2836f88e9ba1a92302e1f85f97c.json",
+    "bytes": 146283,
+    "sha256": "9a8d76153094715cd432bd0cbd7f6faed3bf9de0d5e651f1d801893d4b05c2ac"
+  },
+  {
+    "path": "cases/winner-5/receipts/0x6321ad90a07c2abd2672e5da2dd3a41f6168feecc35ad8ac2cf20a5d36893d53.json",
+    "bytes": 126782,
+    "sha256": "9cf910d8d9c18efcda5ad28fac0a681c5621657a1039df894cde756185d4f937"
+  },
+  {
+    "path": "cases/winner-5/receipts/0x6d72b4c2dc825cd13fe5687f55ac8991a550401b2df1928390bc86cb55ab71bb.json",
+    "bytes": 100820,
+    "sha256": "e24bf15443e820d0aea2451fc6bb8de9d5fe76a61e24149b588c736b6bfcf141"
+  },
+  {
+    "path": "cases/winner-5/receipts/0x6e0146a7a2a1c07ed41ca09d62ca2b3d28e0abd10e7097c69ba9abb69e275628.json",
+    "bytes": 157511,
+    "sha256": "9f32dfd07fefdb551735cd95a53578610dad3e9c562b288168aa9b1987d8a326"
+  },
+  {
+    "path": "cases/winner-5/receipts/0x8017be68211222bf8e03917737294279cac983658a9051d77994548b15f61bdf.json",
+    "bytes": 121363,
+    "sha256": "09bf7175354c125311651d24b3157b9d2ec76701cef74fc5739fec071dbaf639"
+  },
+  {
+    "path": "cases/winner-5/receipts/0xb2fde07f3bc9ac0d714fc1905e6cc873ce90bf2f7bc745e9d725e22b869b8a58.json",
+    "bytes": 90911,
+    "sha256": "e0fb6c55bfafd5850949626698b164f0b1e45da1bc5b297fb4375ad7be358a65"
+  },
+  {
+    "path": "cases/winner-5/receipts/0xc70ba632e2f5b49b414c653c65cc675ad2cd6bcbc18cc16faefe440e9b7f0f17.json",
+    "bytes": 159087,
+    "sha256": "a0f12bb8979ace65caff00d2c91ebb48032e7fec79e50a121a41775ebd6142d8"
+  },
+  {
+    "path": "cases/winner-6/receipts/0x0073459fa84b0c6c6460803355cd5584cd8ee1488ebafaeba014a8b9ada3bc2c.json",
+    "bytes": 129099,
+    "sha256": "a0a5f85d1bd81c9b15a7f1e463ebcc325dcf7d1a8fe9b5d9f2850f1c01d06bcb"
+  },
+  {
+    "path": "cases/winner-6/receipts/0x5607101aa13e066773614d1478fa0adaaefeb47738b1288a3c7666a169f59b15.json",
+    "bytes": 129429,
+    "sha256": "8cbc461bfda030993ab54955e5916237880a8102e6bcb121e6ee1692e65b650d"
+  },
+  {
+    "path": "cases/winner-6/receipts/0x56c326e9ecb4172f9bfae1ead61725053f3cacf0e0d96fbd3e56d762ec2fb7dd.json",
+    "bytes": 146131,
+    "sha256": "d57e13e46140785b3ee2688e912444cf1cb456ffba2177826d124c216cb4d0f2"
+  },
+  {
+    "path": "cases/winner-6/receipts/0x693210ed363e5bd8bc0dbb4d1d93708a86a9f4f3e67c507b2ba2e4cb942a4833.json",
+    "bytes": 89101,
+    "sha256": "303a0220040ad1247f8364eb7b2fa382d696b66433ade5775e38b2fd8db3837b"
+  },
+  {
+    "path": "cases/winner-6/receipts/0x6d0e25dfd0c3af6dcae60e7888a7f03fd7b35917278a8f2ca06980765c93e2a6.json",
+    "bytes": 121246,
+    "sha256": "061d298d73b7fb92a383c55f1a31e9d5755e18af1d314cf9f7a5bd1a248417e7"
+  },
+  {
+    "path": "cases/winner-6/receipts/0x87090a2665cb4fe0388c9613c106e68a8243a7b4dd3cc50ad6c0d37dd6807d2a.json",
+    "bytes": 162332,
+    "sha256": "efb21f53edf76071197b81df1cf1da60f39f4a5ae4f2efb8e2a6d2113146ff72"
+  },
+  {
+    "path": "cases/winner-6/receipts/0x8f60b4ae1ea573003cb6cbe4917bfbc6057b9e1708da1d6f411de87786a5ddae.json",
+    "bytes": 87766,
+    "sha256": "56ebf54214445037de376e252d055baee88f7140e2d9b51d388f7e4ddaeebd77"
+  },
+  {
+    "path": "cases/winner-6/receipts/0xa258de3d5020ab514b221fc3ac9bb9fe0d9a8b2f7ebd7eab63b229021ce6aed2.json",
+    "bytes": 166768,
+    "sha256": "e5c6051a49a4069a0e210008636373f680c3b4d8940a9d70ec71afdd86229468"
+  },
+  {
+    "path": "cases/winner-6/receipts/0xb6bbc2a32c0ece57f5527535c4fc0ea7cb64ee40d032056e9b4ae3e3b5af113f.json",
+    "bytes": 90799,
+    "sha256": "d1c7cab47a95f5ba9730645173314fccd4f924aba0f35b5ca02bb72eb705091f"
+  },
+  {
+    "path": "cases/winner-6/receipts/0xed78d29f2536d6b130b203424326314213889f18bf56212cfd4f4f473802be30.json",
+    "bytes": 168724,
+    "sha256": "8d89b59558317c39d0f1f65f819b50b2267149c8b2e8da9d0636dccea37bd8c3"
+  },
+  {
+    "path": "cases/winner-6/receipts/0xeff868e1ef5333973ed4d886be8d3be6b7e37709a2aecd07aec471231e584345.json",
+    "bytes": 157416,
+    "sha256": "faeaa7c157fa3e7046283dfb3544c9984904fe8c9333d415143bb7bea9def1f4"
+  },
+  {
+    "path": "cases/winner-6/receipts/0xff65119e495d4a85ff7f07b2f4dae0e2845a55eafd990db63cae81856dedaed4.json",
+    "bytes": 184652,
+    "sha256": "0d8c6468932eec0cbdca30514dc2e1e40598f1c18b6e952e28fa2c95d7d65942"
+  },
+  {
+    "path": "cases/winner-7/receipts/0x2046bdbc8bca8c00117f33a7465fea6eab38f5a5765c86f1f37b3f03c7d4b5ed.json",
+    "bytes": 129175,
+    "sha256": "eac74ff4f9288c98e5e95d53518c6fad4fbf373222de33480d5bcc72634434e7"
+  },
+  {
+    "path": "cases/winner-7/receipts/0x279cc8a2868c758bdfb4e9e1f3ae3f9ceba20b0fa61299cfa1c575a24953244e.json",
+    "bytes": 118842,
+    "sha256": "5e3d427795e9f98dca96ba2356525ebf47b01a2e6078bc90d29e0fc9e2f3b7e6"
+  },
+  {
+    "path": "cases/winner-7/receipts/0x2fb9e55ee63922415d15a749952731d8a5ee9b31fa1601c1f134b20487d038f5.json",
+    "bytes": 191570,
+    "sha256": "14315d8b3881d93c75b8c907e0211928d433d3af2a8036f7aca2e105496ad36d"
+  },
+  {
+    "path": "cases/winner-7/receipts/0x5d613cae7cac9e0db5b4ce63b7e8e0de886a92995f92d14ec462971f1fdb546b.json",
+    "bytes": 80076,
+    "sha256": "0a0d86fdf315c0c90be37057fe4922d929c9e90a5cc1eaf4d8de758a4be229f4"
+  },
+  {
+    "path": "cases/winner-7/receipts/0x6c45fc184058031ac2a7ed0829c4906b98e5a47cf27bbc61169bffff18a6600e.json",
+    "bytes": 166567,
+    "sha256": "de6758b0c7d1a42195e72ce66f73325a233c44f0ab3a3645ffe5e8920c090f6c"
+  },
+  {
+    "path": "cases/winner-7/receipts/0x6e6a6de085fc699753526f9c0dcd294331b8beefafd423d0906f705b98643d20.json",
+    "bytes": 186125,
+    "sha256": "925d7c58d6ad0f7df092230a18e8963ecf2b307883e3d9213ae670a33e0af275"
+  },
+  {
+    "path": "cases/winner-7/receipts/0x799a4c97da48f35092b101509d13018f4fbecfb3623ae5837390d7b7ce51947b.json",
+    "bytes": 80573,
+    "sha256": "2c8102a553ef8ed50c43c8cc04b1606d26d386dcd7bc2c8386a52c7260154a0d"
+  },
+  {
+    "path": "cases/winner-7/receipts/0x8261d4fb46f56ad40ed2d3bb3c5e95bf8497aaea5866839f21b12d68a57f4829.json",
+    "bytes": 90877,
+    "sha256": "36d7840b5c92e8b86fc70df707cf34b1aef61c13e99ebeef95e9dff1fc8771f9"
+  },
+  {
+    "path": "cases/winner-7/receipts/0x8e7f54cd83587a9c4203c9f831851df369c076b6a25773e4583eeb43fcf48fb0.json",
+    "bytes": 155592,
+    "sha256": "60cf33348bf0946fec591084df1e5c7afa782964ba6adc023435742507fe209b"
+  },
+  {
+    "path": "cases/winner-7/receipts/0x929e990a4204fc0fc0847642bb5499580a91a4955c992a1fa86b37ce2a57603b.json",
+    "bytes": 195416,
+    "sha256": "7ecf2f1ff4eae04505d5abc473bd4686250d5bd5ab529aee395bfca8ecb5ec56"
+  },
+  {
+    "path": "cases/winner-7/receipts/0x98d6904b7a21be608e43b64fb462a6680dac98cf2264844dd0f7dbf7304523eb.json",
+    "bytes": 136941,
+    "sha256": "56e60ac632586f94050bf4d42abf4d343d63a889a66f6678bb118d21b385bad5"
+  },
+  {
+    "path": "cases/winner-7/receipts/0xa8f165af5f527a5321e619c67f50f4adde0e4a49a63dfff57e75a21486392918.json",
+    "bytes": 87526,
+    "sha256": "b575bcca2859ea9105afa4aa1ed37270c9904537e1782b4b26a80ee3574449a6"
+  },
+  {
+    "path": "cases/winner-7/receipts/0xadbb3d3fce0ce1d0f7abff89b4e4bb16e8593bc31fdda51f03c57b732ca6a964.json",
+    "bytes": 92030,
+    "sha256": "94b9218d657d45b95b201087e0e3ff9e731c90d57cb285f91a9ca707c1fc9f4e"
+  },
+  {
+    "path": "cases/winner-7/receipts/0xb779d8aacefc3818cb0ac46b9d08494d877683d23fedcde684601bf6743bdad9.json",
+    "bytes": 152641,
+    "sha256": "a8d55b7c4f1571e39e3fd94f7f4f23fa2f80265d0049852ff752917ca70ceb7a"
+  },
+  {
+    "path": "cases/winner-7/receipts/0xc60e2acf704dc991719771122e86249a5b76f8b5feed4c5bf42ceeb1a7b33622.json",
+    "bytes": 80216,
+    "sha256": "8b875d346a3a9ff6a7d3abc3a871244d69a87e81b6e32a9a16c1d2c9599e4a45"
+  },
+  {
+    "path": "cases/winner-7/receipts/0xf0d62e8b72eb8665012abf1b2b6294780790b23d50e5ccf606f572f613af6bd5.json",
+    "bytes": 172105,
+    "sha256": "b170ea1c413b9d01890eb77aa52a45dadc5e9d35ea1a79e1d7018e50c9bd3fd4"
+  },
+  {
+    "path": "cases/winner-7/receipts/0xf1fb9d33dc8f453c9562274ee48644b68c914b9662831c2b2f22c839c4ee0f8e.json",
+    "bytes": 96612,
+    "sha256": "0214d95c12efc02e0e1eda5b3d1a9580571a77991d65c7723810fff0c72fc94f"
+  }
+]

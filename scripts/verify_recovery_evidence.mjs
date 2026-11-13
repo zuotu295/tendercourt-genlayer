@@ -11,9 +11,11 @@ function good(tx){return[7,'FINALIZED'].includes(tx.status)&&[6,'MAJORITY_AGREE'
 check('chain-id',await c.getChainId()===61999);check('source-sha',createHash('sha256').update(source).digest('hex')===dep.source_sha256);
 check('deployed-byte-parity',await c.getContractCode(dep.contract_address)===source);check('protocol',await read('get_protocol')==='tendercourt-2.2');
 check('deployment-finalized-success',good(await c.getTransaction({hash:dep.deploy_tx})));
+const manifest=JSON.parse(fs.readFileSync(path.join(DIR,'transactions.json')));
+check('matrix-manifest-complete',manifest.complete===true&&manifest.cases?.length===14);
 const all=JSON.parse(await read('get_all_tenders'));const matrix=[];const records=[];let withdrawals=0;
 for(const outcome of['winner','refund'])for(let n=1;n<=7;n++){
- const key=outcome+'-'+n;const dir=key==='winner-1'?DIR:path.join(DIR,'cases',key);
+ const key=outcome+'-'+n;const dir=path.join(DIR,'cases',key);
  const ev=JSON.parse(fs.readFileSync(path.join(dir,'transactions.json')));check(key+'-complete',ev.complete===true&&ev.contract_address.toLowerCase()===dep.contract_address.toLowerCase());
  const rb=JSON.parse(fs.readFileSync(path.join(dir,'readback.json')));const b=rb.balances[key];
  const found=all.filter(t=>t.requirements.startsWith('Recovery '+key+':'));check(key+'-unique-tender',found.length===1);
@@ -29,9 +31,16 @@ for(const outcome of['winner','refund'])for(let n=1;n<=7;n++){
 }
 // Re-read every live receipt in bounded batches. Never trust recorded pass flags alone.
 for(let i=0;i<records.length;i+=6){const batch=records.slice(i,i+6);const txs=await Promise.all(batch.map(r=>c.getTransaction({hash:r.hash})));for(let j=0;j<batch.length;j++){
- const r=batch[j],tx=txs[j];if(r.disagreement){check(r.label+'-recorded-disagreement',[7,'FINALIZED'].includes(tx.status)&&[5,'MAJORITY_DISAGREE'].includes(tx.result));continue}
+ const r=batch[j],tx=txs[j];
+ const match=r.label.match(/^((?:winner|refund)-([1-7]))-/);const caseName=match?.[1];const caseTender=all.find(t=>t.requirements.startsWith('Recovery '+caseName+':'));
+ const sender=String(tx.from_address||tx.sender||'').toLowerCase();
+ if(r.fn==='request_judgment'&&!r.error)check(r.label+'-actual-supplier-sender',sender===caseTender?.quotes[Number(match[2])-1]?.supplier);
+ if(r.fn==='judge'&&!r.disagreement)check(r.label+'-actual-independent-sender',sender!==caseTender?.buyer&&!caseTender?.quotes.some(q=>q.supplier===sender));
+ if(r.fn==='judge'&&!r.disagreement)check(r.label+'-multi-validator',tx.leader_only===false&&tx.num_of_initial_validators>=3&&Array.isArray(tx.consensus_data?.validators)&&tx.consensus_data.validators.length>=2&&Object.values(tx.consensus_data.votes||{}).filter(v=>v==='agree').length>=3);if(r.disagreement){check(r.label+'-recorded-disagreement',[7,'FINALIZED'].includes(tx.status)&&[5,'MAJORITY_DISAGREE'].includes(tx.result));continue}
  check(r.label+'-live-receipt',r.error?[7,'FINALIZED'].includes(tx.status)&&[6,'MAJORITY_AGREE'].includes(tx.result)&&leader(tx)?.execution_result==='ERROR'&&leader(tx)?.result?.payload===r.error:good(tx));
 }}
-const sum=JSON.parse(await read('get_totals'));check('fourteen-cases',withdrawals===14);check('funds-conserved',BigInt(sum.total_received_wei)===140000000000000000000n&&BigInt(sum.total_withdrawn_wei)===140000000000000000000n&&BigInt(sum.contract_balance_wei)===0n&&BigInt(sum.escrowed_wei)===0n);
+check('manifest-record-count',manifest.transactions.length===records.length);
+const sum=JSON.parse(await read('get_totals'));check('exact-tender-count',all.length===14&&sum.tender_count===14);check('fourteen-cases',withdrawals===14);check('funds-conserved',BigInt(sum.total_received_wei)===140000000000000000000n&&BigInt(sum.total_withdrawn_wei)===140000000000000000000n&&BigInt(sum.contract_balance_wei)===0n&&BigInt(sum.escrowed_wei)===0n);
 const output={network:'Stable Studionet',chain_id:61999,protocol:'tendercourt-2.2',contract_address:dep.contract_address,source_sha256:dep.source_sha256,verified_at:new Date().toISOString(),transactions:records.length,pass,fail:0,matrix,totals:sum,checks};
+fs.writeFileSync(path.join(DIR,'readback.json'),JSON.stringify({network:'Stable Studionet',chain_id:61999,protocol:'tendercourt-2.2',contract_address:dep.contract_address,readback_at:output.verified_at,tenders:all,totals:sum,matrix},null,2));
 fs.writeFileSync(path.join(DIR,'verification.json'),JSON.stringify(output,null,2));console.log(pass+' PASS, 0 FAIL; '+records.length+' live receipts; 140 GEN in = out');
