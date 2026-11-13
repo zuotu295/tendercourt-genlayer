@@ -41,17 +41,18 @@ Direct awards while OPEN remain the buyer's choice, without consensus.
 
 ## Deployment and evidence
 
-The existing deployment in `public/deployment.json` and `evidence/deployment.json`
-is **tendercourt-2.1**, not this source revision. A new deployment is required.
-The v2.2 frontend reads historical data but rejects writes unless the configured
-contract returns `tendercourt-2.2`. The live Pages site remains the default-branch
-version until changes are published.
+The current deployment in `public/deployment.json` is **tendercourt-2.2**:
+[0xD879F2Aa15f8420694872e229424AF06cD9929B9](https://explorer-studio.genlayer.com/address/0xD879F2Aa15f8420694872e229424AF06cD9929B9).
+The frontend rejects writes unless the configured contract returns this protocol.
 
-[EVIDENCE.md](EVIDENCE.md) retains historical receipts and failed attempts.
-[evidence/v2.1](evidence/v2.1/) preserves that version's source and expectations;
-[ERRATA.md](ERRATA.md) preserves the earlier discrepancy. No v2.2 chain verification
-or browser write success is claimed. [EXPECTED.md](EXPECTED.md) specifies tests
-and required live checks. [REVIEWER.md](REVIEWER.md) explains recovery and tradeoffs.
+[EVIDENCE.md](EVIDENCE.md) documents the current deployment and recovery matrix.
+[evidence/v2.2](evidence/v2.2/) contains raw receipts and verification results.
+The original v2.1 deployment/transaction JSONs remain at `evidence/deployment.json`
+and `evidence/transactions.json`; [evidence/v2.1](evidence/v2.1/) preserves the
+old source, expectations and narrative, including failures. They are historical,
+not proof of the current source. [ERRATA.md](ERRATA.md) retains the earlier discrepancy.
+[EXPECTED.md](EXPECTED.md) specifies coverage; [REVIEWER.md](REVIEWER.md) explains
+recovery and tradeoffs.
 
 ## Reproduce
 
@@ -69,7 +70,10 @@ accounts/funding/signing). Actual execution requires `--execute` after deploymen
 authorization; it uses a separate v2.2 checkpoint and writes only
 `evidence/v2.2/deployment.json`. Never reuse an old deployment/checkpoint for changed
 source. After live validation, update the frontend deployment metadata and rebuild.
-The old `run_evidence.mjs` suite is disabled because its partial-fill denial
+The live recovery runner accepts an explicit case (`--case winner-1` through
+`refund-7`), checkpoint and output directory; it resolves pending hashes before
+any new send. `npm run verify:recovery` independently re-reads every current
+receipt, source and final state. The old `run_evidence.mjs` suite is disabled because its partial-fill denial
 expectation is incompatible; it must not overwrite the historical receipts.
 `verify_evidence.mjs` verifies only the preserved v2.1 source/receipts, read-only.
 

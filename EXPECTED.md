@@ -1,7 +1,8 @@
 # TenderCourt v2.2 validation expectations
 
 Protocol: `tendercourt-2.2`. Network: Stable Studionet, 61999,
-https://studio.genlayer.com/api. No v2.2 chain transactions have been executed.
+https://studio.genlayer.com/api. These expectations predate the live recovery run;
+results and receipt references are recorded separately in EVIDENCE.md.
 
 Recovery uses the supplier-triggered alternative, not an elapsed-time timeout.
 An accepted supplier may immediately close an OPEN tender with 1–8 quotes.

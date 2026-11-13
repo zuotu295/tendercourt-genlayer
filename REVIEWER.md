@@ -16,7 +16,7 @@ Tests cover all seven partial sizes, winner and NO_AWARD outcomes, withdrawal
 ownership, duplicate withdrawal, invalid consensus results, frozen quotes and
 buyer override rejection. See EXPECTED.md for scope and the live validation plan.
 
-The existing deployed address is v2.1. No v2.2 deployment or live validation is
-claimed. EVIDENCE.md preserves the historical transactions, including failures;
-they do not prove this revision. New deployment and live consensus/withdrawal
-receipts are required before presenting v2.2 as chain-verified.
+Current deployment: `0xD879F2Aa15f8420694872e229424AF06cD9929B9`,
+protocol tendercourt-2.2, FINALIZED successful deployment and exact source byte
+parity. Recovery matrix validation is recorded in EVIDENCE.md. The previous
+v2.1 transactions and all recorded failures remain historical evidence only.
