@@ -44,12 +44,14 @@ Direct awards while OPEN remain the buyer's choice, without consensus.
 The current deployment in `public/deployment.json` is **tendercourt-2.2**:
 [0xD879F2Aa15f8420694872e229424AF06cD9929B9](https://explorer-studio.genlayer.com/address/0xD879F2Aa15f8420694872e229424AF06cD9929B9).
 The frontend rejects writes unless the configured contract returns this protocol.
-This remediation branch contains the new Pages build; publication to the
-default-branch site is still pending.
+The default-branch GitHub Pages site serves this deployment; bundle version
+`5c0fdcbc` was checked against the published version metadata.
 
 [EVIDENCE.md](EVIDENCE.md) documents the current deployment and recovery matrix:
 14 cases, 156 matrix transaction receipts, 364 independent checks passed;
 140 test GEN received and withdrawn, zero contract balance and escrow.
+[Published-site validation](evidence/v2.2/SITE_VALIDATION.md) covers the live
+readback, bilingual recovery notice, form guards and rendered action controls.
 [evidence/v2.2](evidence/v2.2/) contains raw receipts and verification results.
 The original v2.1 deployment/transaction JSONs remain at `evidence/deployment.json`
 and `evidence/transactions.json`; [evidence/v2.1](evidence/v2.1/) preserves the

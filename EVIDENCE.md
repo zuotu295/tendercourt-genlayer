@@ -51,6 +51,6 @@ To reproduce signed matrix cases on a fresh authorized deployment, prepare separ
 
 Recovery is supplier-triggered, not an elapsed-time timeout. An accepted supplier may close the quote window immediately. Quotes freeze in JUDGING and the buyer can no longer award directly. Consensus disagreement remains retryable but success is not guaranteed. The 10 GEN selection award does not verify procurement delivery. All amounts are free Studionet test GEN.
 
-This branch contains the v2.2 Pages build. Default-branch publication and the new live-site browser write loop are still pending; no v2.2 browser transaction is claimed.
+The default-branch GitHub Pages site serves v2.2 (bundle 5c0fdcbc). Published-site checks cover the finalized readback, bilingual recovery notices, form guards and temporary-account backup flow; see [SITE_VALIDATION.md](evidence/v2.2/SITE_VALIDATION.md). A new browser-signed contract write loop was not executed; the 14-case on-chain matrix was signed through the SDK, and is not represented as browser interaction.
 
 [v2.1 historical evidence](evidence/v2.1/EVIDENCE.md), including failed attempts, remains preserved. The original v2.1 deployment and transactions JSONs remain under evidence/. They do not prove v2.2. [ERRATA.md](ERRATA.md) retains the earlier discrepancy.
