@@ -1,0 +1,517 @@
+{
+  "network": "Stable Studionet",
+  "chain_id": 61999,
+  "protocol": "tendercourt-2.2",
+  "contract_address": "0xD879F2Aa15f8420694872e229424AF06cD9929B9",
+  "deploy_tx": "0xe2c7a22fe59c70b672167929986df05db628ce00166c01abdf019722fe8d3d96",
+  "complete": true,
+  "transactions": [
+    {
+      "label": "refund-1-create",
+      "who": "B2",
+      "fn": "create_tender",
+      "args": [
+        "Recovery refund-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+        "Design",
+        500
+      ],
+      "value_wei": "10000000000000000000",
+      "error": null,
+      "hash": "0x5c33409de19da8c691ca54d8e32b48296422f6f528aec2efe925a16f00cefccb",
+      "receipt": "receipts/0x5c33409de19da8c691ca54d8e32b48296422f6f528aec2efe925a16f00cefccb.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "SUCCESS",
+      "passed": true
+    },
+    {
+      "label": "refund-1-quote-1",
+      "who": "S1",
+      "fn": "submit_quote",
+      "args": [
+        2,
+        301,
+        "Offer 1: text slogan only; no poster, no PDF, no editable source and no revision rounds."
+      ],
+      "value_wei": "0",
+      "error": null,
+      "hash": "0xecfde16b4476a440fd58e0d6f8ecdbd0c21e5d8e08c2d8e99d1dd563dac7058b",
+      "receipt": "receipts/0xecfde16b4476a440fd58e0d6f8ecdbd0c21e5d8e08c2d8e99d1dd563dac7058b.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "SUCCESS",
+      "passed": true
+    },
+    {
+      "label": "refund-1-outsider-request",
+      "who": "OUT",
+      "fn": "request_judgment",
+      "args": [
+        2
+      ],
+      "value_wei": "0",
+      "error": "ONLY_BUYER_OR_QUOTER_CAN_REQUEST_JUDGMENT",
+      "hash": "0x97138e71e7687d83a6edba3f7c5a9156b209b3b7dfaa7fc2286929cd43251149",
+      "before": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xea04990b24f8d283268564cf4375296f6141f3c7",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0x1b3430ce9261297eaa078a5d4b02500b8b6cb127",
+              "terms": "Offer 1: text slogan only; no poster, no PDF, no editable source and no revision rounds."
+            }
+          ],
+          "reason": "",
+          "requirements": "Recovery refund-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "OPEN",
+          "tender_id": 2,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "receipt": "receipts/0x97138e71e7687d83a6edba3f7c5a9156b209b3b7dfaa7fc2286929cd43251149.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "ERROR",
+      "leader_error": "ONLY_BUYER_OR_QUOTER_CAN_REQUEST_JUDGMENT",
+      "observed_error": "ONLY_BUYER_OR_QUOTER_CAN_REQUEST_JUDGMENT",
+      "after": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xea04990b24f8d283268564cf4375296f6141f3c7",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0x1b3430ce9261297eaa078a5d4b02500b8b6cb127",
+              "terms": "Offer 1: text slogan only; no poster, no PDF, no editable source and no revision rounds."
+            }
+          ],
+          "reason": "",
+          "requirements": "Recovery refund-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "OPEN",
+          "tender_id": 2,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "passed": true
+    },
+    {
+      "label": "refund-1-supplier-request",
+      "who": "S1",
+      "fn": "request_judgment",
+      "args": [
+        2
+      ],
+      "value_wei": "0",
+      "error": null,
+      "hash": "0x51fc9e98695207b8f48d6e050ddcf2f1573f5e1a5d4170e8fd87e181ddf34f0d",
+      "receipt": "receipts/0x51fc9e98695207b8f48d6e050ddcf2f1573f5e1a5d4170e8fd87e181ddf34f0d.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "SUCCESS",
+      "passed": true
+    },
+    {
+      "label": "refund-1-buyer-override",
+      "who": "B2",
+      "fn": "award_tender",
+      "args": [
+        2,
+        1
+      ],
+      "value_wei": "0",
+      "error": "TENDER_NOT_OPEN",
+      "hash": "0x12f92f5aca86257a492003d945b9c98462ca6c8d6c72b2f964da1d7545df4d2c",
+      "before": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xea04990b24f8d283268564cf4375296f6141f3c7",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0x1b3430ce9261297eaa078a5d4b02500b8b6cb127",
+              "terms": "Offer 1: text slogan only; no poster, no PDF, no editable source and no revision rounds."
+            }
+          ],
+          "reason": "",
+          "requirements": "Recovery refund-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "JUDGING",
+          "tender_id": 2,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "receipt": "receipts/0x12f92f5aca86257a492003d945b9c98462ca6c8d6c72b2f964da1d7545df4d2c.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "ERROR",
+      "leader_error": "TENDER_NOT_OPEN",
+      "observed_error": "TENDER_NOT_OPEN",
+      "after": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xea04990b24f8d283268564cf4375296f6141f3c7",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0x1b3430ce9261297eaa078a5d4b02500b8b6cb127",
+              "terms": "Offer 1: text slogan only; no poster, no PDF, no editable source and no revision rounds."
+            }
+          ],
+          "reason": "",
+          "requirements": "Recovery refund-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "JUDGING",
+          "tender_id": 2,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "passed": true
+    },
+    {
+      "label": "refund-1-late-quote",
+      "who": "S8",
+      "fn": "submit_quote",
+      "args": [
+        2,
+        300,
+        "Late complete poster offer with source."
+      ],
+      "value_wei": "0",
+      "error": "TENDER_NOT_OPEN",
+      "hash": "0xf825afc2e8cee58783a58324a1d9b72ddc09e21d32758fad7885739d96fd4d00",
+      "before": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xea04990b24f8d283268564cf4375296f6141f3c7",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0x1b3430ce9261297eaa078a5d4b02500b8b6cb127",
+              "terms": "Offer 1: text slogan only; no poster, no PDF, no editable source and no revision rounds."
+            }
+          ],
+          "reason": "",
+          "requirements": "Recovery refund-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "JUDGING",
+          "tender_id": 2,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "receipt": "receipts/0xf825afc2e8cee58783a58324a1d9b72ddc09e21d32758fad7885739d96fd4d00.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "ERROR",
+      "leader_error": "TENDER_NOT_OPEN",
+      "observed_error": "TENDER_NOT_OPEN",
+      "after": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xea04990b24f8d283268564cf4375296f6141f3c7",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0x1b3430ce9261297eaa078a5d4b02500b8b6cb127",
+              "terms": "Offer 1: text slogan only; no poster, no PDF, no editable source and no revision rounds."
+            }
+          ],
+          "reason": "",
+          "requirements": "Recovery refund-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "JUDGING",
+          "tender_id": 2,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "passed": true
+    },
+    {
+      "label": "refund-1-early-withdraw",
+      "who": "S1",
+      "fn": "withdraw",
+      "args": [
+        2
+      ],
+      "value_wei": "0",
+      "error": "NO_CREDIT",
+      "hash": "0xd12f2640cd0e2611eedbca525e996080a1300f6a6203e79c1cefdc11150a13b6",
+      "before": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xea04990b24f8d283268564cf4375296f6141f3c7",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0x1b3430ce9261297eaa078a5d4b02500b8b6cb127",
+              "terms": "Offer 1: text slogan only; no poster, no PDF, no editable source and no revision rounds."
+            }
+          ],
+          "reason": "",
+          "requirements": "Recovery refund-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "JUDGING",
+          "tender_id": 2,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "receipt": "receipts/0xd12f2640cd0e2611eedbca525e996080a1300f6a6203e79c1cefdc11150a13b6.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "ERROR",
+      "leader_error": "NO_CREDIT",
+      "observed_error": "NO_CREDIT",
+      "after": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xea04990b24f8d283268564cf4375296f6141f3c7",
+          "buyer_credit": 0,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0x1b3430ce9261297eaa078a5d4b02500b8b6cb127",
+              "terms": "Offer 1: text slogan only; no poster, no PDF, no editable source and no revision rounds."
+            }
+          ],
+          "reason": "",
+          "requirements": "Recovery refund-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "JUDGING",
+          "tender_id": 2,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "passed": true
+    },
+    {
+      "label": "refund-1-judge",
+      "who": "OUT",
+      "fn": "judge",
+      "args": [
+        2
+      ],
+      "value_wei": "0",
+      "error": null,
+      "hash": "0xa17c3a4fc645dff066f2491042908e405bc14b56d040f1c9d031c87d86ca2548",
+      "receipt": "receipts/0xa17c3a4fc645dff066f2491042908e405bc14b56d040f1c9d031c87d86ca2548.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "SUCCESS",
+      "passed": true
+    },
+    {
+      "label": "refund-1-wrong-withdraw",
+      "who": "S1",
+      "fn": "withdraw",
+      "args": [
+        2
+      ],
+      "value_wei": "0",
+      "error": "NO_CREDIT",
+      "hash": "0xfbb7360a24832b8864938cd7dc77870d0b0b2545185130ead548962eb5c1ce98",
+      "before": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xea04990b24f8d283268564cf4375296f6141f3c7",
+          "buyer_credit": 10000000000000000000,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0x1b3430ce9261297eaa078a5d4b02500b8b6cb127",
+              "terms": "Offer 1: text slogan only; no poster, no PDF, no editable source and no revision rounds."
+            }
+          ],
+          "reason": "The quote only offers a text slogan and lacks the required poster, PDF, editable source, and revision rounds, thus it does not meet the stated requirements.",
+          "requirements": "Recovery refund-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "CANCELLED",
+          "tender_id": 2,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "receipt": "receipts/0xfbb7360a24832b8864938cd7dc77870d0b0b2545185130ead548962eb5c1ce98.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "ERROR",
+      "leader_error": "NO_CREDIT",
+      "observed_error": "NO_CREDIT",
+      "after": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xea04990b24f8d283268564cf4375296f6141f3c7",
+          "buyer_credit": 10000000000000000000,
+          "buyer_withdrawn": false,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0x1b3430ce9261297eaa078a5d4b02500b8b6cb127",
+              "terms": "Offer 1: text slogan only; no poster, no PDF, no editable source and no revision rounds."
+            }
+          ],
+          "reason": "The quote only offers a text slogan and lacks the required poster, PDF, editable source, and revision rounds, thus it does not meet the stated requirements.",
+          "requirements": "Recovery refund-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "CANCELLED",
+          "tender_id": 2,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "passed": true
+    },
+    {
+      "label": "refund-1-withdraw",
+      "who": "B2",
+      "fn": "withdraw",
+      "args": [
+        2
+      ],
+      "value_wei": "0",
+      "error": null,
+      "hash": "0x4ae285703c5a5bba910ba0242aca8b85e6612b7cf7e1558ddca5c12a8455c17f",
+      "receipt": "receipts/0x4ae285703c5a5bba910ba0242aca8b85e6612b7cf7e1558ddca5c12a8455c17f.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "SUCCESS",
+      "passed": true
+    },
+    {
+      "label": "refund-1-double-withdraw",
+      "who": "B2",
+      "fn": "withdraw",
+      "args": [
+        2
+      ],
+      "value_wei": "0",
+      "error": "NO_CREDIT",
+      "hash": "0x65ce29dbe53f847ece6b67049f88127e4507b8299ded7610eb4328df0ccc495f",
+      "before": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xea04990b24f8d283268564cf4375296f6141f3c7",
+          "buyer_credit": 10000000000000000000,
+          "buyer_withdrawn": true,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0x1b3430ce9261297eaa078a5d4b02500b8b6cb127",
+              "terms": "Offer 1: text slogan only; no poster, no PDF, no editable source and no revision rounds."
+            }
+          ],
+          "reason": "The quote only offers a text slogan and lacks the required poster, PDF, editable source, and revision rounds, thus it does not meet the stated requirements.",
+          "requirements": "Recovery refund-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "CANCELLED",
+          "tender_id": 2,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "receipt": "receipts/0x65ce29dbe53f847ece6b67049f88127e4507b8299ded7610eb4328df0ccc495f.json",
+      "status": 7,
+      "result": 6,
+      "leader_execution": "ERROR",
+      "leader_error": "NO_CREDIT",
+      "observed_error": "NO_CREDIT",
+      "after": {
+        "tender": {
+          "budget_gen": 500,
+          "buyer": "0xea04990b24f8d283268564cf4375296f6141f3c7",
+          "buyer_credit": 10000000000000000000,
+          "buyer_withdrawn": true,
+          "category": "Design",
+          "fee_wei": 10000000000000000000,
+          "quotes": [
+            {
+              "price_gen": 301,
+              "quote_id": 1,
+              "supplier": "0x1b3430ce9261297eaa078a5d4b02500b8b6cb127",
+              "terms": "Offer 1: text slogan only; no poster, no PDF, no editable source and no revision rounds."
+            }
+          ],
+          "reason": "The quote only offers a text slogan and lacks the required poster, PDF, editable source, and revision rounds, thus it does not meet the stated requirements.",
+          "requirements": "Recovery refund-1: Design a complete print-ready A4 poster PDF and editable source, including two revision rounds, delivered within five days.",
+          "status": "CANCELLED",
+          "tender_id": 2,
+          "winner_credit": 0,
+          "winner_quote_id": 0,
+          "winner_supplier": "",
+          "winner_withdrawn": false
+        }
+      },
+      "passed": true
+    }
+  ]
+}

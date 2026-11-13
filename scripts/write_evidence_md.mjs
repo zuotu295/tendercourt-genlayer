@@ -10,6 +10,8 @@ import {createHash} from 'node:crypto';
 import {createClient} from 'genlayer-js';
 import {studionet} from 'genlayer-js/chains';
 
+throw new Error('HISTORICAL_GENERATOR: EVIDENCE.md preserves v2.1 receipts; do not overwrite it with v2.2 source claims');
+
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const deployment = JSON.parse(fs.readFileSync(path.join(REPO, 'evidence', 'deployment.json'), 'utf8'));
 const evidence = JSON.parse(fs.readFileSync(path.join(REPO, 'evidence', 'transactions.json'), 'utf8'));

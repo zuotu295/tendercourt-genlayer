@@ -1,0 +1,30 @@
+{
+  "protocol": "tendercourt-2.2",
+  "network": "Stable Studionet",
+  "chain_id": 61999,
+  "rpc": "https://studio.genlayer.com/api",
+  "contract_address": "0xD879F2Aa15f8420694872e229424AF06cD9929B9",
+  "deploy_tx": "0xe2c7a22fe59c70b672167929986df05db628ce00166c01abdf019722fe8d3d96",
+  "explorer": "https://explorer-studio.genlayer.com/address/0xD879F2Aa15f8420694872e229424AF06cD9929B9",
+  "source_sha256": "555f777f9f3aed483aab78623592909bccd5e3be9821b3cd7c21796b438ed944",
+  "source_bytes": 14980,
+  "source_file": "contracts/tendercourt.py",
+  "byte_parity": "BYTE_PARITY_MATCH: TRUE",
+  "fee_wei": "10000000000000000000",
+  "fee_gen": 10,
+  "wallets": {
+    "B1": "0xbac86943290b3ac56b11bcd8e02726491af12b8b",
+    "B2": "0x90af1ba50ee3851b8368e260ce7d0ea2dbca2272",
+    "S1": "0xea5ddf104264f86d223599bb12f508c773fcfc3f",
+    "S2": "0xe85a360b04e8802e6cb784b5f64d4a3a88e205dc",
+    "S3": "0xd4d65b7bbabcdbd2f6c79d09f06d124f3c96ca2f",
+    "S4": "0x540c0f9e53ba5403b3e7bc26041dd93aa803c32f",
+    "S5": "0xd844df15b23f4533ee7ee9bd352edfd1bd5f6222",
+    "S6": "0x8defce101b0e0528ce89a7ef36eb9661cdeea524",
+    "S7": "0x73e0f0cebef54436c1ba16b134e6d325604c893c",
+    "S8": "0xd61c2e92b8c0c53ee54ed490cf07a2b2f92a9ee6",
+    "S9": "0x71d7e7ee0ccf11403381cf8afb5cb8aee45de749",
+    "OUT": "0xb1a2ed6607b48bc943cf8f767c04f58a4f8529dd"
+  },
+  "note": "Temp accounts generated for this evidence run only."
+}

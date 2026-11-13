@@ -1,9 +1,25 @@
-# TenderCourt technical verification scope
+# TenderCourt supplier recovery
 
-The capacity revision enforces 1000 characters per quote, 8 quotes and 8000 total characters. With n < 8 accepted quotes, existing terms occupy at most n * 1000 characters, leaving enough capacity for every remaining slot. Supplier-triggered judgment remains restricted to a full tender; an unrelated address cannot freeze competition. The shared-address assumption remains: many addresses can fill all eight slots.
+`tendercourt-2.2` removes the full-capacity condition from `request_judgment`.
+Only the buyer or an address already present in the accepted quote set may
+start judgment. This works with one to seven quotes without buyer cooperation.
+Quotes freeze in JUDGING; anyone may execute consensus judgment. The buyer's
+direct-award method now accepts OPEN only, preventing a later override.
 
-Independent verification: 78/78 PASS (all 63 evidence transactions re-read live, byte parity, 7 tenders match EXPECTED.md, 70 GEN in = 70 out). Local Mock tests pass (30/30); the production frontend builds. Browser interaction is verified for this revision: a live-site write loop on tender 8 (browser quote, fill-to-8, quoter-requested judgment, non-buyer judge, winner withdraw; 80 GEN in = 80 out). See EVIDENCE.md for exact results. One honest limitation is recorded there: the write-loop buyer's private key was not persisted, so the buyer path was blocked and tender 8 settled through the fill-to-8 liveness path instead.
+This implements the supplier-triggered alternative to a deadline. It provides
+no guaranteed bidding period: a supplier may close the window immediately after
+its quote is accepted. An unrelated address cannot close it without first
+submitting an eligible quote. One-address-one-quote is not Sybil protection.
+Consensus can still disagree or be unavailable; retry does not guarantee success.
 
-The original V2 source and original expectations are immutable copies in evidence/v2/. The V2 Tender 6 discrepancy is disclosed in ERRATA.md and confirmed by a latest-final readback. The capacity revision has a separate execution plan in EXPECTED.md; it is not retrospectively substituted for the old registration.
+Tests cover all seven partial sizes, winner and NO_AWARD outcomes, withdrawal
+ownership, duplicate withdrawal, invalid consensus results, frozen quotes and
+buyer override rejection. See EXPECTED.md for scope and the live validation plan.
 
-OPEN tenders with 1–7 quotes still depend on the buyer. There is no timeout. Direct awards do not use consensus. The 10 GEN award does not fund or verify off-chain procurement delivery.
+Current deployment: `0xD879F2Aa15f8420694872e229424AF06cD9929B9`,
+protocol tendercourt-2.2, FINALIZED successful deployment and exact source byte
+parity. All 14 recovery cases (1–7 quotes, winner and NO_AWARD) completed, with
+156 matrix transactions independently re-read: 364 PASS, 0 FAIL. Actual
+recipient balance deltas and 140 GEN in = 140 GEN out were verified.
+See EVIDENCE.md for all hashes and verification scope. The previous
+v2.1 transactions and all recorded failures remain historical evidence only.

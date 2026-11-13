@@ -1,0 +1,83 @@
+HISTORICAL tendercourt-2.1 evidence only; v2.2 is not deployed.
+PASS byte-parity source sha256 7d662041cf18…
+PASS source-sha-matches-deployment 
+PASS capacity-limits 
+PASS protocol tendercourt-2.1
+PASS deploy-tx status=7 result=6 leader=SUCCESS
+PASS t1-create status=7 result=6 leader=SUCCESS
+PASS t2-create status=7 result=6 leader=SUCCESS
+PASS t3-create status=7 result=6 leader=SUCCESS
+PASS t4-create status=7 result=6 leader=SUCCESS
+PASS t5-create status=7 result=6 leader=SUCCESS
+PASS t6-create status=7 result=6 leader=SUCCESS
+PASS t7-create status=7 result=6 leader=SUCCESS
+PASS t1-quote-1 status=7 result=6 leader=SUCCESS
+PASS t1-quote-2 status=7 result=6 leader=SUCCESS
+PASS t1-quote-3 status=7 result=6 leader=SUCCESS
+PASS t2-quote-1 status=7 result=6 leader=SUCCESS
+PASS t2-quote-2 status=7 result=6 leader=SUCCESS
+PASS t3-quote-1 status=7 result=6 leader=SUCCESS
+PASS t3-quote-2 status=7 result=6 leader=SUCCESS
+PASS t5-quote-1 status=7 result=6 leader=SUCCESS
+PASS t5-quote-2 status=7 result=6 leader=SUCCESS
+PASS t6-quote-1 status=7 result=6 leader=SUCCESS
+PASS t6-quote-2 status=7 result=6 leader=SUCCESS
+PASS t6-quote-3 status=7 result=6 leader=SUCCESS
+PASS t6-quote-4 status=7 result=6 leader=SUCCESS
+PASS t6-quote-5 status=7 result=6 leader=SUCCESS
+PASS t6-quote-6 status=7 result=6 leader=SUCCESS
+PASS t6-quote-7 status=7 result=6 leader=SUCCESS
+PASS t6-quote-8 status=7 result=6 leader=SUCCESS
+PASS t7-quote-1 status=7 result=6 leader=SUCCESS
+PASS t7-quote-2 status=7 result=6 leader=SUCCESS
+PASS t7-quote-3 status=7 result=6 leader=SUCCESS
+PASS t7-quote-4 status=7 result=6 leader=SUCCESS
+PASS neg0-wrong-fee-create status=7 result=6 leader=ERROR leader_error=FEE_MUST_BE_10_GEN expected=FEE_MUST_BE_10_GEN
+PASS neg1-buyer-quotes-own status=7 result=6 leader=ERROR leader_error=BUYER_CANNOT_QUOTE_OWN_TENDER expected=BUYER_CANNOT_QUOTE_OWN_TENDER
+PASS neg2-duplicate-quote status=7 result=6 leader=ERROR leader_error=DUPLICATE_QUOTE expected=DUPLICATE_QUOTE
+PASS neg3-price-over-budget status=7 result=6 leader=ERROR leader_error=QUOTE_PRICE expected=QUOTE_PRICE
+PASS neg4-price-zero status=7 result=6 leader=ERROR leader_error=QUOTE_PRICE expected=QUOTE_PRICE
+PASS neg5-outsider-award status=7 result=6 leader=ERROR leader_error=ONLY_BUYER_CAN_AWARD expected=ONLY_BUYER_CAN_AWARD
+PASS neg6-outsider-cancel status=7 result=6 leader=ERROR leader_error=ONLY_BUYER_CAN_CANCEL expected=ONLY_BUYER_CAN_CANCEL
+PASS neg7-outsider-request-judgment status=7 result=6 leader=ERROR leader_error=ONLY_BUYER_CAN_REQUEST_JUDGMENT expected=ONLY_BUYER_CAN_REQUEST_JUDGMENT
+PASS neg9-cancel-after-quotes status=7 result=6 leader=ERROR leader_error=CANNOT_CANCEL_WITH_QUOTES expected=CANNOT_CANCEL_WITH_QUOTES
+PASS neg10-award-unknown-quote status=7 result=6 leader=ERROR leader_error=QUOTE_NOT_FOUND expected=QUOTE_NOT_FOUND
+PASS neg11-request-judgment-no-quotes status=7 result=6 leader=ERROR leader_error=NO_QUOTES expected=NO_QUOTES
+PASS neg12-ninth-quote-full-tender status=7 result=6 leader=ERROR leader_error=QUOTE_LIMIT expected=QUOTE_LIMIT
+PASS neg13-oversized-quote status=7 result=6 leader=ERROR leader_error=QUOTE_TERMS expected=QUOTE_TERMS
+PASS neg14-judge-while-open status=7 result=6 leader=ERROR leader_error=TENDER_NOT_JUDGING expected=TENDER_NOT_JUDGING
+PASS neg15-quoter-request-not-full status=7 result=6 leader=ERROR leader_error=ONLY_BUYER_CAN_REQUEST_JUDGMENT expected=ONLY_BUYER_CAN_REQUEST_JUDGMENT
+PASS t1-request-judgment status=7 result=6 leader=SUCCESS
+PASS t1-judge status=7 result=6 leader=SUCCESS
+PASS t2-award status=7 result=6 leader=SUCCESS
+PASS t3-request-judgment status=7 result=6 leader=SUCCESS
+PASS t3-judge status=7 result=6 leader=SUCCESS
+PASS t4-cancel status=7 result=6 leader=SUCCESS
+PASS t5-request-judgment status=7 result=6 leader=SUCCESS
+PASS t5-judge status=7 result=6 leader=SUCCESS
+PASS t6-request-judgment-by-quoter status=7 result=6 leader=SUCCESS
+PASS t6-judge-by-out status=7 result=6 leader=SUCCESS
+PASS t7-request-judgment status=7 result=6 leader=SUCCESS
+PASS t7-judge status=7 result=6 leader=SUCCESS
+PASS t1-winner-withdraw status=7 result=6 leader=SUCCESS
+PASS t2-winner-withdraw status=7 result=6 leader=SUCCESS
+PASS t3-buyer-withdraw status=7 result=6 leader=SUCCESS
+PASS t4-buyer-withdraw status=7 result=6 leader=SUCCESS
+PASS t5-winner-withdraw status=7 result=6 leader=SUCCESS
+PASS t6-winner-withdraw status=7 result=6 leader=SUCCESS
+PASS t7-winner-withdraw status=7 result=6 leader=SUCCESS
+PASS neg8-double-withdraw status=7 result=6 leader=ERROR leader_error=NO_CREDIT expected=NO_CREDIT
+PASS tender-count got 8 (evidence set is tenders 1-7; any extra tender is the separately documented post-evidence write loop)
+PASS tender-1 status=AWARDED winner=1 winner_credit=10000000000000000000 buyer_credit=0
+PASS tender-2 status=AWARDED winner=1 winner_credit=10000000000000000000 buyer_credit=0
+PASS tender-3 status=CANCELLED winner=0 winner_credit=0 buyer_credit=10000000000000000000
+PASS tender-4 status=CANCELLED winner=0 winner_credit=0 buyer_credit=10000000000000000000
+PASS tender-5 status=AWARDED winner=1 winner_credit=10000000000000000000 buyer_credit=0
+PASS full-capacity-eight-slots 
+PASS tender-6 status=AWARDED winner=1 winner_credit=10000000000000000000 buyer_credit=0
+PASS tender-7 status=AWARDED winner=1 winner_credit=10000000000000000000 buyer_credit=0
+NOTE extra tender (post-evidence write loop): id=8 status=AWARDED winner=1
+PASS accounting in=80000000000000000000 out=80000000000000000000 balance=0 escrowed=0
+
+78 PASS, 0 FAIL
+ALL CHECKS PASS.
