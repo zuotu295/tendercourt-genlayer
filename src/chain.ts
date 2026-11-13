@@ -228,6 +228,8 @@ export function destroyTemporaryAccount() {
 // waiting). Waiting is separate so a timeout never loses the hash.
 export async function sendWriteOnly(wallet: Wallet, functionName: string, args: any[], value = 0n) {
   if (!wallet?.client) throw new Error('NO_SIGNER');
+  const protocol = await reader.readContract({ address: contractAddress() as `0x${string}`, functionName: 'get_protocol', args: [], transactionHashVariant: 'latest-final' as any });
+  if (protocol !== 'tendercourt-2.2') throw new Error('DEPLOYMENT_VERSION_MISMATCH: tendercourt-2.2 required; configured deployment is read-only');
   await ensureInjectedChain(wallet);
   const hash = await wallet.client.writeContract({ address: contractAddress() as `0x${string}`, functionName, args, value, leaderOnly: false });
   return hash as string;

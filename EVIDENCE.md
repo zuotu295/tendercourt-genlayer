@@ -1,8 +1,10 @@
-# TenderCourt capacity revision — Evidence
+# TenderCourt v2.1 — Historical evidence
+
+These receipts concern only tendercourt-2.1. They do not verify the current v2.2 contract. The deployed-source snapshot is [evidence/v2.1/tendercourt.py](evidence/v2.1/tendercourt.py). New-version validation is described in [EXPECTED.md](EXPECTED.md).
 
 Contract: [0x616A603D3e95b5b871F4f1784e4F9E66e66104C4](https://explorer-studio.genlayer.com/address/0x616A603D3e95b5b871F4f1784e4F9E66e66104C4)
 Deploy tx: [0x1b2e0419…](https://explorer-studio.genlayer.com/tx/0x1b2e04195c46b6344ae07a27d1b00925e0de975b2233065b586e14fb53db1da2)
-Protocol: tendercourt-2.1 · Source SHA-256: 7d662041cf180ef5fc216a98e098168bc65e9194a9e46bc19232434a4b0a1be8 · Byte parity with `contracts/tendercourt.py`: TRUE
+Protocol: tendercourt-2.1 · Source SHA-256: 7d662041cf180ef5fc216a98e098168bc65e9194a9e46bc19232434a4b0a1be8 · Recorded byte parity with `evidence/v2.1/tendercourt.py`: TRUE
 
 All transactions below are FINALIZED on Stable Studionet (Chain ID 61999). Success steps: FINALIZED + MAJORITY_AGREE + leader SUCCESS. Negative steps (neg0–neg15): FINALIZED + MAJORITY_AGREE + leader ERROR with the expected error code exactly equal to the leader receipt's error payload, and no state change.
 
@@ -131,4 +133,4 @@ Tender 8 final state (live readback, latest-final): AWARDED, winner quote 1, win
 
 - The 10 GEN is the selection award, not the procurement contract value.
 - No value was sent on any expected-failure payable call. Platform behavior (verified live 2026-11-11): on Studionet a FAILED payable call does not refund the sent value — it stays in the contract with no entitlement — so evidence never sends value on a negative payable.
-- Execution plan: EXPECTED.md (local commit before this run; no public advance-registration timestamp asserted). V2 correction: ERRATA.md. Independent re-verification: `node scripts/verify_evidence.mjs`.
+- Historical execution plan: evidence/v2.1/EXPECTED.md (local commit before this run; no public advance-registration timestamp asserted). V2 correction: ERRATA.md. Independent re-verification: `node scripts/verify_evidence.mjs`.

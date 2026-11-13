@@ -2,89 +2,89 @@
 
 **Live site: https://zuotu295.github.io/tendercourt-genlayer/**
 
-A procurement quote-selection court on GenLayer Stable Studionet (Chain ID 61999). A buyer posts a tender (requirements + category + budget cap) and escrows a fixed **10 GEN** award. Suppliers submit one quote each (price in GEN + terms text). The buyer awards directly to a quote, or requests judgment: GenLayer validators read the published requirements and all quotes and return the winning quote id — or `0` for NO_AWARD when no quote satisfies the requirements. Deterministic contract code settles the award:
+TenderCourt lets a buyer publish requirements, category and budget, escrow a
+fixed 10 GEN selection award, and receive supplier quotes. GenLayer validators
+independently evaluate fit and agree on a winning quote id, or NO_AWARD. Contract
+code credits the winner 10 GEN or refunds the buyer; the entitled address then
+withdraws once. The award is not the procurement price and does not prove delivery.
 
-| Outcome | Winner | Buyer |
-| --- | --- | --- |
-| Winner quote id N | 10 GEN | 0 |
-| NO_AWARD (0) | — | 10 GEN refund |
+## Supplier recovery — protocol tendercourt-2.2
 
-Withdraw is pull-payment, once per entitled party per tender. Sender-bound roles: only the tender buyer can cancel or award; only a non-buyer supplier can quote, one quote per supplier per tender, at most 8 quotes per tender and 8000 chars of quote terms in total (both caps enforced in the contract); quotes only while OPEN; a tender with quotes cannot be cancelled. Judgment is requested by the buyer (or by a quoter once the tender is full) and, once JUDGING, may be executed by anyone — the winner is decided by consensus, so the caller cannot bias it. A verbatim copy of the requirements is not a quote — quotes are judged on substance, not text matching.
+| State | Action | Authorized caller | Result |
+| --- | --- | --- | --- |
+| OPEN, zero quotes | cancel_tender | buyer | CANCELLED, buyer credit |
+| OPEN, 1–8 quotes | award_tender | buyer | AWARDED, selected supplier credit |
+| OPEN, 1–8 quotes | request_judgment | buyer or accepted supplier | JUDGING, frozen quotes |
+| JUDGING | judge | anyone | consensus winner or NO_AWARD |
+| Settled, unwithdrawn credit | withdraw | credit owner | one 10 GEN transfer |
 
-The 10 GEN is a **selection award** (a prize for winning the tender), not the procurement contract value: the real contract price is agreed off-chain between buyer and winner after the award. The on-chain part solves fair selection and award ownership.
+An accepted supplier can start judgment with **1–7 quotes**, without waiting for
+the buyer or filling the remaining slots. This is the supplier-triggered recovery
+alternative to a deadline; there is no elapsed-time timeout. A supplier may close
+the bidding window immediately. Transaction order determines whether another
+quote or a buyer's OPEN direct award precedes closure. Once JUDGING, the buyer
+cannot bypass consensus with a direct award. Disagreement leaves JUDGING retryable;
+it does not guarantee eventual consensus.
 
-## Escrow exits (explicit actions only — Studionet has no clock)
+Each non-buyer address has one immutable quote. Price is an integer from 1 to the
+budget (1–10,000 GEN); terms contain 10–1000 Unicode code points after trimming.
+Eight quotes fit the 8000-character total. These caps do not prevent Sybil activity.
+Only the buyer may cancel, and only an empty OPEN tender.
 
-- **Cancel while OPEN with zero quotes:** the buyer cancels and the full 10 GEN is credited back for withdraw. Cancel after quotes exist is forbidden (the buyer has already seen the quotes; cancel-after-quotes would let them take the quotes and the refund).
-- **Direct award:** the buyer awards to any submitted quote while OPEN or JUDGING; the winner is credited 10 GEN. Direct award is the buyer's own choice and is NOT consensus-reviewed; the frontend marks it as such.
-- **Judgment:** judgment is requested (OPEN, at least one quote) → JUDGING (quotes frozen) → anyone runs the judgment; validators return the winning quote id or NO_AWARD. A consensus disagreement leaves the tender JUDGING and the judgment can be retried; the buyer keeps the direct-award right until the tender settles.
-- There are no time gates, block-time checks, or timestamps anywhere in the contract: every transition is an explicit action.
+## Consensus
 
-## Why GenLayer is indispensable here
+Validators independently read requirements and all quotes, with INPUT treated as
+untrusted data. Exact agreement on `winner_quote_id` is required; deterministic
+code validates the id and settles. The 15–280 character reason is explanatory,
+not compared. Agreement is not proof of objective quality or delivery ability.
+Direct awards while OPEN remain the buyer's choice, without consensus.
 
-Which quote "best satisfies the requirements" is a multi-factor semantic judgment — price against the budget, completeness of terms, and fit with the published requirements. No single honest server can settle it: a fixed scoring formula can be gamed by whoever writes the formula, and a single judge can be bribed or biased. TenderCourt needs several independent validators to read the requirements and the quotes and agree on one winner. Deterministic code — not any single LLM output — decides money and state.
+## Deployment and evidence
 
-## Capacity revision
+The existing deployment in `public/deployment.json` and `evidence/deployment.json`
+is **tendercourt-2.1**, not this source revision. A new deployment is required.
+The v2.2 frontend reads historical data but rejects writes unless the configured
+contract returns `tendercourt-2.2`. The live Pages site remains the default-branch
+version until changes are published.
 
-Each quote has at most 1000 Unicode code points after trimming. Eight maximum-size quotes exactly fill the 8000-character total; no earlier quote can consume another slot’s capacity. The 8-address cap does not prevent Sybil slot filling. OPEN tenders with fewer than 8 quotes still require the buyer to act.
+[EVIDENCE.md](EVIDENCE.md) retains historical receipts and failed attempts.
+[evidence/v2.1](evidence/v2.1/) preserves that version's source and expectations;
+[ERRATA.md](ERRATA.md) preserves the earlier discrepancy. No v2.2 chain verification
+or browser write success is claimed. [EXPECTED.md](EXPECTED.md) specifies tests
+and required live checks. [REVIEWER.md](REVIEWER.md) explains recovery and tradeoffs.
 
-Historical V2 evidence and its original expectations are preserved in [evidence/v2](evidence/v2/). See [ERRATA.md](ERRATA.md) for the Tender 6 discrepancy.
-
-## Contract
-
-- `contracts/tendercourt.py` — `TenderCourt`, protocol `tendercourt-2.1`
-- Fixed award: 10 GEN (`10000000000000000000` wei), `create_tender` is `@gl.public.write.payable` and takes requirements (20–2000 chars), a category from a fixed list of 8, and a budget cap (1–10,000 GEN)
-- `submit_quote` (non-buyer supplier only, one per tender, price 1–budget GEN, terms 10–1000 chars, at most 8 quotes per tender, total terms capped at 8000 chars), `cancel_tender` (buyer, OPEN with zero quotes), `award_tender` (buyer, OPEN or JUDGING), `request_judgment` (buyer, or a quoter once the tender is full, OPEN with at least one quote), `judge` (anyone, JUDGING, consensus), `withdraw` (pull-payment)
-- Narrow LLM: validators answer exactly one fixed question (`winner_quote_id` + one short `reason`); equivalence is exact agreement on the winner quote id; the reason is informational only (15–280 chars, not compared). The judgment prompt marks all INPUT as untrusted data and instructs validators to ignore any instruction embedded in it (see the injection evidence tender). The evidence is the on-chain text itself — no external URL fetch, no dead-link failure mode.
-- Views: `get_tender`, `get_all_tenders`, `get_totals`, `get_protocol`, `get_limits` (quote caps + fee)
-- Deployment facts: `evidence/deployment.json` (address, deploy tx, source SHA-256, byte parity). New execution plan: `EXPECTED.md` (local commit before execution, no public advance-registration timestamp asserted).
-
-## Verification scope
-
-Independent verification: `node scripts/verify_evidence.mjs` — 78/78 PASS (all 63 evidence transactions re-read live, byte parity, 7 tenders match EXPECTED.md, 70 GEN in = 70 out, balance 0, escrow 0). Post-evidence live-site write loop on tender 8 also complete (browser quote, fill-to-8, quoter-requested judgment, non-buyer judge, winner withdraw; 80 GEN in = 80 out). See [EVIDENCE.md](EVIDENCE.md). The configured Pages URL serves this revision (contract 0x616A603D3e95b5b871F4f1784e4F9E66e66104C4, protocol tendercourt-2.1).
-
-## Frontend
-
-Vite + React + TypeScript (`src/`), styled as a blueprint tender hall — deep blueprint blue, white line-work, brass award accents, paper tender cards. Bilingual CN/EN throughout; on-chain values (statuses, winner ids) in English.
-
-- All reads pinned to `latest-final` with a visible FINALIZED marker + the time the latest-final readback completed (labelled as a readback time, with timezone — never presented as an on-chain finalization timestamp); cold start shows only unconfirmed/neutral state; no success is shown before FINALIZED + SUCCESS; export is gated until a FINALIZED readback.
-- Wallet: OKX Wallet and MetaMask via injected provider (Studionet 61999 auto-add, wrong-chain detection with switch prompt and verification, writes blocked until the chain is correct). Writes also offer a clearly labelled in-browser temporary test account (key in sessionStorage only, free testnet GEN funding), never packaged as a user-wallet signature.
-- Temporary-account safety: escrow funding (`create_tender`) requires a persistent wallet — a temp account is blocked from posting tenders. The temp private key is shown once with copy/export and an "I saved my key" acknowledgement before its first write; a persistent risk banner is shown while a temp account is active; disconnect/rotate checks the address's pending quotes on OPEN/JUDGING tenders and its unwithdrawn funds on any status, names the exact tenders and amounts, and requires the key to be backed up first; the key can be exported at any time.
-- Tx lifecycle: the tx hash is saved to localStorage immediately after send; a timeout is shown as "unknown — check chain", never as a final failure; polling continues and resumes after refresh from the stored hash; success is shown only on FINALIZED + SUCCESS. Every write asks for a double confirmation (action + amount + tender) before sending.
-- The frontend targets the deployment in `public/deployment.json`. Browser interaction is verified for this revision (live-site write loop on tender 8: browser quote, fill-to-8, quoter-requested judgment, non-buyer judge, winner withdraw; see EVIDENCE.md). Bundle is version-stamped (`?v=<sha>`) after build so GitHub Pages never serves a stale build.
-
-## Run locally
+## Reproduce
 
 ```bash
-npm install
+npm ci
+npm test
+npx tsc --noEmit
 npm run build
 npm run preview
+node scripts/deploy_studionet.mjs --prepare
 ```
 
-## Deploy & verify (Stable Studionet only)
+The deploy command defaults to read-only preflight (chain id, source hash, no
+accounts/funding/signing). Actual execution requires `--execute` after deployment
+authorization; it uses a separate v2.2 checkpoint and writes only
+`evidence/v2.2/deployment.json`. Never reuse an old deployment/checkpoint for changed
+source. After live validation, update the frontend deployment metadata and rebuild.
+The old `run_evidence.mjs` suite is disabled because its partial-fill denial
+expectation is incompatible; it must not overwrite the historical receipts.
+`verify_evidence.mjs` verifies only the preserved v2.1 source/receipts, read-only.
 
-```bash
-npm test            # contract mock tests (30 cases)
-node scripts/deploy_studionet.mjs    # deploy + byte-parity check
-node scripts/run_evidence.mjs        # full evidence run (7 tenders + 16 on-chain negatives neg0–neg15; resumable)
-node scripts/verify_evidence.mjs     # independent re-verification, read-only
-```
+Local tests use a stub SDK and canned consensus outputs, not live validators or
+real transfers. Build output is committed under `docs/` for existing GitHub Pages
+hosting. Frontend: React, TypeScript, Vite; SDK: genlayer-js 1.1.8. Network remains
+Stable Studionet 61999 at https://studio.genlayer.com/api.
 
-Evidence transactions: `evidence/transactions.json` (see `EVIDENCE.md`).
+## Frontend and limits
 
-## What this project does not prove
+Bilingual CN/EN; reads use latest-final and label readback time. Wallets: OKX and
+MetaMask. Temporary test accounts require key backup acknowledgement and cannot
+fund tender creation. Sent hashes persist for receipt recovery; a timeout is
+unknown, not final failure. Success requires FINALIZED and successful execution.
 
-- **The 10 GEN is the award, not the contract value.** The on-chain award pays the winner of the selection; the real procurement price is agreed off-chain. Nothing here verifies that the winner actually delivers the work.
-- **The reason text is not compared.** Validators must agree exactly on the winning quote id; the one-sentence reason is explanatory text only and is not part of the equivalence check.
-- **The direct-award path pays without consensus, by the buyer's own choice.** When the buyer awards directly, the full award is released with no validator judgment at all. That is the intended UX (a buyer who already knows the winner should not wait for a court), not a verification of quality.
-- **No clock-based timeout.** Studionet has no clock, so a tender left OPEN with 1–7 quotes whose buyer disappears cannot advance (no fair timeout exists without a clock); the escrow is 10 test GEN and no supplier paid anything, so the harm is bounded to a lost chance at the award. A tender left JUDGING can always advance, because anyone may execute the judgment.
-- **Validator judgment is LLM agreement, not proof.** Validators are independent LLM calls agreeing on one winning quote id; agreement is not a mathematical proof that the quote is best, and a consensus disagreement leaves the tender unsettled (retryable).
-
-## Known limitations
-
-- Fixed award of 10 GEN per tender; no variable pricing.
-- Quotes are the suppliers' own words; consensus judges fit with the published requirements, it does not verify off-chain delivery capability.
-- No time gates: every transition is an explicit action; a tender stays OPEN until the buyer awards, requests judgment, or cancels (zero quotes only), and stays JUDGING until anyone runs the judgment or the buyer awards directly.
-- One quote per supplier per tender; at most 8 quotes per tender and 8000 chars of quote terms in total; a supplier cannot revise a quote — a new tender is needed for a revised offer.
-- `get_all_tenders` returns the full tender list in one view call: fine at current scale, but a large tender count will eventually hit Studionet's view-payload limits — the board has no pagination yet.
-- Platform behavior (verified live 2026-11-11): on Studionet a FAILED payable call does not refund the sent value — it stays in the contract with no entitlement. Evidence never sends value on an expected-failure payable call. The frontend validates every `create_tender` / `submit_quote` input against the contract bounds (code-point counts) before any payable send.
+No delivery enforcement, guaranteed bidding duration, pagination, or guaranteed
+consensus liveness is provided. Historical evidence reports failed payable calls
+retaining sent value on Studionet; send no value on negative payable tests.

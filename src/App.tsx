@@ -228,7 +228,7 @@ export default function App() {
   }
   async function requestJudgment(t: TenderRec) {
     await doWrite('request_judgment', 'request_judgment', [t.tender_id], 0n,
-      `${tr('requestJudgment')} · Tender #${t.tender_id}`);
+      `${tr('requestJudgment')} · Tender #${t.tender_id}\n${tr('supplierRecovery')}`);
   }
   async function judge(t: TenderRec) {
     await doWrite('judge', 'judge', [t.tender_id], 0n,
@@ -312,7 +312,7 @@ export default function App() {
 
       <section className="panel">
         <h2><span className="no">§01</span>{tr('createTitle')}</h2>
-        <p className="sub">{tr('feeNote')}</p>
+        <p className="sub">{tr('feeNote')}</p><p className="hint">{tr('supplierRecovery')}</p><p className="hint">{tr('deploymentPending')}</p>
         <label>{tr('reqLabel')}</label>
         <textarea value={req} onChange={(e) => setReq(capCp(e.target.value, 2000))} placeholder={tr('reqPh')} />
         <div className={`count ${reqErr === 'req_long' ? 'over' : ''}`}>{countOf(req)} / 2000</div>
@@ -352,8 +352,8 @@ export default function App() {
           const isBuyer = me && t.buyer === me;
           const myQuote = t.quotes.find((q) => q.supplier === me);
           const canQuote = me && t.status === 'OPEN' && !isBuyer && !myQuote && t.quotes.length < limits.max_quotes_per_tender;
-          const canAward = isBuyer && (t.status === 'OPEN' || t.status === 'JUDGING') && t.quotes.length > 0;
-          const canRequest = (isBuyer || (myQuote && t.quotes.length >= limits.max_quotes_per_tender)) && t.status === 'OPEN' && t.quotes.length > 0;
+          const canAward = isBuyer && t.status === 'OPEN' && t.quotes.length > 0;
+          const canRequest = (isBuyer || myQuote) && t.status === 'OPEN' && t.quotes.length > 0;
           const canJudge = me && t.status === 'JUDGING';
           const canCancel = isBuyer && t.status === 'OPEN' && t.quotes.length === 0;
           const canWithdrawW = me && t.winner_supplier === me && t.winner_credit > 0 && !t.winner_withdrawn;
@@ -438,7 +438,7 @@ export default function App() {
       </section>
 
       <footer className="site">
-        <p><b>TenderCourt 比选庭</b> · GenLayer Stable Studionet (Chain ID 61999) · Intelligent Contract · tendercourt-2.1</p>
+        <p><b>TenderCourt 比选庭</b> · GenLayer Stable Studionet (Chain ID 61999) · Intelligent Contract · tendercourt-2.2 · {tr('deploymentPending')}</p>
         <p className="mono">Contract: {dep ? dep.contract_address : 'awaiting deployment.json — UNCONFIRMED'}{dep && <> · <a href={explorerAddress(dep.contract_address)} target="_blank" rel="noreferrer">explorer-studio.genlayer.com</a></>}</p>
         <p className="mono small">Source SHA-256: {dep ? dep.source_sha256 : '—'} · Fee: 10 GEN fixed · {tr('awardExpl')}</p>
       </footer>

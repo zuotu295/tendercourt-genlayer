@@ -70,6 +70,8 @@ async function collect(client, hash, label) {
   throw new Error('Timeout waiting for FINALIZED: ' + label + ' ' + hash);
 }
 
+throw new Error('HISTORICAL_SUITE_ONLY: v2.1 expectations include partial-fill denial; use the v2.2 validation plan in EXPECTED.md after deployment approval');
+
 const cp = loadCheckpoint();
 const ADDRESS = cp.contract_address;
 if (!ADDRESS) throw new Error('no contract_address in checkpoint; deploy first');

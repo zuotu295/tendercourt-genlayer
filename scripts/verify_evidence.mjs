@@ -27,7 +27,7 @@ const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const deployment = JSON.parse(fs.readFileSync(path.join(REPO, 'evidence', 'deployment.json'), 'utf8'));
 const evidence = JSON.parse(fs.readFileSync(path.join(REPO, 'evidence', 'transactions.json'), 'utf8'));
 if (evidence.complete !== true) throw new Error('INCOMPLETE_EVIDENCE: new chain suite has not finished; no completed verification may be generated');
-const source = fs.readFileSync(path.join(REPO, 'contracts', 'tendercourt.py'), 'utf8');
+const source = fs.readFileSync(path.join(REPO, 'evidence', 'v2.1', 'tendercourt.py'), 'utf8');
 const ADDRESS = deployment.contract_address;
 
 const sha = (s) => createHash('sha256').update(s).digest('hex');
@@ -54,7 +54,9 @@ async function receiptOf(hash) {
   return reader.waitForTransactionReceipt({hash, status: 'FINALIZED', interval: 5000, retries: 12, fullTransaction: true});
 }
 
-// 1. Byte parity: deployed code equals contracts/tendercourt.py.
+// Historical v2.1 verification only; never evidence for v2.2.
+console.log('HISTORICAL tendercourt-2.1 evidence only; v2.2 is not deployed.');
+// 1. Byte parity against the preserved v2.1 source.
 const onChain = await reader.getContractCode(ADDRESS);
 check('byte-parity', onChain === source, `source sha256 ${sha(source).slice(0, 12)}…`);
 check('source-sha-matches-deployment', sha(source) === deployment.source_sha256);

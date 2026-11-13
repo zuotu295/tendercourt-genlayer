@@ -1,9 +1,8 @@
 // TenderCourt: deploy contracts/tendercourt.py on Stable Studionet (61999).
-// Temp accounts live ONLY in the checkpoint file:
-//   ~/workspace/build-tendercourt/.tendercourt-checkpoint.json
-// (workspace, NOT in the repo, mode 0600, deleted when the flow is done
-// or abandoned). No keys are written to the repo, logs, or evidence.
-// Usage: node scripts/deploy_studionet.mjs [--checkpoint <path>]
+// Default: read-only preflight. --execute enables account creation, testnet
+// funding and deployment signing. Use only after deployment authorization.
+// Checkpoint: ../.tendercourt-v2.2-checkpoint.json (0600, outside repository).
+// Usage: node scripts/deploy_studionet.mjs [--prepare | --execute] [--checkpoint <path>]
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -19,9 +18,9 @@ const opt = (name, def) => {
   const i = args.indexOf(name);
   return i >= 0 && args[i + 1] ? args[i + 1] : def;
 };
-const CHECKPOINT = opt('--checkpoint', path.resolve(REPO, '..', '.tendercourt-checkpoint.json'));
+const CHECKPOINT = opt('--checkpoint', path.resolve(REPO, '..', '.tendercourt-v2.2-checkpoint.json'));
 const CONTRACT_PATH = path.join(REPO, 'contracts', 'tendercourt.py');
-const DEPLOYMENT_PATH = path.join(REPO, 'evidence', 'deployment.json');
+const DEPLOYMENT_PATH = path.join(REPO, 'evidence', 'v2.2', 'deployment.json');
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const sha = (s) => createHash('sha256').update(s).digest('hex');
@@ -62,7 +61,22 @@ async function collect(client, hash, label) {
 const source = fs.readFileSync(CONTRACT_PATH, 'utf8');
 console.log('contract source sha256:', sha(source), `(${Buffer.byteLength(source)} bytes)`);
 
+// Default is a read-only preflight: no account creation, funding or signing.
+if (!args.includes('--execute')) {
+  const reader = createClient({chain: studionet});
+  const chainId = await reader.getChainId();
+  if (chainId !== CHAIN_ID) throw new Error('WRONG_CHAIN: ' + chainId);
+  console.log(JSON.stringify({mode: 'prepare-only', protocol: 'tendercourt-2.2',
+    chain_id: chainId, rpc: RPC_URL, source_sha256: sha(source),
+    source_bytes: Buffer.byteLength(source), signing_required: true,
+    new_deployment_required: true, transactions_sent: 0}, null, 2));
+  process.exit(0);
+}
+
 const cp = loadCheckpoint();
+if (cp.source_sha256 && cp.source_sha256 !== sha(source)) throw new Error('CHECKPOINT_SOURCE_MISMATCH');
+if ((cp.contract_address || cp.pending_deploy_tx) && !cp.source_sha256) throw new Error('UNVERSIONED_CHECKPOINT');
+cp.source_sha256 = sha(source);
 for (const k of ['B1', 'B2', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'OUT']) {
   if (!cp.wallets[k]) { cp.wallets[k] = generatePrivateKey(); console.log('generated temp account', k); }
 }
@@ -119,6 +133,7 @@ console.log('BYTE_PARITY_MATCH: TRUE');
 
 fs.mkdirSync(path.dirname(DEPLOYMENT_PATH), {recursive: true});
 const deployment = {
+  protocol: 'tendercourt-2.2',
   network: 'Stable Studionet',
   chain_id: CHAIN_ID,
   rpc: RPC_URL,

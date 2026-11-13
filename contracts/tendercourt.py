@@ -1,7 +1,7 @@
 # { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
-"""TenderCourt v2: procurement quote-selection court on GenLayer Studionet.
+"""TenderCourt v2.2: procurement quote-selection court on GenLayer Studionet.
 
-Protocol tendercourt-2.1. Capacity revision: each quote is limited to 1000
+Protocol tendercourt-2.2. Capacity revision: each quote is limited to 1000
 characters, so 8 slots always fit within the 8000-character total. A buyer posts a tender (requirements text,
 category, budget cap) and escrows a fixed 10 GEN award. Suppliers submit
 one quote each (price in GEN + terms text). The buyer awards directly to
@@ -33,24 +33,16 @@ v2 hardening (vs tendercourt-1):
     bias the outcome; quotes are frozen in JUDGING, so the caller
     cannot change the quote set. A buyer who disappears after
     requesting judgment can no longer stall the tender.
-  * Full-tender quoter request: when a tender has reached
-    MAX_QUOTES_PER_TENDER (no more quotes can arrive), any quoter may
-    request judgment. A supplier cannot freeze a tender early to
-    exclude competitors, because the tender must already be full.
-  * Direct award is the buyer's own choice and is NOT consensus
-    reviewed; the frontend marks it as such. Consensus judgment is
-    the reviewed selection path.
+  * Supplier recovery: any supplier with an accepted quote may request
+    judgment while OPEN, including partial fills of one to seven quotes.
+    No buyer action, full capacity, or clock is required. This explicitly
+    permits an accepted supplier to close the quote window early.
+  * Once JUDGING, direct awards are forbidden: only consensus may settle.
+    Quotes are immutable and unrelated addresses cannot initiate judgment.
 
-Sender-bound roles: only the tender buyer can cancel (OPEN, zero
-quotes), award, or request judgment (except the full-tender quoter
-case above); only a supplier who is not the buyer can quote, one quote
-per supplier per tender; quotes only while OPEN; a tender with quotes
-cannot be cancelled (the buyer has already seen the quotes). No time
-gates anywhere: every transition is an explicit action (Studionet has
-no clock). Remaining known limit: a tender left OPEN with 1-7 quotes
-whose buyer disappears cannot advance (no clock means no fair
-timeout); the escrow is 10 test GEN and no supplier paid anything,
-so the harm is bounded to a lost chance at the award.
+Only the buyer may cancel an empty OPEN tender or award while OPEN.
+Existing suppliers or the buyer may request judgment with nonempty quotes;
+anyone may execute it. No elapsed-time timeout is claimed or required.
 """
 from genlayer import *
 import json
@@ -309,7 +301,7 @@ class TenderCourt(gl.Contract):
         sender = str(gl.message.sender_address).lower()
         if sender != t['buyer']:
             fail('ONLY_BUYER_CAN_AWARD')
-        if t['status'] not in ('OPEN', 'JUDGING'):
+        if t['status'] != 'OPEN':
             fail('TENDER_NOT_OPEN')
         return self._award(t, quote_id, 'Buyer awarded directly.')
 
@@ -322,9 +314,8 @@ class TenderCourt(gl.Contract):
         if len(t['quotes']) == 0:
             fail('NO_QUOTES')
         is_quoter = any(q['supplier'] == sender for q in t['quotes'])
-        if sender != t['buyer'] and not (
-                is_quoter and len(t['quotes']) >= MAX_QUOTES_PER_TENDER):
-            fail('ONLY_BUYER_CAN_REQUEST_JUDGMENT')
+        if sender != t['buyer'] and not is_quoter:
+            fail('ONLY_BUYER_OR_QUOTER_CAN_REQUEST_JUDGMENT')
         t['status'] = 'JUDGING'
         return self._save(t)
 
@@ -363,7 +354,7 @@ class TenderCourt(gl.Contract):
 
     @gl.public.view
     def get_protocol(self) -> str:
-        return 'tendercourt-2.1'
+        return 'tendercourt-2.2'
 
     @gl.public.view
     def get_limits(self) -> str:

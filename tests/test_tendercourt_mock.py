@@ -146,6 +146,7 @@ class TenderCourtTest(unittest.TestCase):
         self.c = TC.TenderCourt()
         self.c.__init__()
         _Nondet.answers = []
+        TC._Recipient.transfers.clear()
 
     def as_sender(self, addr, value=0):
         _GL.message.sender_address = addr
@@ -232,15 +233,10 @@ class TenderCourtTest(unittest.TestCase):
         suppliers = [SUP1, SUP2, SUP3, SUP4, SUP5, SUP6, SUP7, SUP8]
         for i, supplier in enumerate(suppliers):
             self.quote(t['tender_id'], supplier, 400, '界' * 1000)
-            if i < 7:
-                self.as_sender(SUP1)
-                before = self.c.get_tender(1)
-                self.expect_error('ONLY_BUYER_CAN_REQUEST_JUDGMENT', self.c.request_judgment, 1)
-                self.assertEqual(self.c.get_tender(1), before)
         full = json.loads(self.c.get_tender(1))
         self.assertEqual(sum(len(q['terms']) for q in full['quotes']), 8000)
         self.as_sender(OUT)
-        self.expect_error('ONLY_BUYER_CAN_REQUEST_JUDGMENT', self.c.request_judgment, 1)
+        self.expect_error('ONLY_BUYER_OR_QUOTER_CAN_REQUEST_JUDGMENT', self.c.request_judgment, 1)
         self.expect_error('QUOTE_LIMIT', self.quote, 1, SUP9, 400)
         self.as_sender(SUP1)
         self.c.request_judgment(1)
@@ -394,7 +390,7 @@ class TenderCourtTest(unittest.TestCase):
         t = self.create()
         self.quote(t['tender_id'], SUP1, 400)
         self.as_sender(SUP1)
-        self.expect_error('ONLY_BUYER_CAN_REQUEST_JUDGMENT', self.c.request_judgment, t['tender_id'])
+        self.assertEqual(json.loads(self.c.request_judgment(t['tender_id']))['status'], 'JUDGING')
 
     def test_judge_while_open(self):
         t = self.create()
@@ -417,6 +413,122 @@ class TenderCourtTest(unittest.TestCase):
         self.as_sender(BUYER)
         self.c.request_judgment(t['tender_id'])
         self.expect_error('TENDER_NOT_OPEN', self.quote, t['tender_id'], SUP2, 450)
+
+    # -- partial-fill recovery (supplier alternative to a timeout) ---------
+    def partial(self, count):
+        self.create()
+        suppliers = [SUP1, SUP2, SUP3, SUP4, SUP5, SUP6, SUP7]
+        for supplier in suppliers[:count]:
+            self.quote(1, supplier, 400)
+        return suppliers[:count]
+
+    def test_partial_fill_silent_buyer_winner_and_withdraw_all_sizes(self):
+        for count in range(1, 8):
+            with self.subTest(quotes=count):
+                self.setUp()
+                suppliers = self.partial(count)
+                # Last supplier requests; consensus may choose someone else.
+                self.as_sender(suppliers[-1])
+                before = json.loads(self.c.get_tender(1))['quotes']
+                mid = json.loads(self.c.request_judgment(1))
+                self.assertEqual(mid['status'], 'JUDGING')
+                self.assertEqual(mid['quotes'], before)
+                self.assertEqual(mid['winner_credit'] + mid['buyer_credit'], 0)
+                self.expect_error('NO_CREDIT', self.c.withdraw, 1)
+                self.as_sender(OUT)
+                _Nondet.answers = [judge_answer(1), judge_answer(1)]
+                settled = json.loads(self.c.judge(1))
+                self.assertEqual(settled['winner_supplier'], SUP1)
+                self.assertEqual(settled['winner_credit'], FEE)
+                self.assertEqual(settled['buyer_credit'], 0)
+                self.assertEqual(settled['quotes'], before)
+                for denied in [BUYER, OUT] + suppliers[1:]:
+                    self.as_sender(denied)
+                    self.expect_error('NO_CREDIT', self.c.withdraw, 1)
+                self.as_sender(SUP1)
+                self.c.withdraw(1)
+                self.expect_error('NO_CREDIT', self.c.withdraw, 1)
+                self.expect_error('TENDER_NOT_JUDGING', self.c.judge, 1)
+                self.expect_error('TENDER_NOT_OPEN', self.c.request_judgment, 1)
+                self.assertEqual(TC._Recipient.transfers, [(SUP1, FEE)])
+                totals = json.loads(self.c.get_totals())
+                self.assertEqual(totals['total_received_wei'], FEE)
+                self.assertEqual(totals['total_withdrawn_wei'], FEE)
+                self.assertEqual(totals['escrowed_wei'], 0)
+
+    def test_partial_fill_no_award_refund_all_sizes(self):
+        for count in range(1, 8):
+            with self.subTest(quotes=count):
+                self.setUp()
+                suppliers = self.partial(count)
+                self.as_sender(suppliers[-1])
+                self.c.request_judgment(1)
+                self.as_sender(OUT)
+                _Nondet.answers = [judge_answer(0), judge_answer(0)]
+                result = json.loads(self.c.judge(1))
+                self.assertEqual(result['status'], 'CANCELLED')
+                self.assertEqual(result['winner_credit'], 0)
+                self.assertEqual(result['buyer_credit'], FEE)
+                for denied in suppliers + [OUT]:
+                    self.as_sender(denied)
+                    self.expect_error('NO_CREDIT', self.c.withdraw, 1)
+                self.as_sender(BUYER)
+                self.c.withdraw(1)
+                self.expect_error('NO_CREDIT', self.c.withdraw, 1)
+                self.expect_error('TENDER_NOT_OPEN', self.c.award_tender, 1, 1)
+                self.assertEqual(TC._Recipient.transfers, [(BUYER, FEE)])
+                self.assertEqual(json.loads(self.c.get_totals())['escrowed_wei'], 0)
+
+    def test_partial_fill_outsider_cannot_close_window_all_sizes(self):
+        for count in range(1, 8):
+            with self.subTest(quotes=count):
+                self.setUp()
+                self.partial(count)
+                self.as_sender(OUT)
+                before = self.c.get_tender(1)
+                self.expect_error('ONLY_BUYER_OR_QUOTER_CAN_REQUEST_JUDGMENT',
+                                  self.c.request_judgment, 1)
+                self.assertEqual(self.c.get_tender(1), before)
+                self.expect_error('TENDER_NOT_JUDGING', self.c.judge, 1)
+
+    def test_supplier_recovery_freezes_quotes_and_buyer_override(self):
+        self.partial(2)
+        self.as_sender(SUP1)
+        self.c.request_judgment(1)
+        before = self.c.get_tender(1)
+        self.expect_error('TENDER_NOT_OPEN', self.quote, 1, SUP3, 300)
+        self.as_sender(BUYER)
+        self.expect_error('TENDER_NOT_OPEN', self.c.award_tender, 1, 2)
+        self.expect_error('TENDER_NOT_OPEN', self.c.cancel_tender, 1)
+        self.expect_error('TENDER_NOT_OPEN', self.c.request_judgment, 1)
+        self.assertEqual(self.c.get_tender(1), before)
+
+    def test_supplier_recovery_disagreement_invalid_result_retry(self):
+        self.partial(2)
+        self.as_sender(SUP2)
+        self.c.request_judgment(1)
+        before = self.c.get_tender(1)
+        self.as_sender(OUT)
+        _Nondet.answers = [judge_answer(2), judge_answer(1)]
+        with self.assertRaises(_ConsensusDisagreement):
+            self.c.judge(1)
+        self.assertEqual(self.c.get_tender(1), before)
+        for winner in [99, True, '1']:
+            _Nondet.answers = [judge_answer(winner)]
+            self.expect_error('JUDGE_WINNER', self.c.judge, 1)
+            self.assertEqual(self.c.get_tender(1), before)
+        _Nondet.answers = [judge_answer(1), judge_answer(1)]
+        self.assertEqual(json.loads(self.c.judge(1))['winner_quote_id'], 1)
+        self.assertEqual(TC._Recipient.transfers, [])
+
+    def test_empty_tender_supplier_cannot_request_or_withdraw(self):
+        self.create()
+        self.as_sender(SUP1)
+        before = self.c.get_tender(1)
+        self.expect_error('NO_QUOTES', self.c.request_judgment, 1)
+        self.expect_error('NO_CREDIT', self.c.withdraw, 1)
+        self.assertEqual(self.c.get_tender(1), before)
+        self.assertEqual(self.c.get_protocol(), 'tendercourt-2.2')
 
     # -- accounting --------------------------------------------------------
     def test_ledger_conserved(self):

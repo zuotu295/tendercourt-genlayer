@@ -2,6 +2,8 @@ export type Lang = 'zh' | 'en';
 export const STR: Record<string, Record<Lang, string>> = {
   tagline: { zh: '采购比选法庭 · 哪份报价胜出，由共识裁决', en: 'Procurement quote court · consensus picks the winning quote' },
   heroTitle: { zh: '招标不该\n由一个人说了算。', en: 'A tender should not\nbe one person’s call.' },
+  supplierRecovery: { zh: '已有报价的供应商可立即启动评审（1–8 份报价均可），报价窗口随即关闭；进入评审后买方不能直接授标。', en: 'Any accepted supplier may immediately request judgment with 1–8 quotes, closing the quote window. Direct awards are disabled once judging starts.' },
+  deploymentPending: { zh: '本构建要求 tendercourt-2.2；旧部署仅供读取，版本不匹配时禁止写入。', en: 'This build requires tendercourt-2.2; an older deployment is read-only and writes are blocked on a version mismatch.' },
   heroSub: { zh: '买家发标书、托管 10 GEN 奖金，供应商投报价。直接授标，或请 GenLayer 验证者按标书要求评出最优报价——胜者拿走 10 GEN，无一报价合格则全额退回。', en: 'A buyer posts a tender and escrows a 10 GEN award; suppliers submit quotes. Award directly, or let GenLayer validators judge the best quote against the published requirements — the winner takes 10 GEN, or the buyer is fully refunded when no quote qualifies.' },
   howItWorks: { zh: '流程 · 四步', en: 'How it works · four steps' },
   step1: { zh: '买家发标并托管 10 GEN', en: 'Buyer posts a tender, escrows 10 GEN' },
@@ -82,7 +84,7 @@ export const STR: Record<string, Record<Lang, string>> = {
   exportGated: { zh: '导出需等待 FINALIZED 读回完成后可用', en: 'Export unlocks after a FINALIZED readback' },
   refresh: { zh: '刷新链上状态', en: 'Refresh on-chain state' },
   evidence: { zh: '证据与验证', en: 'Evidence & verification' },
-  evidenceText: { zh: '全部证据交易均可在 Stable Studionet 浏览器上查到；仓库内 scripts/verify_evidence.mjs 可一键重验。', en: 'Every evidence transaction is on the Stable Studionet explorer; scripts/verify_evidence.mjs in the repo re-verifies them all in one command.' },
+  evidenceText: { zh: '现有交易证据属于 v2.1；scripts/verify_evidence.mjs 仅重验历史版本，不能证明 v2.2 修复。', en: 'Existing receipts belong to v2.1. scripts/verify_evidence.mjs verifies historical evidence only, not the v2.2 fix.' },
   awardExpl: { zh: '胜者得 10 GEN · 无一合格则买家全额退回', en: 'Winner takes 10 GEN · no qualifying quote: full refund to buyer' },
   err_req_short: { zh: '标书要求至少 20 字。', en: 'Requirements need at least 20 characters.' },
   err_req_long: { zh: '标书要求最多 2000 字。', en: 'Requirements allow at most 2000 characters.' },
@@ -96,6 +98,6 @@ export const STR: Record<string, Record<Lang, string>> = {
   noAward: { zh: '无一报价合格', en: 'No qualifying quote' },
   quotes: { zh: '报价', en: 'Quotes' },
   quoteN: { zh: '报价', en: 'Quote' },
-  judgingNote: { zh: '已送交裁决：报价已冻结。任何人均可执行共识裁决；也可直接授标（直接授标未经共识评审）。', en: 'Sent to judgment: quotes are frozen. Anyone may run the consensus judgment; or award directly (direct award is not consensus-reviewed).' },
+  judgingNote: { zh: '已送交裁决：报价已冻结。任何人均可执行共识裁决；买方不能再直接授标。', en: 'Sent to judgment: quotes are frozen. Anyone may run the consensus judgment; the buyer can no longer award directly.' },
 };
 export const t = (key: string, lang: Lang) => STR[key]?.[lang] ?? key;

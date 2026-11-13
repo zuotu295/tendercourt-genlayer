@@ -1,97 +1,48 @@
-# TenderCourt capacity revision — new execution plan
+# TenderCourt v2.2 validation expectations
 
-Protocol `tendercourt-2.1`, Stable Studionet (Chain ID 61999), fixed award 10 GEN
-per tender. This is a new plan prepared before the capacity-revision transactions. It is not a correction of the old advance registration; see ERRATA.md and evidence/v2/EXPECTED.md. The local plan commit predates execution; no public advance-registration timestamp is asserted.
+Protocol: `tendercourt-2.2`. Network: Stable Studionet, 61999,
+https://studio.genlayer.com/api. No v2.2 chain transactions have been executed.
 
-v2 changes vs v1 (see contracts/tendercourt.py docstring):
-- At most 8 quotes per tender (QUOTE_LIMIT) and the sum of all quotes'
-  terms is capped at 8000 chars (QUOTE_TERMS_TOTAL). Each quote is capped at 1000 characters; all eight slots always fit. All bounds are enforced in the contract.
-- Once JUDGING, ANYONE may execute judge() (the winner is decided by
-  consensus; the caller cannot bias it). A quoter may request judgment
-  once the tender is full (8 quotes); a quoter on a non-full tender
-  cannot (ONLY_BUYER_CAN_REQUEST_JUDGMENT).
-- v1 evidence (tenders 1-5 on contract 0xD2A0Fe94...) is archived in
-  evidence/v1/. It does NOT prove this contract; v2 evidence below is
-  fresh, on the new deployment.
+Recovery uses the supplier-triggered alternative, not an elapsed-time timeout.
+An accepted supplier may immediately close an OPEN tender with 1–8 quotes.
+This is an explicit competition/liveness tradeoff: later suppliers may be excluded.
+No clock availability claim is needed. The buyer cannot override consensus once
+JUDGING. Transaction ordering still determines which OPEN action runs first.
 
-## Tenders (7 tenders x 10 GEN = 70 GEN in)
+## Local contract coverage
 
-| # | Buyer | Requirements -> category | Budget | Quotes | Path | Expected status | Winner | Winner credit | Buyer credit |
-|---|-------|--------------------------|--------|--------|------|-----------------|--------|---------------|--------------|
-| 1 | B1 | Bilingual bakery landing page, ordering + EN/CN menu, 2 weeks -> Software Development | 500 | Q1 S1 400 complete terms; Q2 S2 480 thin terms; Q3 S3 350 no ordering/menu | request judgment + judge | AWARDED | Q1 / S1 | 10 GEN | 0 |
-| 2 | B2 | Coffee-shop logo + brand colors, 3 concepts, 2 revisions -> Design | 300 | Q1 S1 250 complete; Q2 S2 280 complete | buyer awards directly to Q1 | AWARDED | Q1 / S1 | 10 GEN | 0 |
-| 3 | B1 | Translate 20-page manual EN->DE, certified quality, 1 week -> Writing & Translation | 200 | Q1 S1 180 machine-only, no review; Q2 S2 150 first 5 pages only | request judgment + judge | CANCELLED (NO_AWARD) | 0 | 0 | 10 GEN |
-| 4 | B2 | Monthly bookkeeping, small shop, 12 months -> Consulting | 400 | (none) | buyer cancels while OPEN | CANCELLED | 0 | 0 | 10 GEN |
-| 5 | B1 | 5 blog posts, urban gardening, 800 words each, original -> Writing & Translation | 250 | Q1 S1 200 complete; Q2 S2 180 with embedded instruction to pick it | request judgment + judge | AWARDED | Q1 / S1 (NOT the injected Q2) | 10 GEN | 0 |
-| 6 | B1 | Design a community book fair poster, print-ready PDF, editable source, 2 revision rounds, 5 days -> Design | 500 | 8 quotes of 1000 characters each (S1-S8): Q1 S1 400 complete; Q2 S2 480 thin; Q3 S3 350 no PDF; Q4 S4 500 thin; Q5 S5 420 missing revisions; Q6 S6 460 thin; Q7 S7 440 incomplete; Q8 S8 490 thin | quoter S1 requests judgment (tender full) + OUT executes judge | AWARDED | Q1 / S1 | 10 GEN | 0 |
-| 7 | B2 | Write a 40-page product catalog, EN + DE, print-ready, 4 weeks -> Writing & Translation | 800 | 4 quotes with exactly 1000-char terms each (S1-S4, total 4000): Q1 S1 600 most complete; Q2 S2 700 thinner; Q3 S3 750 thinner; Q4 S4 780 thinnest | buyer requests judgment + judge | AWARDED | Q1 / S1 | 10 GEN | 0 |
+`python3 tests/test_tendercourt_mock.py` runs the actual contract against a
+stub GenLayer module; canned leader/validator outputs exercise deterministic
+settlement. These are not live consensus or real transfers.
 
-Tender 5's Q2 terms embed an instruction telling validators to pick that
-quote. It is test data for the injection check: the judgment must ignore
-it and the injected quote must not win.
+For every count 1 through 7, with the buyer inactive after creation:
 
-Tender 6's Q1 is the cheapest complete quote; Q3 is cheaper but has no
-print-ready PDF, so it does not satisfy the requirements. The key
-mechanism assertions are: quoter-request-when-full succeeds, and a
-non-buyer executes judge() in JUDGING.
+| Scenario | Expected result |
+| --- | --- |
+| Accepted supplier requests judgment | JUDGING; same quotes; no credit yet |
+| Unrelated address requests judgment | Exact authorization error; unchanged state |
+| Independent caller judges with agreeing winner | AWARDED; selected supplier has 10 GEN credit, buyer zero |
+| Independent caller judges with NO_AWARD | CANCELLED; buyer has 10 GEN credit, suppliers zero |
+| Winner/refund owner withdraws | Exactly one emitted 10 GEN transfer; escrow zero |
+| Outsider, loser, wrong recipient or repeated withdrawal | NO_CREDIT; no extra transfer |
 
-Tender 6 fills all eight slots with exactly 1000 characters each (8000 total), then S1 requests judgment and OUT executes it. Tender 7 has four 1000-character quotes; an additional 1001-character quote must fail with QUOTE_TERMS and leave state unchanged.
+Additional tests reject buyer award/cancel after recovery, late quotes,
+repeated judgment requests, invalid winner ids/types and disagreeing validators.
+Disagreement leaves JUDGING unchanged and permits retry. Empty tenders cannot
+be supplier-closed. The original create, quote bounds/caps, cancel, direct award
+while OPEN, full-fill judgment and accounting paths remain tested.
 
-## Withdrawals (all must succeed, exactly once)
+## Required live validation after a new deployment
 
-- Tender 1: winner S1 withdraws 10 GEN.
-- Tender 2: winner S1 withdraws 10 GEN.
-- Tender 3: buyer B1 withdraws 10 GEN (NO_AWARD refund).
-- Tender 4: buyer B2 withdraws 10 GEN (cancel refund).
-- Tender 5: winner S1 withdraws 10 GEN.
-- Tender 6: winner S1 withdraws 10 GEN.
-- Tender 7: winner S1 withdraws 10 GEN.
-
-## Negatives (16, all must show FINALIZED + MAJORITY_AGREE + leader ERROR with the exact expected error code in the leader receipt payload)
-
-- neg0 wrong-fee-create: FEE_MUST_BE_10_GEN
-- neg1 buyer-quotes-own: BUYER_CANNOT_QUOTE_OWN_TENDER
-- neg2 duplicate-quote: DUPLICATE_QUOTE
-- neg3 price-over-budget: QUOTE_PRICE
-- neg4 price-zero: QUOTE_PRICE
-- neg5 outsider-award: ONLY_BUYER_CAN_AWARD
-- neg6 outsider-cancel: ONLY_BUYER_CAN_CANCEL
-- neg7 outsider-request-judgment: ONLY_BUYER_CAN_REQUEST_JUDGMENT
-- neg8 double-withdraw: NO_CREDIT (runs after withdrawals)
-- neg9 cancel-after-quotes: CANNOT_CANCEL_WITH_QUOTES
-- neg10 award-unknown-quote: QUOTE_NOT_FOUND
-- neg11 request-judgment-no-quotes: NO_QUOTES
-- neg12 ninth-quote-on-full-tender: QUOTE_LIMIT (tender 6, after 8 quotes)
-- neg13 oversized-quote: QUOTE_TERMS (tender 7, attempted quote has 1001 characters)
-- neg14 judge-while-open: TENDER_NOT_JUDGING
-- neg15 quoter-request-judgment-not-full: ONLY_BUYER_CAN_REQUEST_JUDGMENT (tender 7, 4 quotes, not full)
-
-## GEN accounting (read back latest-final)
-
-- Total received: 70 GEN. Total withdrawn: 70 GEN. Contract balance: 0 GEN.
-  Escrowed: 0 GEN. 70 in = 70 out, no unexplained gap.
-
-## Consensus disagreement
-
-A `judge` call whose validators disagree (MAJORITY_DISAGREE) leaves the
-tender JUDGING with no state change; the evidence script retries up to 3
-times and records each attempt. A wrong winner (not the expected one
-above) aborts the run loudly — the tender is settled and must be
-inspected, never papered over.
-
-## Verification
-
-`node scripts/verify_evidence.mjs` re-reads every tx live, checks byte
-parity of the deployed code vs `contracts/tendercourt.py`, re-checks all
-seven tenders' status/winner/credits, and re-checks the 70 GEN
-accounting. Negative checks compare the exact leader-receipt error
-payload (not a substring of the whole receipt); a consensus
-disagreement is never counted as a pass.
-
-## Platform finding: failed payable calls strand value
-
-Verified live on 2026-11-11 (LinguaCourt): on Studionet, a FAILED payable
-call does NOT refund the sent value — it stays in the contract with no
-entitlement and no withdraw path. Evidence design rule: never send value
-on an expected-failure payable call. The only payable here is
-`create_tender`; neg0 sends value 0.
+Use new checkpoint and evidence paths; never reuse v2.1 receipts as v2.2 proof.
+Record deploy receipt FINALIZED + MAJORITY_AGREE + leader SUCCESS, exact deployed
+source bytes/SHA-256, and latest-final protocol `tendercourt-2.2`.
+On fresh tenders with 1–7 quotes exercise supplier request, independent judge,
+winner settlement/withdrawal and NO_AWARD refund/withdrawal. Record all receipts,
+including failed attempts and disagreements, and the final readbacks and balances.
+Verify outsider request, buyer override, late quotes and double withdraw are
+rejected with exact errors and unchanged tender/credit state. Send no value on
+negative payable calls. Check aggregate received equals withdrawn, zero residual
+escrow, and actual recipient balance changes. Mock transfers cannot prove these.
+Update deployment metadata only with the new verified deployment, rebuild Pages,
+and exercise the supplier action and withdrawal from the browser.
